@@ -1,0 +1,1 @@
+Zona para outputs de FLUKA y para códigos de lectura de datos de FLUKA:

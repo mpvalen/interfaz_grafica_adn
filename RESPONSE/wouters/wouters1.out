@@ -1,0 +1,103 @@
+*-* Running: wouters1
+Dir: /home/seba/wouters
+Cmd: /usr/bin/nohup /home/seba/fluka/fluka4-2.2/bin/rfluka -M 11 wouters1
+/usr/bin/nohup: ignoring input
+
+                                   F L U K A
+
+Dir:   /home/seba/fluka/fluka4-2.2
+Data:  /home/seba/fluka/fluka4-2.2/data
+Exec:  /home/seba/fluka/fluka4-2.2/bin/fluka
+Input: /home/seba/wouters/wouters1.inp
+Initial seed copied from /home/seba/fluka/fluka4-2.2/data
+Running fluka in /home/seba/wouters/fluka_342
+
+======================== Running FLUKA for cycle # 1 ========================
+Removing links
+Removing temporary files
+Saving output and random number seed
+Saving additional files generated
+     Moving "fort.21" to "/home/seba/wouters/wouters1001_fort.21"
+     Moving "fort.23" to "/home/seba/wouters/wouters1001_fort.23"
+     Moving "fort.60" to "/home/seba/wouters/wouters1001_fort.60"
+======================== Running FLUKA for cycle # 2 ========================
+Removing links
+Removing temporary files
+Saving output and random number seed
+Saving additional files generated
+     Moving "fort.21" to "/home/seba/wouters/wouters1002_fort.21"
+     Moving "fort.23" to "/home/seba/wouters/wouters1002_fort.23"
+     Moving "fort.60" to "/home/seba/wouters/wouters1002_fort.60"
+======================== Running FLUKA for cycle # 3 ========================
+Removing links
+Removing temporary files
+Saving output and random number seed
+Saving additional files generated
+     Moving "fort.21" to "/home/seba/wouters/wouters1003_fort.21"
+     Moving "fort.23" to "/home/seba/wouters/wouters1003_fort.23"
+     Moving "fort.60" to "/home/seba/wouters/wouters1003_fort.60"
+======================== Running FLUKA for cycle # 4 ========================
+Removing links
+Removing temporary files
+Saving output and random number seed
+Saving additional files generated
+     Moving "fort.21" to "/home/seba/wouters/wouters1004_fort.21"
+     Moving "fort.23" to "/home/seba/wouters/wouters1004_fort.23"
+     Moving "fort.60" to "/home/seba/wouters/wouters1004_fort.60"
+======================== Running FLUKA for cycle # 5 ========================
+Removing links
+Removing temporary files
+Saving output and random number seed
+Saving additional files generated
+     Moving "fort.21" to "/home/seba/wouters/wouters1005_fort.21"
+     Moving "fort.23" to "/home/seba/wouters/wouters1005_fort.23"
+     Moving "fort.60" to "/home/seba/wouters/wouters1005_fort.60"
+======================== Running FLUKA for cycle # 6 ========================
+Removing links
+Removing temporary files
+Saving output and random number seed
+Saving additional files generated
+     Moving "fort.21" to "/home/seba/wouters/wouters1006_fort.21"
+     Moving "fort.23" to "/home/seba/wouters/wouters1006_fort.23"
+     Moving "fort.60" to "/home/seba/wouters/wouters1006_fort.60"
+======================== Running FLUKA for cycle # 7 ========================
+Removing links
+Removing temporary files
+Saving output and random number seed
+Saving additional files generated
+     Moving "fort.21" to "/home/seba/wouters/wouters1007_fort.21"
+     Moving "fort.23" to "/home/seba/wouters/wouters1007_fort.23"
+     Moving "fort.60" to "/home/seba/wouters/wouters1007_fort.60"
+======================== Running FLUKA for cycle # 8 ========================
+Removing links
+Removing temporary files
+Saving output and random number seed
+Saving additional files generated
+     Moving "fort.21" to "/home/seba/wouters/wouters1008_fort.21"
+     Moving "fort.23" to "/home/seba/wouters/wouters1008_fort.23"
+     Moving "fort.60" to "/home/seba/wouters/wouters1008_fort.60"
+======================== Running FLUKA for cycle # 9 ========================
+Removing links
+Removing temporary files
+Saving output and random number seed
+Saving additional files generated
+     Moving "fort.21" to "/home/seba/wouters/wouters1009_fort.21"
+     Moving "fort.23" to "/home/seba/wouters/wouters1009_fort.23"
+     Moving "fort.60" to "/home/seba/wouters/wouters1009_fort.60"
+======================== Running FLUKA for cycle # 10 ========================
+Removing links
+Removing temporary files
+Saving output and random number seed
+Saving additional files generated
+     Moving "fort.21" to "/home/seba/wouters/wouters1010_fort.21"
+     Moving "fort.23" to "/home/seba/wouters/wouters1010_fort.23"
+     Moving "fort.60" to "/home/seba/wouters/wouters1010_fort.60"
+======================== Running FLUKA for cycle # 11 ========================
+Removing links
+Removing temporary files
+Saving output and random number seed
+Saving additional files generated
+     Moving "fort.21" to "/home/seba/wouters/wouters1011_fort.21"
+     Moving "fort.23" to "/home/seba/wouters/wouters1011_fort.23"
+     Moving "fort.60" to "/home/seba/wouters/wouters1011_fort.60"
+End of FLUKA run

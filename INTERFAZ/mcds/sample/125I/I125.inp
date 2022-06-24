@@ -1,0 +1,6 @@
+
+CELL: DNA=6
+SIMCON: nocs=250000 seed=987654321
+RADX: fn=I125.dat
+EVO2: pO2=100
+

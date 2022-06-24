@@ -1,0 +1,1875 @@
+TITLE
+
+* Set the defaults for precision simulations
+DEFAULTS                                                              PRECISIO
+SPECSOUR         41.                                                  BEAMSPOT
+SPOTBEAM      PROTON  -0.15407   1.00000                              1
+SPOTPOS                             -0.1       5.0        0.      -1.01
+SPOTBEAM      PROTON  -0.15504   2.02446                              2
+SPOTPOS                             -0.1       5.0        0.      -1.02
+SPOTBEAM      PROTON  -0.15601   2.05823                              3
+SPOTPOS                             -0.1       5.0        0.      -1.03
+SPOTBEAM      PROTON  -0.15698   2.09350                              4
+SPOTPOS                             -0.1       5.0        0.      -1.04
+SPOTBEAM      PROTON  -0.15794   2.13036                              5
+SPOTPOS                             -0.1       5.0        0.      -1.05
+SPOTBEAM      PROTON  -0.15890   2.16893                              6
+SPOTPOS                             -0.1       5.0        0.      -1.06
+SPOTBEAM      PROTON  -0.15985   2.20935                              7
+SPOTPOS                             -0.1       5.0        0.      -1.07
+SPOTBEAM      PROTON  -0.16080   2.25177                              8
+SPOTPOS                             -0.1       5.0        0.      -1.08
+SPOTBEAM      PROTON  -0.16174   2.29635                              9
+SPOTPOS                             -0.1       5.0        0.      -1.09
+SPOTBEAM      PROTON  -0.16268   2.34326                              10
+SPOTPOS                             -0.1       5.0        0.      -1.010
+SPOTBEAM      PROTON  -0.16362   2.39272                              11
+SPOTPOS                             -0.1       5.0        0.      -1.011
+SPOTBEAM      PROTON  -0.16455   2.44496                              12
+SPOTPOS                             -0.1       5.0        0.      -1.012
+SPOTBEAM      PROTON  -0.16547   2.50023                              13
+SPOTPOS                             -0.1       5.0        0.      -1.013
+SPOTBEAM      PROTON  -0.16640   2.55884                              14
+SPOTPOS                             -0.1       5.0        0.      -1.014
+SPOTBEAM      PROTON  -0.16732   2.62110                              15
+SPOTPOS                             -0.1       5.0        0.      -1.015
+SPOTBEAM      PROTON  -0.16823   2.68742                              16
+SPOTPOS                             -0.1       5.0        0.      -1.016
+SPOTBEAM      PROTON  -0.16914   2.75823                              17
+SPOTPOS                             -0.1       5.0        0.      -1.017
+SPOTBEAM      PROTON  -0.17005   2.83404                              18
+SPOTPOS                             -0.1       5.0        0.      -1.018
+SPOTBEAM      PROTON  -0.17096   2.91545                              19
+SPOTPOS                             -0.1       5.0        0.      -1.019
+SPOTBEAM      PROTON  -0.17186   3.00316                              20
+SPOTPOS                             -0.1       5.0        0.      -1.020
+SPOTBEAM      PROTON  -0.17275   3.09798                              21
+SPOTPOS                             -0.1       5.0        0.      -1.021
+SPOTBEAM      PROTON  -0.17365   3.20090                              22
+SPOTPOS                             -0.1       5.0        0.      -1.022
+SPOTBEAM      PROTON  -0.17454   3.31310                              23
+SPOTPOS                             -0.1       5.0        0.      -1.023
+SPOTBEAM      PROTON  -0.17542   3.43600                              24
+SPOTPOS                             -0.1       5.0        0.      -1.024
+SPOTBEAM      PROTON  -0.17631   3.57134                              25
+SPOTPOS                             -0.1       5.0        0.      -1.025
+SPOTBEAM      PROTON  -0.17719   3.72130                              26
+SPOTPOS                             -0.1       5.0        0.      -1.026
+SPOTBEAM      PROTON  -0.17806   3.88858                              27
+SPOTPOS                             -0.1       5.0        0.      -1.027
+SPOTBEAM      PROTON  -0.17894   4.07668                              28
+SPOTPOS                             -0.1       5.0        0.      -1.028
+SPOTBEAM      PROTON  -0.17981   4.29010                              29
+SPOTPOS                             -0.1       5.0        0.      -1.029
+SPOTBEAM      PROTON  -0.18067   4.53484                              30
+SPOTPOS                             -0.1       5.0        0.      -1.030
+SPOTBEAM      PROTON  -0.18154   4.81903                              31
+SPOTPOS                             -0.1       5.0        0.      -1.031
+SPOTBEAM      PROTON  -0.18240   5.15405                              32
+SPOTPOS                             -0.1       5.0        0.      -1.032
+SPOTBEAM      PROTON  -0.18325   5.55638                              33
+SPOTPOS                             -0.1       5.0        0.      -1.033
+SPOTBEAM      PROTON  -0.18411   6.05090                              34
+SPOTPOS                             -0.1       5.0        0.      -1.034
+SPOTBEAM      PROTON  -0.18496   6.67730                              35
+SPOTPOS                             -0.1       5.0        0.      -1.035
+SPOTBEAM      PROTON  -0.18580   7.50355                              36
+SPOTPOS                             -0.1       5.0        0.      -1.036
+SPOTBEAM      PROTON  -0.18665   8.65809                              37
+SPOTPOS                             -0.1       5.0        0.      -1.037
+SPOTBEAM      PROTON  -0.18749  10.42159                              38
+SPOTPOS                             -0.1       5.0        0.      -1.038
+SPOTBEAM      PROTON  -0.18833  13.57723                              39
+SPOTPOS                             -0.1       5.0        0.      -1.039
+SPOTBEAM      PROTON  -0.18917  21.91556                              40
+SPOTPOS                             -0.1       5.0        0.      -1.040
+SPOTBEAM      PROTON  -0.19000  44.71433                              41
+SPOTPOS                             -0.1       5.0        0.      -1.041
+GEOBEGIN                                                              COMBNAME
+    0    0          
+* Black body
+SPH blkbody    0.0 0.0 0.0 100000.0
+* Void sphere
+SPH void       0.0 0.0 0.0 10000.0
+RPP target     -25. 25. -25. 25. 0. 50.
+RCC tube       0. 0.0 0. 0. 0. 25.1 5
+XYP p1         0.1
+XYP p2         0.2
+XYP p3         0.3
+XYP p4         0.4
+XYP p5         0.5
+XYP p6         0.6
+XYP p7         0.7
+XYP p8         0.8
+XYP p9         0.9
+XYP p10        1.0
+XYP p11        1.1
+XYP p12        1.2
+XYP p13        1.3
+XYP p14        1.4
+XYP p15        1.5
+XYP p16        1.6
+XYP p17        1.7
+XYP p18        1.8
+XYP p19        1.9
+XYP p20        2.0
+XYP p21        2.1
+XYP p22        2.2
+XYP p23        2.3
+XYP p24        2.4
+XYP p25        2.5
+XYP p26        2.6
+XYP p27        2.7
+XYP p28        2.8
+XYP p29        2.9
+XYP p30        3.0
+XYP p31        3.1
+XYP p32        3.2
+XYP p33        3.3
+XYP p34        3.4
+XYP p35        3.5
+XYP p36        3.6
+XYP p37        3.7
+XYP p38        3.8
+XYP p39        3.9
+XYP p40        4.0
+XYP p41        4.1
+XYP p42        4.2
+XYP p43        4.3
+XYP p44        4.4
+XYP p45        4.5
+XYP p46        4.6
+XYP p47        4.7
+XYP p48        4.8
+XYP p49        4.9
+XYP p50        5.0
+XYP p51        5.1
+XYP p52        5.2
+XYP p53        5.3
+XYP p54        5.4
+XYP p55        5.5
+XYP p56        5.6
+XYP p57        5.7
+XYP p58        5.8
+XYP p59        5.9
+XYP p60        6.0
+XYP p61        6.1
+XYP p62        6.2
+XYP p63        6.3
+XYP p64        6.4
+XYP p65        6.5
+XYP p66        6.6
+XYP p67        6.7
+XYP p68        6.8
+XYP p69        6.9
+XYP p70        7.0
+XYP p71        7.1
+XYP p72        7.2
+XYP p73        7.3
+XYP p74        7.4
+XYP p75        7.5
+XYP p76        7.6
+XYP p77        7.7
+XYP p78        7.8
+XYP p79        7.9
+XYP p80        8.0
+XYP p81        8.1
+XYP p82        8.2
+XYP p83        8.3
+XYP p84        8.4
+XYP p85        8.5
+XYP p86        8.6
+XYP p87        8.7
+XYP p88        8.8
+XYP p89        8.9
+XYP p90        9.0
+XYP p91        9.1
+XYP p92        9.2
+XYP p93        9.3
+XYP p94        9.4
+XYP p95        9.5
+XYP p96        9.6
+XYP p97        9.7
+XYP p98        9.8
+XYP p99        9.9
+XYP p100       10.0
+XYP p101       10.1
+XYP p102       10.2
+XYP p103       10.3
+XYP p104       10.4
+XYP p105       10.5
+XYP p106       10.6
+XYP p107       10.7
+XYP p108       10.8
+XYP p109       10.9
+XYP p110       11.0
+XYP p111       11.1
+XYP p112       11.2
+XYP p113       11.3
+XYP p114       11.4
+XYP p115       11.5
+XYP p116       11.6
+XYP p117       11.7
+XYP p118       11.8
+XYP p119       11.9
+XYP p120       12.0
+XYP p121       12.1
+XYP p122       12.2
+XYP p123       12.3
+XYP p124       12.4
+XYP p125       12.5
+XYP p126       12.6
+XYP p127       12.7
+XYP p128       12.8
+XYP p129       12.9
+XYP p130       13.0
+XYP p131       13.1
+XYP p132       13.2
+XYP p133       13.3
+XYP p134       13.4
+XYP p135       13.5
+XYP p136       13.6
+XYP p137       13.7
+XYP p138       13.8
+XYP p139       13.9
+XYP p140       14.0
+XYP p141       14.1
+XYP p142       14.2
+XYP p143       14.3
+XYP p144       14.4
+XYP p145       14.5
+XYP p146       14.6
+XYP p147       14.7
+XYP p148       14.8
+XYP p149       14.9
+XYP p150       15.0
+XYP p151       15.1
+XYP p152       15.2
+XYP p153       15.3
+XYP p154       15.4
+XYP p155       15.5
+XYP p156       15.6
+XYP p157       15.7
+XYP p158       15.8
+XYP p159       15.9
+XYP p160       16.0
+XYP p161       16.1
+XYP p162       16.2
+XYP p163       16.3
+XYP p164       16.4
+XYP p165       16.5
+XYP p166       16.6
+XYP p167       16.7
+XYP p168       16.8
+XYP p169       16.9
+XYP p170       17.0
+XYP p171       17.1
+XYP p172       17.2
+XYP p173       17.3
+XYP p174       17.4
+XYP p175       17.5
+XYP p176       17.6
+XYP p177       17.7
+XYP p178       17.8
+XYP p179       17.9
+XYP p180       18.0
+XYP p181       18.1
+XYP p182       18.2
+XYP p183       18.3
+XYP p184       18.4
+XYP p185       18.5
+XYP p186       18.6
+XYP p187       18.7
+XYP p188       18.8
+XYP p189       18.9
+XYP p190       19.0
+XYP p191       19.1
+XYP p192       19.2
+XYP p193       19.3
+XYP p194       19.4
+XYP p195       19.5
+XYP p196       19.6
+XYP p197       19.7
+XYP p198       19.8
+XYP p199       19.9
+XYP p200       20.0
+XYP p201       20.1
+XYP p202       20.2
+XYP p203       20.3
+XYP p204       20.4
+XYP p205       20.5
+XYP p206       20.6
+XYP p207       20.7
+XYP p208       20.8
+XYP p209       20.9
+XYP p210       21.0
+XYP p211       21.1
+XYP p212       21.2
+XYP p213       21.3
+XYP p214       21.4
+XYP p215       21.5
+XYP p216       21.6
+XYP p217       21.7
+XYP p218       21.8
+XYP p219       21.9
+XYP p220       22.0
+XYP p221       22.1
+XYP p222       22.2
+XYP p223       22.3
+XYP p224       22.4
+XYP p225       22.5
+XYP p226       22.6
+XYP p227       22.7
+XYP p228       22.8
+XYP p229       22.9
+XYP p230       23.0
+XYP p231       23.1
+XYP p232       23.2
+XYP p233       23.3
+XYP p234       23.4
+XYP p235       23.5
+XYP p236       23.6
+XYP p237       23.7
+XYP p238       23.8
+XYP p239       23.9
+XYP p240       24.0
+XYP p241       24.1
+XYP p242       24.2
+XYP p243       24.3
+XYP p244       24.4
+XYP p245       24.5
+XYP p246       24.6
+XYP p247       24.7
+XYP p248       24.8
+XYP p249       24.9
+XYP p250       25.0
+END
+* Black hole
+BLKBODY      5 +blkbody -void
+* Void around
+VOID         5 +void -target
+PHANTOM      5 target -tube
+* Target
+TARGET1      5 +tube+p1
+* Target
+TARGET2      5 +tube-p1+p2
+* Target
+TARGET3      5 +tube-p2+p3
+* Target
+TARGET4      5 +tube-p3+p4
+* Target
+TARGET5      5 +tube-p4+p5
+* Target
+TARGET6      5 +tube-p5+p6
+* Target
+TARGET7      5 +tube-p6+p7
+* Target
+TARGET8      5 +tube-p7+p8
+* Target
+TARGET9      5 +tube-p8+p9
+* Target
+TARGET10     5 +tube-p9+p10
+* Target
+TARGET11     5 +tube-p10+p11
+* Target
+TARGET12     5 +tube-p11+p12
+* Target
+TARGET13     5 +tube-p12+p13
+* Target
+TARGET14     5 +tube-p13+p14
+* Target
+TARGET15     5 +tube-p14+p15
+* Target
+TARGET16     5 +tube-p15+p16
+* Target
+TARGET17     5 +tube-p16+p17
+* Target
+TARGET18     5 +tube-p17+p18
+* Target
+TARGET19     5 +tube-p18+p19
+* Target
+TARGET20     5 +tube-p19+p20
+* Target
+TARGET21     5 +tube-p20+p21
+* Target
+TARGET22     5 +tube-p21+p22
+* Target
+TARGET23     5 +tube-p22+p23
+* Target
+TARGET24     5 +tube-p23+p24
+* Target
+TARGET25     5 +tube-p24+p25
+* Target
+TARGET26     5 +tube-p25+p26
+* Target
+TARGET27     5 +tube-p26+p27
+* Target
+TARGET28     5 +tube-p27+p28
+* Target
+TARGET29     5 +tube-p28+p29
+* Target
+TARGET30     5 +tube-p29+p30
+* Target
+TARGET31     5 +tube-p30+p31
+* Target
+TARGET32     5 +tube-p31+p32
+* Target
+TARGET33     5 +tube-p32+p33
+* Target
+TARGET34     5 +tube-p33+p34
+* Target
+TARGET35     5 +tube-p34+p35
+* Target
+TARGET36     5 +tube-p35+p36
+* Target
+TARGET37     5 +tube-p36+p37
+* Target
+TARGET38     5 +tube-p37+p38
+* Target
+TARGET39     5 +tube-p38+p39
+* Target
+TARGET40     5 +tube-p39+p40
+* Target
+TARGET41     5 +tube-p40+p41
+* Target
+TARGET42     5 +tube-p41+p42
+* Target
+TARGET43     5 +tube-p42+p43
+* Target
+TARGET44     5 +tube-p43+p44
+* Target
+TARGET45     5 +tube-p44+p45
+* Target
+TARGET46     5 +tube-p45+p46
+* Target
+TARGET47     5 +tube-p46+p47
+* Target
+TARGET48     5 +tube-p47+p48
+* Target
+TARGET49     5 +tube-p48+p49
+* Target
+TARGET50     5 +tube-p49+p50
+* Target
+TARGET51     5 +tube-p50+p51
+* Target
+TARGET52     5 +tube-p51+p52
+* Target
+TARGET53     5 +tube-p52+p53
+* Target
+TARGET54     5 +tube-p53+p54
+* Target
+TARGET55     5 +tube-p54+p55
+* Target
+TARGET56     5 +tube-p55+p56
+* Target
+TARGET57     5 +tube-p56+p57
+* Target
+TARGET58     5 +tube-p57+p58
+* Target
+TARGET59     5 +tube-p58+p59
+* Target
+TARGET60     5 +tube-p59+p60
+* Target
+TARGET61     5 +tube-p60+p61
+* Target
+TARGET62     5 +tube-p61+p62
+* Target
+TARGET63     5 +tube-p62+p63
+* Target
+TARGET64     5 +tube-p63+p64
+* Target
+TARGET65     5 +tube-p64+p65
+* Target
+TARGET66     5 +tube-p65+p66
+* Target
+TARGET67     5 +tube-p66+p67
+* Target
+TARGET68     5 +tube-p67+p68
+* Target
+TARGET69     5 +tube-p68+p69
+* Target
+TARGET70     5 +tube-p69+p70
+* Target
+TARGET71     5 +tube-p70+p71
+* Target
+TARGET72     5 +tube-p71+p72
+* Target
+TARGET73     5 +tube-p72+p73
+* Target
+TARGET74     5 +tube-p73+p74
+* Target
+TARGET75     5 +tube-p74+p75
+* Target
+TARGET76     5 +tube-p75+p76
+* Target
+TARGET77     5 +tube-p76+p77
+* Target
+TARGET78     5 +tube-p77+p78
+* Target
+TARGET79     5 +tube-p78+p79
+* Target
+TARGET80     5 +tube-p79+p80
+* Target
+TARGET81     5 +tube-p80+p81
+* Target
+TARGET82     5 +tube-p81+p82
+* Target
+TARGET83     5 +tube-p82+p83
+* Target
+TARGET84     5 +tube-p83+p84
+* Target
+TARGET85     5 +tube-p84+p85
+* Target
+TARGET86     5 +tube-p85+p86
+* Target
+TARGET87     5 +tube-p86+p87
+* Target
+TARGET88     5 +tube-p87+p88
+* Target
+TARGET89     5 +tube-p88+p89
+* Target
+TARGET90     5 +tube-p89+p90
+* Target
+TARGET91     5 +tube-p90+p91
+* Target
+TARGET92     5 +tube-p91+p92
+* Target
+TARGET93     5 +tube-p92+p93
+* Target
+TARGET94     5 +tube-p93+p94
+* Target
+TARGET95     5 +tube-p94+p95
+* Target
+TARGET96     5 +tube-p95+p96
+* Target
+TARGET97     5 +tube-p96+p97
+* Target
+TARGET98     5 +tube-p97+p98
+* Target
+TARGET99     5 +tube-p98+p99
+* Target
+TRGT100      5 +tube-p99+p100
+* TRGT
+TRGT101      5 +tube-p100+p101
+* TRGT
+TRGT102      5 +tube-p101+p102
+* TRGT
+TRGT103      5 +tube-p102+p103
+* TRGT
+TRGT104      5 +tube-p103+p104
+* TRGT
+TRGT105      5 +tube-p104+p105
+* TRGT
+TRGT106      5 +tube-p105+p106
+* TRGT
+TRGT107      5 +tube-p106+p107
+* TRGT
+TRGT108      5 +tube-p107+p108
+* TRGT
+TRGT109      5 +tube-p108+p109
+* TRGT
+TRGT110      5 +tube-p109+p110
+* TRGT
+TRGT111      5 +tube-p110+p111
+* TRGT
+TRGT112      5 +tube-p111+p112
+* TRGT
+TRGT113      5 +tube-p112+p113
+* TRGT
+TRGT114      5 +tube-p113+p114
+* TRGT
+TRGT115      5 +tube-p114+p115
+* TRGT
+TRGT116      5 +tube-p115+p116
+* TRGT
+TRGT117      5 +tube-p116+p117
+* TRGT
+TRGT118      5 +tube-p117+p118
+* TRGT
+TRGT119      5 +tube-p118+p119
+* TRGT
+TRGT120      5 +tube-p119+p120
+* TRGT
+TRGT121      5 +tube-p120+p121
+* TRGT
+TRGT122      5 +tube-p121+p122
+* TRGT
+TRGT123      5 +tube-p122+p123
+* TRGT
+TRGT124      5 +tube-p123+p124
+* TRGT
+TRGT125      5 +tube-p124+p125
+* TRGT
+TRGT126      5 +tube-p125+p126
+* TRGT
+TRGT127      5 +tube-p126+p127
+* TRGT
+TRGT128      5 +tube-p127+p128
+* TRGT
+TRGT129      5 +tube-p128+p129
+* TRGT
+TRGT130      5 +tube-p129+p130
+* TRGT
+TRGT131      5 +tube-p130+p131
+* TRGT
+TRGT132      5 +tube-p131+p132
+* TRGT
+TRGT133      5 +tube-p132+p133
+* TRGT
+TRGT134      5 +tube-p133+p134
+* TRGT
+TRGT135      5 +tube-p134+p135
+* TRGT
+TRGT136      5 +tube-p135+p136
+* TRGT
+TRGT137      5 +tube-p136+p137
+* TRGT
+TRGT138      5 +tube-p137+p138
+* TRGT
+TRGT139      5 +tube-p138+p139
+* TRGT
+TRGT140      5 +tube-p139+p140
+* TRGT
+TRGT141      5 +tube-p140+p141
+* TRGT
+TRGT142      5 +tube-p141+p142
+* TRGT
+TRGT143      5 +tube-p142+p143
+* TRGT
+TRGT144      5 +tube-p143+p144
+* TRGT
+TRGT145      5 +tube-p144+p145
+* TRGT
+TRGT146      5 +tube-p145+p146
+* TRGT
+TRGT147      5 +tube-p146+p147
+* TRGT
+TRGT148      5 +tube-p147+p148
+* TRGT
+TRGT149      5 +tube-p148+p149
+* TRGT
+TRGT150      5 +tube-p149+p150
+* TRGT
+TRGT151      5 +tube-p150+p151
+* TRGT
+TRGT152      5 +tube-p151+p152
+* TRGT
+TRGT153      5 +tube-p152+p153
+* TRGT
+TRGT154      5 +tube-p153+p154
+* TRGT
+TRGT155      5 +tube-p154+p155
+* TRGT
+TRGT156      5 +tube-p155+p156
+* TRGT
+TRGT157      5 +tube-p156+p157
+* TRGT
+TRGT158      5 +tube-p157+p158
+* TRGT
+TRGT159      5 +tube-p158+p159
+* TRGT
+TRGT160      5 +tube-p159+p160
+* TRGT
+TRGT161      5 +tube-p160+p161
+* TRGT
+TRGT162      5 +tube-p161+p162
+* TRGT
+TRGT163      5 +tube-p162+p163
+* TRGT
+TRGT164      5 +tube-p163+p164
+* TRGT
+TRGT165      5 +tube-p164+p165
+* TRGT
+TRGT166      5 +tube-p165+p166
+* TRGT
+TRGT167      5 +tube-p166+p167
+* TRGT
+TRGT168      5 +tube-p167+p168
+* TRGT
+TRGT169      5 +tube-p168+p169
+* TRGT
+TRGT170      5 +tube-p169+p170
+* TRGT
+TRGT171      5 +tube-p170+p171
+* TRGT
+TRGT172      5 +tube-p171+p172
+* TRGT
+TRGT173      5 +tube-p172+p173
+* TRGT
+TRGT174      5 +tube-p173+p174
+* TRGT
+TRGT175      5 +tube-p174+p175
+* TRGT
+TRGT176      5 +tube-p175+p176
+* TRGT
+TRGT177      5 +tube-p176+p177
+* TRGT
+TRGT178      5 +tube-p177+p178
+* TRGT
+TRGT179      5 +tube-p178+p179
+* TRGT
+TRGT180      5 +tube-p179+p180
+* TRGT
+TRGT181      5 +tube-p180+p181
+* TRGT
+TRGT182      5 +tube-p181+p182
+* TRGT
+TRGT183      5 +tube-p182+p183
+* TRGT
+TRGT184      5 +tube-p183+p184
+* TRGT
+TRGT185      5 +tube-p184+p185
+* TRGT
+TRGT186      5 +tube-p185+p186
+* TRGT
+TRGT187      5 +tube-p186+p187
+* TRGT
+TRGT188      5 +tube-p187+p188
+* TRGT
+TRGT189      5 +tube-p188+p189
+* TRGT
+TRGT190      5 +tube-p189+p190
+* TRGT
+TRGT191      5 +tube-p190+p191
+* TRGT
+TRGT192      5 +tube-p191+p192
+* TRGT
+TRGT193      5 +tube-p192+p193
+* TRGT
+TRGT194      5 +tube-p193+p194
+* TRGT
+TRGT195      5 +tube-p194+p195
+* TRGT
+TRGT196      5 +tube-p195+p196
+* TRGT
+TRGT197      5 +tube-p196+p197
+* TRGT
+TRGT198      5 +tube-p197+p198
+* TRGT
+TRGT199      5 +tube-p198+p199
+* TRGT
+TRGT200      5 +tube-p199+p200
+* TRGT
+TRGT201      5 +tube-p200+p201
+* TRGT
+TRGT202      5 +tube-p201+p202
+* TRGT
+TRGT203      5 +tube-p202+p203
+* TRGT
+TRGT204      5 +tube-p203+p204
+* TRGT
+TRGT205      5 +tube-p204+p205
+* TRGT
+TRGT206      5 +tube-p205+p206
+* TRGT
+TRGT207      5 +tube-p206+p207
+* TRGT
+TRGT208      5 +tube-p207+p208
+* TRGT
+TRGT209      5 +tube-p208+p209
+* TRGT
+TRGT210      5 +tube-p209+p210
+* TRGT
+TRGT211      5 +tube-p210+p211
+* TRGT
+TRGT212      5 +tube-p211+p212
+* TRGT
+TRGT213      5 +tube-p212+p213
+* TRGT
+TRGT214      5 +tube-p213+p214
+* TRGT
+TRGT215      5 +tube-p214+p215
+* TRGT
+TRGT216      5 +tube-p215+p216
+* TRGT
+TRGT217      5 +tube-p216+p217
+* TRGT
+TRGT218      5 +tube-p217+p218
+* TRGT
+TRGT219      5 +tube-p218+p219
+* TRGT
+TRGT220      5 +tube-p219+p220
+* TRGT
+TRGT221      5 +tube-p220+p221
+* TRGT
+TRGT222      5 +tube-p221+p222
+* TRGT
+TRGT223      5 +tube-p222+p223
+* TRGT
+TRGT224      5 +tube-p223+p224
+* TRGT
+TRGT225      5 +tube-p224+p225
+* TRGT
+TRGT226      5 +tube-p225+p226
+* TRGT
+TRGT227      5 +tube-p226+p227
+* TRGT
+TRGT228      5 +tube-p227+p228
+* TRGT
+TRGT229      5 +tube-p228+p229
+* TRGT
+TRGT230      5 +tube-p229+p230
+* TRGT
+TRGT231      5 +tube-p230+p231
+* TRGT
+TRGT232      5 +tube-p231+p232
+* TRGT
+TRGT233      5 +tube-p232+p233
+* TRGT
+TRGT234      5 +tube-p233+p234
+* TRGT
+TRGT235      5 +tube-p234+p235
+* TRGT
+TRGT236      5 +tube-p235+p236
+* TRGT
+TRGT237      5 +tube-p236+p237
+* TRGT
+TRGT238      5 +tube-p237+p238
+* TRGT
+TRGT239      5 +tube-p238+p239
+* TRGT
+TRGT240      5 +tube-p239+p240
+* TRGT
+TRGT241      5 +tube-p240+p241
+* TRGT
+TRGT242      5 +tube-p241+p242
+* TRGT
+TRGT243      5 +tube-p242+p243
+* TRGT
+TRGT244      5 +tube-p243+p244
+* TRGT
+TRGT245      5 +tube-p244+p245
+* TRGT
+TRGT246      5 +tube-p245+p246
+* TRGT
+TRGT247      5 +tube-p246+p247
+* TRGT
+TRGT248      5 +tube-p247+p248
+* TRGT
+TRGT249      5 +tube-p248+p249
+* TRGT
+TRGT250      5 +tube-p249+p250
+* TRGT
+TRGT251      5 +tube-p250
+END
+GEOEND
+* ..+....1....+....2....+....3....+....4....+....5....+....6....+....7..
+ASSIGNMA    BLCKHOLE   BLKBODY
+ASSIGNMA      VACUUM      VOID
+ASSIGNMA        PMMA   PHANTOM  @LASTREG
+USRBIN           10.    ENERGY        21       25.       25.        25E1
+USRBIN          -25.      -25.        0.        1.        1.     1000. &
+USRBDX            1.    PROTON        99      VOID   TARGET1          det0
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TARGET1   TARGET2          det1
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TARGET2   TARGET3          det2
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TARGET3   TARGET4          det3
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TARGET4   TARGET5          det4
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TARGET5   TARGET6          det5
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TARGET6   TARGET7          det6
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TARGET7   TARGET8          det7
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TARGET8   TARGET9          det8
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TARGET9  TARGET10          det9
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET10  TARGET11          det10
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET11  TARGET12          det11
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET12  TARGET13          det12
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET13  TARGET14          det13
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET14  TARGET15          det14
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET15  TARGET16          det15
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET16  TARGET17          det16
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET17  TARGET18          det17
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET18  TARGET19          det18
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET19  TARGET20          det19
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET20  TARGET21          det20
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET21  TARGET22          det21
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET22  TARGET23          det22
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET23  TARGET24          det23
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET24  TARGET25          det24
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET25  TARGET26          det25
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET26  TARGET27          det26
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET27  TARGET28          det27
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET28  TARGET29          det28
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET29  TARGET30          det29
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET30  TARGET31          det30
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET31  TARGET32          det31
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET32  TARGET33          det32
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET33  TARGET34          det33
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET34  TARGET35          det34
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET35  TARGET36          det35
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET36  TARGET37          det36
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET37  TARGET38          det37
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET38  TARGET39          det38
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET39  TARGET40          det39
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET40  TARGET41          det40
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET41  TARGET42          det41
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET42  TARGET43          det42
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET43  TARGET44          det43
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET44  TARGET45          det44
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET45  TARGET46          det45
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET46  TARGET47          det46
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET47  TARGET48          det47
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET48  TARGET49          det48
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET49  TARGET50          det49
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET50  TARGET51          det50
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET51  TARGET52          det51
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET52  TARGET53          det52
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET53  TARGET54          det53
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET54  TARGET55          det54
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET55  TARGET56          det55
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET56  TARGET57          det56
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET57  TARGET58          det57
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET58  TARGET59          det58
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET59  TARGET60          det59
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET60  TARGET61          det60
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET61  TARGET62          det61
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET62  TARGET63          det62
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET63  TARGET64          det63
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET64  TARGET65          det64
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET65  TARGET66          det65
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET66  TARGET67          det66
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET67  TARGET68          det67
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET68  TARGET69          det68
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET69  TARGET70          det69
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET70  TARGET71          det70
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET71  TARGET72          det71
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET72  TARGET73          det72
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET73  TARGET74          det73
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET74  TARGET75          det74
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET75  TARGET76          det75
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET76  TARGET77          det76
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET77  TARGET78          det77
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET78  TARGET79          det78
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET79  TARGET80          det79
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET80  TARGET81          det80
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET81  TARGET82          det81
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET82  TARGET83          det82
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET83  TARGET84          det83
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET84  TARGET85          det84
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET85  TARGET86          det85
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET86  TARGET87          det86
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET87  TARGET88          det87
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET88  TARGET89          det88
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET89  TARGET90          det89
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET90  TARGET91          det90
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET91  TARGET92          det91
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET92  TARGET93          det92
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET93  TARGET94          det93
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET94  TARGET95          det94
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET95  TARGET96          det95
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET96  TARGET97          det96
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET97  TARGET98          det97
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET98  TARGET99          det98
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99  TARGET99   TRGT100          det99
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT100   TRGT101          det100
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT101   TRGT102          det101
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT102   TRGT103          det102
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT103   TRGT104          det103
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT104   TRGT105          det104
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT105   TRGT106          det105
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT106   TRGT107          det106
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT107   TRGT108          det107
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT108   TRGT109          det108
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT109   TRGT110          det109
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT110   TRGT111          det110
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT111   TRGT112          det111
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT112   TRGT113          det112
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT113   TRGT114          det113
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT114   TRGT115          det114
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT115   TRGT116          det115
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT116   TRGT117          det116
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT117   TRGT118          det117
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT118   TRGT119          det118
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT119   TRGT120          det119
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT120   TRGT121          det120
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT121   TRGT122          det121
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT122   TRGT123          det122
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT123   TRGT124          det123
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT124   TRGT125          det124
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT125   TRGT126          det125
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT126   TRGT127          det126
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT127   TRGT128          det127
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT128   TRGT129          det128
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT129   TRGT130          det129
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT130   TRGT131          det130
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT131   TRGT132          det131
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT132   TRGT133          det132
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT133   TRGT134          det133
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT134   TRGT135          det134
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT135   TRGT136          det135
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT136   TRGT137          det136
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT137   TRGT138          det137
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT138   TRGT139          det138
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT139   TRGT140          det139
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT140   TRGT141          det140
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT141   TRGT142          det141
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT142   TRGT143          det142
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT143   TRGT144          det143
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT144   TRGT145          det144
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT145   TRGT146          det145
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT146   TRGT147          det146
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT147   TRGT148          det147
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT148   TRGT149          det148
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT149   TRGT150          det149
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT150   TRGT151          det150
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT151   TRGT152          det151
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT152   TRGT153          det152
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT153   TRGT154          det153
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT154   TRGT155          det154
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT155   TRGT156          det155
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT156   TRGT157          det156
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT157   TRGT158          det157
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT158   TRGT159          det158
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT159   TRGT160          det159
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT160   TRGT161          det160
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT161   TRGT162          det161
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT162   TRGT163          det162
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT163   TRGT164          det163
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT164   TRGT165          det164
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT165   TRGT166          det165
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT166   TRGT167          det166
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT167   TRGT168          det167
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT168   TRGT169          det168
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT169   TRGT170          det169
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT170   TRGT171          det170
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT171   TRGT172          det171
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT172   TRGT173          det172
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT173   TRGT174          det173
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT174   TRGT175          det174
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT175   TRGT176          det175
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT176   TRGT177          det176
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT177   TRGT178          det177
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT178   TRGT179          det178
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT179   TRGT180          det179
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT180   TRGT181          det180
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT181   TRGT182          det181
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT182   TRGT183          det182
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT183   TRGT184          det183
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT184   TRGT185          det184
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT185   TRGT186          det185
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT186   TRGT187          det186
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT187   TRGT188          det187
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT188   TRGT189          det188
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT189   TRGT190          det189
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT190   TRGT191          det190
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT191   TRGT192          det191
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT192   TRGT193          det192
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT193   TRGT194          det193
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT194   TRGT195          det194
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT195   TRGT196          det195
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT196   TRGT197          det196
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT197   TRGT198          det197
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT198   TRGT199          det198
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT199   TRGT200          det199
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT200   TRGT201          det200
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT201   TRGT202          det201
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT202   TRGT203          det202
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT203   TRGT204          det203
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT204   TRGT205          det204
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT205   TRGT206          det205
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT206   TRGT207          det206
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT207   TRGT208          det207
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT208   TRGT209          det208
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT209   TRGT210          det209
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT210   TRGT211          det210
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT211   TRGT212          det211
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT212   TRGT213          det212
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT213   TRGT214          det213
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT214   TRGT215          det214
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT215   TRGT216          det215
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT216   TRGT217          det216
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT217   TRGT218          det217
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT218   TRGT219          det218
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT219   TRGT220          det219
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT220   TRGT221          det220
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT221   TRGT222          det221
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT222   TRGT223          det222
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT223   TRGT224          det223
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT224   TRGT225          det224
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT225   TRGT226          det225
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT226   TRGT227          det226
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT227   TRGT228          det227
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT228   TRGT229          det228
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT229   TRGT230          det229
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT230   TRGT231          det230
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT231   TRGT232          det231
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT232   TRGT233          det232
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT233   TRGT234          det233
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT234   TRGT235          det234
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT235   TRGT236          det235
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT236   TRGT237          det236
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT237   TRGT238          det237
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT238   TRGT239          det238
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT239   TRGT240          det239
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT240   TRGT241          det240
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT241   TRGT242          det241
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT242   TRGT243          det242
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT243   TRGT244          det243
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT244   TRGT245          det244
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT245   TRGT246          det245
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT246   TRGT247          det246
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT247   TRGT248          det247
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT248   TRGT249          det248
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT249   TRGT250          det249
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON        99   TRGT250   TRGT251          det250
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99      VOID   TARGET1          det0
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TARGET1   TARGET2          det1
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TARGET2   TARGET3          det2
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TARGET3   TARGET4          det3
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TARGET4   TARGET5          det4
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TARGET5   TARGET6          det5
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TARGET6   TARGET7          det6
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TARGET7   TARGET8          det7
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TARGET8   TARGET9          det8
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TARGET9  TARGET10          det9
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET10  TARGET11          det10
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET11  TARGET12          det11
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET12  TARGET13          det12
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET13  TARGET14          det13
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET14  TARGET15          det14
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET15  TARGET16          det15
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET16  TARGET17          det16
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET17  TARGET18          det17
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET18  TARGET19          det18
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET19  TARGET20          det19
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET20  TARGET21          det20
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET21  TARGET22          det21
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET22  TARGET23          det22
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET23  TARGET24          det23
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET24  TARGET25          det24
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET25  TARGET26          det25
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET26  TARGET27          det26
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET27  TARGET28          det27
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET28  TARGET29          det28
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET29  TARGET30          det29
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET30  TARGET31          det30
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET31  TARGET32          det31
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET32  TARGET33          det32
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET33  TARGET34          det33
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET34  TARGET35          det34
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET35  TARGET36          det35
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET36  TARGET37          det36
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET37  TARGET38          det37
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET38  TARGET39          det38
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET39  TARGET40          det39
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET40  TARGET41          det40
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET41  TARGET42          det41
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET42  TARGET43          det42
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET43  TARGET44          det43
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET44  TARGET45          det44
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET45  TARGET46          det45
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET46  TARGET47          det46
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET47  TARGET48          det47
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET48  TARGET49          det48
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET49  TARGET50          det49
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET50  TARGET51          det50
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET51  TARGET52          det51
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET52  TARGET53          det52
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET53  TARGET54          det53
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET54  TARGET55          det54
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET55  TARGET56          det55
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET56  TARGET57          det56
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET57  TARGET58          det57
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET58  TARGET59          det58
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET59  TARGET60          det59
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET60  TARGET61          det60
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET61  TARGET62          det61
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET62  TARGET63          det62
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET63  TARGET64          det63
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET64  TARGET65          det64
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET65  TARGET66          det65
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET66  TARGET67          det66
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET67  TARGET68          det67
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET68  TARGET69          det68
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET69  TARGET70          det69
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET70  TARGET71          det70
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET71  TARGET72          det71
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET72  TARGET73          det72
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET73  TARGET74          det73
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET74  TARGET75          det74
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET75  TARGET76          det75
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET76  TARGET77          det76
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET77  TARGET78          det77
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET78  TARGET79          det78
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET79  TARGET80          det79
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET80  TARGET81          det80
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET81  TARGET82          det81
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET82  TARGET83          det82
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET83  TARGET84          det83
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET84  TARGET85          det84
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET85  TARGET86          det85
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET86  TARGET87          det86
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET87  TARGET88          det87
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET88  TARGET89          det88
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET89  TARGET90          det89
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET90  TARGET91          det90
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET91  TARGET92          det91
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET92  TARGET93          det92
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET93  TARGET94          det93
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET94  TARGET95          det94
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET95  TARGET96          det95
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET96  TARGET97          det96
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET97  TARGET98          det97
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET98  TARGET99          det98
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99  TARGET99   TRGT100          det99
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT100   TRGT101          det100
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT101   TRGT102          det101
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT102   TRGT103          det102
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT103   TRGT104          det103
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT104   TRGT105          det104
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT105   TRGT106          det105
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT106   TRGT107          det106
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT107   TRGT108          det107
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT108   TRGT109          det108
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT109   TRGT110          det109
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT110   TRGT111          det110
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT111   TRGT112          det111
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT112   TRGT113          det112
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT113   TRGT114          det113
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT114   TRGT115          det114
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT115   TRGT116          det115
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT116   TRGT117          det116
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT117   TRGT118          det117
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT118   TRGT119          det118
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT119   TRGT120          det119
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT120   TRGT121          det120
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT121   TRGT122          det121
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT122   TRGT123          det122
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT123   TRGT124          det123
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT124   TRGT125          det124
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT125   TRGT126          det125
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT126   TRGT127          det126
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT127   TRGT128          det127
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT128   TRGT129          det128
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT129   TRGT130          det129
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT130   TRGT131          det130
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT131   TRGT132          det131
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT132   TRGT133          det132
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT133   TRGT134          det133
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT134   TRGT135          det134
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT135   TRGT136          det135
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT136   TRGT137          det136
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT137   TRGT138          det137
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT138   TRGT139          det138
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT139   TRGT140          det139
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT140   TRGT141          det140
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT141   TRGT142          det141
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT142   TRGT143          det142
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT143   TRGT144          det143
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT144   TRGT145          det144
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT145   TRGT146          det145
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT146   TRGT147          det146
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT147   TRGT148          det147
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT148   TRGT149          det148
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT149   TRGT150          det149
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT150   TRGT151          det150
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT151   TRGT152          det151
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT152   TRGT153          det152
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT153   TRGT154          det153
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT154   TRGT155          det154
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT155   TRGT156          det155
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT156   TRGT157          det156
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT157   TRGT158          det157
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT158   TRGT159          det158
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT159   TRGT160          det159
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT160   TRGT161          det160
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT161   TRGT162          det161
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT162   TRGT163          det162
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT163   TRGT164          det163
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT164   TRGT165          det164
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT165   TRGT166          det165
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT166   TRGT167          det166
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT167   TRGT168          det167
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT168   TRGT169          det168
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT169   TRGT170          det169
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT170   TRGT171          det170
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT171   TRGT172          det171
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT172   TRGT173          det172
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT173   TRGT174          det173
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT174   TRGT175          det174
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT175   TRGT176          det175
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT176   TRGT177          det176
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT177   TRGT178          det177
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT178   TRGT179          det178
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT179   TRGT180          det179
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT180   TRGT181          det180
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT181   TRGT182          det181
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT182   TRGT183          det182
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT183   TRGT184          det183
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT184   TRGT185          det184
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT185   TRGT186          det185
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT186   TRGT187          det186
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT187   TRGT188          det187
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT188   TRGT189          det188
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT189   TRGT190          det189
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT190   TRGT191          det190
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT191   TRGT192          det191
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT192   TRGT193          det192
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT193   TRGT194          det193
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT194   TRGT195          det194
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT195   TRGT196          det195
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT196   TRGT197          det196
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT197   TRGT198          det197
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT198   TRGT199          det198
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT199   TRGT200          det199
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT200   TRGT201          det200
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT201   TRGT202          det201
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT202   TRGT203          det202
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT203   TRGT204          det203
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT204   TRGT205          det204
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT205   TRGT206          det205
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT206   TRGT207          det206
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT207   TRGT208          det207
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT208   TRGT209          det208
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT209   TRGT210          det209
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT210   TRGT211          det210
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT211   TRGT212          det211
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT212   TRGT213          det212
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT213   TRGT214          det213
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT214   TRGT215          det214
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT215   TRGT216          det215
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT216   TRGT217          det216
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT217   TRGT218          det217
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT218   TRGT219          det218
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT219   TRGT220          det219
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT220   TRGT221          det220
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT221   TRGT222          det221
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT222   TRGT223          det222
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT223   TRGT224          det223
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT224   TRGT225          det224
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT225   TRGT226          det225
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT226   TRGT227          det226
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT227   TRGT228          det227
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT228   TRGT229          det228
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT229   TRGT230          det229
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT230   TRGT231          det230
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT231   TRGT232          det231
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT232   TRGT233          det232
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT233   TRGT234          det233
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT234   TRGT235          det234
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT235   TRGT236          det235
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT236   TRGT237          det236
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT237   TRGT238          det237
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT238   TRGT239          det238
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT239   TRGT240          det239
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT240   TRGT241          det240
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT241   TRGT242          det241
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT242   TRGT243          det242
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT243   TRGT244          det243
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT244   TRGT245          det244
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT245   TRGT246          det245
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT246   TRGT247          det246
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT247   TRGT248          det247
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT248   TRGT249          det248
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT249   TRGT250          det249
+USRBDX           0.2      1E-6      100.                            1. &
+USRBDX            1.    PROTON       -99   TRGT250   TRGT251          det250
+USRBDX           0.2      1E-6      100.                            1. &
+BIASING            0                   5   TRGT140   TRGT251
+EMFCUT      -0.00015   0.00010             BLKBODY  @LASTREG
+EMFCUT      -0.00015   0.00010        1.  BLCKHOLE  @LASTMAT          PROD-CUT
+EMFFIX         WATER       .05                                        NOPRINT
+IONFLUCT          1.        1.        4.     WATER
+* Set the random number seed
+RANDOMIZ         1.0     4321.
+* Set the number of primary histories to be simulated in the run
+START         50000.
+STOP

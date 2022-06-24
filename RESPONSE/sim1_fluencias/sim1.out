@@ -1,0 +1,55 @@
+/usr/bin/nohup: *-* Running: sim1
+Dir: /home/seba/sim1
+Cmd: /usr/bin/nohup /home/seba/fluka/fluka4-2.2/bin/rfluka -M 5 sim1
+ignoring input
+
+                                   F L U K A
+
+Dir:   /home/seba/fluka/fluka4-2.2
+Data:  /home/seba/fluka/fluka4-2.2/data
+Exec:  /home/seba/fluka/fluka4-2.2/bin/fluka
+Input: /home/seba/sim1/sim1.inp
+Initial seed copied from /home/seba/fluka/fluka4-2.2/data
+Running fluka in /home/seba/sim1/fluka_405
+
+======================== Running FLUKA for cycle # 1 ========================
+Removing links
+Removing temporary files
+Saving output and random number seed
+Saving additional files generated
+     Moving "fort.100" to "/home/seba/sim1/sim1001_fort.100"
+     Moving "fort.21" to "/home/seba/sim1/sim1001_fort.21"
+     Moving "fort.99" to "/home/seba/sim1/sim1001_fort.99"
+======================== Running FLUKA for cycle # 2 ========================
+Removing links
+Removing temporary files
+Saving output and random number seed
+Saving additional files generated
+     Moving "fort.100" to "/home/seba/sim1/sim1002_fort.100"
+     Moving "fort.21" to "/home/seba/sim1/sim1002_fort.21"
+     Moving "fort.99" to "/home/seba/sim1/sim1002_fort.99"
+======================== Running FLUKA for cycle # 3 ========================
+Removing links
+Removing temporary files
+Saving output and random number seed
+Saving additional files generated
+     Moving "fort.100" to "/home/seba/sim1/sim1003_fort.100"
+     Moving "fort.21" to "/home/seba/sim1/sim1003_fort.21"
+     Moving "fort.99" to "/home/seba/sim1/sim1003_fort.99"
+======================== Running FLUKA for cycle # 4 ========================
+Removing links
+Removing temporary files
+Saving output and random number seed
+Saving additional files generated
+     Moving "fort.100" to "/home/seba/sim1/sim1004_fort.100"
+     Moving "fort.21" to "/home/seba/sim1/sim1004_fort.21"
+     Moving "fort.99" to "/home/seba/sim1/sim1004_fort.99"
+======================== Running FLUKA for cycle # 5 ========================
+Removing links
+Removing temporary files
+Saving output and random number seed
+Saving additional files generated
+     Moving "fort.100" to "/home/seba/sim1/sim1005_fort.100"
+     Moving "fort.21" to "/home/seba/sim1/sim1005_fort.21"
+     Moving "fort.99" to "/home/seba/sim1/sim1005_fort.99"
+End of FLUKA run

@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>685</width>
+    <height>360</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Interfaz para simular daño al ADN</string>
+  </property>
+  <widget class="QWidget" name="centralwidget"/>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>685</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu_Vista">
+    <property name="title">
+     <string>&amp;MCDS</string>
+    </property>
+    <widget class="QMenu" name="menuCalcular_supervivencia">
+     <property name="title">
+      <string>Calcular supervivencia</string>
+     </property>
+     <addaction name="actionCelula_HSG"/>
+     <addaction name="actionCelula_V79"/>
+    </widget>
+    <addaction name="actionCelula"/>
+    <addaction name="actionControl_simulacion"/>
+    <addaction name="actionCampo_de_radiacion"/>
+    <addaction name="actionOxigenacion"/>
+    <addaction name="actionFBL"/>
+    <addaction name="actionReductor_de_radicales"/>
+    <addaction name="separator"/>
+    <addaction name="actionGenerar_input"/>
+    <addaction name="actionLanzar_simulaciones"/>
+    <addaction name="menuCalcular_supervivencia"/>
+    <addaction name="separator"/>
+    <addaction name="actionNueva_carpeta"/>
+   </widget>
+   <widget class="QMenu" name="menuFluka">
+    <property name="title">
+     <string>Fluka</string>
+    </property>
+    <addaction name="actionFluka"/>
+    <addaction name="separator"/>
+    <addaction name="actionFluka_Survival"/>
+    <addaction name="separator"/>
+    <addaction name="actionNueva_carpeta_proc"/>
+    <addaction name="actionCarpeta_output_proc"/>
+   </widget>
+   <widget class="QMenu" name="menuGraficar">
+    <property name="title">
+     <string>Graficar</string>
+    </property>
+    <addaction name="actionInterfaz_de_ploteo"/>
+   </widget>
+   <widget class="QMenu" name="menuBase_de_datos">
+    <property name="title">
+     <string>Base de datos</string>
+    </property>
+    <addaction name="actionGenerar_base_de_datos"/>
+   </widget>
+   <widget class="QMenu" name="menuModelo">
+    <property name="title">
+     <string>Modelo</string>
+    </property>
+    <addaction name="actionWang"/>
+   </widget>
+   <addaction name="menu_Vista"/>
+   <addaction name="menuFluka"/>
+   <addaction name="menuGraficar"/>
+   <addaction name="menuBase_de_datos"/>
+   <addaction name="menuModelo"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionCelula">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Celula</string>
+   </property>
+   <property name="toolTip">
+    <string>Ajusta DNA, NDIA, CDIA y WEM</string>
+   </property>
+  </action>
+  <action name="actionControl_simulacion">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Control simulacion</string>
+   </property>
+   <property name="toolTip">
+    <string>Ajusta NOCS y SEED</string>
+   </property>
+  </action>
+  <action name="actionCampo_de_radiacion">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Campo de radiacion</string>
+   </property>
+   <property name="toolTip">
+    <string>Ajusta FN, PAR, KE, MeV/A y AD</string>
+   </property>
+  </action>
+  <action name="actionOxigenacion">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Oxigenacion</string>
+   </property>
+   <property name="toolTip">
+    <string>Ajusta PO2, mmHg, m0, k, q y r</string>
+   </property>
+  </action>
+  <action name="actionFBL">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>FBL</string>
+   </property>
+  </action>
+  <action name="actionReductor_de_radicales">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Reductor de radicales</string>
+   </property>
+  </action>
+  <action name="actionFluka">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Añadir parámetros fluka</string>
+   </property>
+  </action>
+  <action name="actionGenerar_input">
+   <property name="text">
+    <string>Generar input</string>
+   </property>
+  </action>
+  <action name="actionLanzar_simulaciones">
+   <property name="text">
+    <string>Lanzar simulaciones</string>
+   </property>
+  </action>
+  <action name="actionFluka_Yield">
+   <property name="text">
+    <string>Fluka -&gt; Yield</string>
+   </property>
+  </action>
+  <action name="actionYield_Survival">
+   <property name="text">
+    <string>Yield -&gt; Survival</string>
+   </property>
+  </action>
+  <action name="actionInterfaz_de_ploteo">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Interfaz de ploteo</string>
+   </property>
+  </action>
+  <action name="actionGenerar_base_de_datos">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Generar base de datos</string>
+   </property>
+  </action>
+  <action name="actionNueva_carpeta">
+   <property name="text">
+    <string>Nueva carpeta</string>
+   </property>
+  </action>
+  <action name="actionFluka_Survival">
+   <property name="text">
+    <string>Fluka -&gt; Survival</string>
+   </property>
+  </action>
+  <action name="actionWang">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Wang (2018)</string>
+   </property>
+  </action>
+  <action name="actionNueva_carpeta_proc">
+   <property name="text">
+    <string>Nueva carpeta output</string>
+   </property>
+  </action>
+  <action name="actionCarpeta_output_proc">
+   <property name="text">
+    <string>Carpeta output existente</string>
+   </property>
+  </action>
+  <action name="actionCelula_HSG">
+   <property name="text">
+    <string>Celula HSG</string>
+   </property>
+  </action>
+  <action name="actionCelula_V79">
+   <property name="text">
+    <string>Celula V79</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
