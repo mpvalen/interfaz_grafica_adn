@@ -12,6 +12,7 @@ En el menú superior se encuentran las distintas opciones: MCDS, Fluka, Graficar
 ## MCDS
 Contiene los parámetros necesarios para crear un archivo input, cada set de parámetros puede añadirse a la interfaz según se requiera. Luego de definir los valores, se debe seleccionar `Generar input` para crear un archivo `.inp` en la carpeta escogida al inicio. Se puede seleccionar una carpeta distinta en `Nueva carpeta`. 
 Una vez terminada la generación de inputs, se puede ejecutar la simulación seleccionando `Lanzar simulaciones`. Esto último abre una selección de carpeta y luego ejecuta las simulaciones para todos los archivos dentro de esta.
+Finalmente se incorpora una opción para calcular supervivencia celular usando el modelo seleccionado (ver **Modelo**) y escogiendo el tipo de célula a usar (HSG y V79 actualmente).
 
 ## Fluka
 Se puede añadir esta opción seleccionando `Añadir parámetros fluka`. En esta ventana se deben escoger 2 carpetas con archivos obtenidos desde Fluka: `dose data`, `spectrum data`. Además se debe añadir una carpeta con una base de datos (ver **Base de datos**)
@@ -28,7 +29,7 @@ Una vez añadidos los parámetros necesarios, se selecciona `Generar plots`y el 
 
 ## Base de datos
 
-Se puede generar una base de datos que puede usarse luego en la sección de **Fluka**. Se debe escoger el tipo de partícula (actualmente solo entre protones y carbono), la seed, el número de simulaciones (NOCS) y el número de puntos de energía. Internamente el programa considera rangos de MeV para cada tipo de partícula:
+Se puede generar una base de datos que puede usarse luego en la sección de **Fluka**. Se debe escoger el tipo de partícula (actualmente solo entre protones y carbono), la seed, el número de simulaciones (NOCS), el número de puntos de energía o de dosis y si se quiere fijar la energía cinética o dosis en algún valor distinto a los predeterminados. Internamente el programa considera rangos de MeV para cada tipo de partícula:
 
  - Protones [0.5 - 500 MeV]
  - Carbono [20 - 6000 MeV]

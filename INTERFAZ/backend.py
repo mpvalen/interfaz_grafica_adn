@@ -143,25 +143,35 @@ class Logica(QObject):
         
         elif tipo_plot == 'Survival vs dose':
             for file in os.listdir(directory):
-                path_read = os.path.join(directory, file)
-                (self.depths_mm, self.doses, self.doseerrs, self.dsbyields, self.dsbyielderrs,
-                self.lmbdas, self.lmbdaerrs, self.survs, self.surverrs) = read_output_file(path_read)
-                dict_file = {'doses': self.doses, 'survival': self.survs, 'survivalerr': self.surverrs,
-                             'set_experimental': set_experimental, 'num_puntos': num_ptos_plot}
-                dosis_key = find_dose_from_filename(file)
-                dict_info[f'{dosis_key}'] = dict_file
-            self.senal_info_plots_backend.emit(dict_info)
+                if file.endswith('.db'):
+                    survival, dose = read_surv_dose_file(os.path.join(directory, file))
+                    dict_file = {'doses': dose, 'survival': survival,
+                                'set_experimental': set_experimental, 'num_puntos': num_ptos_plot}
+                    dosis_key = 0
+                    print(file[-6:-3])
+                    dict_info[f'{dosis_key}'] = dict_file
+                    self.senal_info_plots_backend.emit(dict_info)
+
+            #for file in os.listdir(directory):
+            #    path_read = os.path.join(directory, file)
+            #    (self.depths_mm, self.doses, self.doseerrs, self.dsbyields, self.dsbyielderrs,
+            #    self.lmbdas, self.lmbdaerrs, self.survs, self.surverrs) = read_output_file(path_read)
+            #    dict_file = {'doses': self.doses, 'survival': self.survs, 'survivalerr': self.surverrs,
+            #                 'set_experimental': set_experimental, 'num_puntos': num_ptos_plot}
+            #    dosis_key = find_dose_from_filename(file)
+            #    dict_info[f'{dosis_key}'] = dict_file
+            #self.senal_info_plots_backend.emit(dict_info)
         
-        elif tipo_plot == 'Survival vs depth':
-            for file in os.listdir(directory):
-                path_read = os.path.join(directory, file)
-                (self.depths_mm, self.doses, self.doseerrs, self.dsbyields, self.dsbyielderrs,
-                self.lmbdas, self.lmbdaerrs, self.survs, self.surverrs) = read_output_file(path_read)
-                dict_file = {'depth': self.depths_mm, 'survival': self.survs, 'survivalerr': self.surverrs,
-                             'set_experimental': set_experimental, 'num_puntos': num_ptos_plot}
-                dosis_key = find_dose_from_filename(file)
-                dict_info[f'{dosis_key}'] = dict_file
-            self.senal_info_plots_backend.emit(dict_info)
+        #elif tipo_plot == 'Survival vs depth':
+        #    for file in os.listdir(directory):
+        #        path_read = os.path.join(directory, file)
+        #        (self.depths_mm, self.doses, self.doseerrs, self.dsbyields, self.dsbyielderrs,
+        #        self.lmbdas, self.lmbdaerrs, self.survs, self.surverrs) = read_output_file(path_read)
+        #        dict_file = {'depth': self.depths_mm, 'survival': self.survs, 'survivalerr': self.surverrs,
+        #                     'set_experimental': set_experimental, 'num_puntos': num_ptos_plot}
+        #        dosis_key = find_dose_from_filename(file)
+        #        dict_info[f'{dosis_key}'] = dict_file
+        #    self.senal_info_plots_backend.emit(dict_info)
         
         elif tipo_plot == 'Yield vs depth':
             for file in os.listdir(directory):

@@ -48,7 +48,7 @@ class Canvas(FigureCanvasQTAgg):
             self.draw()
         
         elif option == 'Survival vs dose':
-            self.survival_vs_dose(v['doses'], v['survival'], v['survivalerr'], v['set_experimental'],
+            self.survival_vs_dose(v['doses'], v['survival'], v['set_experimental'],
                                   v['num_puntos'])
             self.draw()
         
@@ -62,15 +62,15 @@ class Canvas(FigureCanvasQTAgg):
                                  v['num_puntos'])
             self.draw()
         
-        elif option == 'Test plot':
-            self.test_plot_survival(v['depth'], v['survival'], v['survivalerr'], v['set_experimental'],
-                                    v['num_puntos'], v['dosis'])
-            self.draw()
+        #elif option == 'Test plot':
+        #    self.test_plot_survival(v['depth'], v['survival'], v['survivalerr'], v['set_experimental'],
+        #                            v['num_puntos'], v['dosis'])
+        #    self.draw()
         
-        elif option == 'Test plot 2':
-            self.test_plot_survival_dose(v['doses'], v['survival'], v['set_experimental'],
-                                    v['num_puntos'])
-            self.draw()
+        #elif option == 'Test plot 2':
+        #    self.test_plot_survival_dose(v['doses'], v['survival'], v['set_experimental'],
+        #                            v['num_puntos'])
+        #    self.draw()
 
 
     def dose_vs_depth(self, doses, doseserr, depth, set_experimental, num_puntos):
@@ -87,14 +87,14 @@ class Canvas(FigureCanvasQTAgg):
             self.axes.legend()
 
     
-    def survival_vs_dose(self, doses, surv, surverr, set_experimental, num_puntos):
+    def survival_vs_dose(self, doses, surv, set_experimental, num_puntos):
         doses_sorted_id = np.argsort(doses)
         survival = surv[doses_sorted_id]
-        survivalerr = surverr[doses_sorted_id]
+        #survivalerr = surverr[doses_sorted_id]
         doses.sort()
         self.axes.clear()
         self.axes.plot(doses, survival, color='black')
-        self.axes.errorbar(doses, survival, survivalerr, color='black', errorevery= num_puntos)
+        #self.axes.errorbar(doses, survival, survivalerr, color='black', errorevery= num_puntos)
         self.axes.set_xlabel('Dose [Gy]')
         self.axes.set_ylabel('Survival fraction')
         if set_experimental != '':
@@ -647,8 +647,7 @@ class TabParams(QTabWidget):
         tipo_plot = QLabel('Tipo de plot')
         self.inputs['plot_options'] = QComboBox()
         self.inputs['plot_options'].addItems(['Survival vs dose', 'Dose vs depth', 'Survival vs depth',
-                                              'Yield vs depth', 'Lambda vs depth', 'Test plot',
-                                             'Test plot 2'])
+                                              'Yield vs depth', 'Lambda vs depth'])
         carpeta = QLabel('Carpeta')
         carpeta.setToolTip('La carpeta que contiene los archivos output')
         self.carpeta_plot = QPushButton('Elegir carpeta', self)
