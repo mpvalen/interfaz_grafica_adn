@@ -76,10 +76,12 @@ def mech_model(D,ctype,LET,Y):
             xi = 0.0572
             eta_1 = 7.26e-4
             eta_infty = 0.0022
-        R = 5  # um
+        R = 5.5  # um
         rho = 1  # Nucleus density g/cm3
-        N = Y * D  # NÚMERO DE DSBS X CÉLULA
+        N = (Y / 50) * D  # NÚMERO DE DSBS X CÉLULA
         lmbda = Y * (LET * 1.602 * 10 ** (-19)) / (math.pi * R ** 2 * rho * 10 ** (-18)) # =N/n
+
+        #lmbda = 3
         n_p = Y*D/lmbda * (1 - math.exp(-lmbda))
         lmbda_p = lmbda / (1 - math.exp(-lmbda))
         eta = eta_infty - (eta_infty - eta_1) / lmbda_p
@@ -89,9 +91,17 @@ def mech_model(D,ctype,LET,Y):
         Pcontrib = (1 - math.exp(-zeta * lmbda_p)) / (zeta * lmbda_p)
         N_death = mu_y * N * Pcontrib * (1 - Pcorrect)
         S = math.exp(-N_death)
-        return S
+
+
+        database_mech_model = open('database_mech_model.database', 'a')
+        database_mech_model.write('LAMBDA n_p LAMBDA_p ETA P_int P_track P_correct P_contrib S\n')
+        database_mech_model.write('{} {} {} {} {} {} {} {} {}\n'.format(lmbda, n_p, lmbda_p, eta, Pint,
+                                                                         Ptrack, Pcorrect, Pcontrib, S))
+
+
+        return S, lmbda
     else:
-        return 1
+        return 1, 0 # 0 lmbda es solo para rellenar y que no se caiga el código mientras testeo esta parte
 
 
 def mech_model_wlmbda(D,ctype,Y,lmbda):
@@ -121,6 +131,13 @@ def mech_model_wlmbda(D,ctype,Y,lmbda):
         Pcontrib = (1 - math.exp(-zeta * lmbda_p)) / (zeta * lmbda_p)
         N_death = mu_y * N * Pcontrib * (1 - Pcorrect)
         S = math.exp(-N_death)
+
+
+        database_mech_model = open('database_mech_model_lambda.database', 'a')
+        database_mech_model.write('LAMBDA n_p LAMBDA_p ETA P_int P_track P_correct P_contrib S\n')
+        database_mech_model.write('{} {} {} {} {} {} {} {} {}\n'.format(lmbda, n_p, lmbda_p, eta, Pint,
+                                                                         Ptrack, Pcorrect, Pcontrib, S))
+
         return S
     else:
         return 1

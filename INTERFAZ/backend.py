@@ -13,6 +13,8 @@ import natsort
 
 
 class Logica(QObject):
+    # Clase que contiene gran parte de las funciones del backend de la interfaz. Se guarda información
+    # recurrente como directorio escogido, parámetros dados por el user, etc.
     senal_info_plots_backend = pyqtSignal(dict)
 
     def __init__(self):
@@ -162,16 +164,16 @@ class Logica(QObject):
             #    dict_info[f'{dosis_key}'] = dict_file
             #self.senal_info_plots_backend.emit(dict_info)
         
-        #elif tipo_plot == 'Survival vs depth':
-        #    for file in os.listdir(directory):
-        #        path_read = os.path.join(directory, file)
-        #        (self.depths_mm, self.doses, self.doseerrs, self.dsbyields, self.dsbyielderrs,
-        #        self.lmbdas, self.lmbdaerrs, self.survs, self.surverrs) = read_output_file(path_read)
-        #        dict_file = {'depth': self.depths_mm, 'survival': self.survs, 'survivalerr': self.surverrs,
-        #                     'set_experimental': set_experimental, 'num_puntos': num_ptos_plot}
-        #        dosis_key = find_dose_from_filename(file)
-        #        dict_info[f'{dosis_key}'] = dict_file
-        #    self.senal_info_plots_backend.emit(dict_info)
+        elif tipo_plot == 'Survival vs depth':
+            for file in os.listdir(directory):
+                path_read = os.path.join(directory, file)
+                (self.depths_mm, self.doses, self.doseerrs, self.dsbyields, self.dsbyielderrs,
+                self.lmbdas, self.lmbdaerrs, self.survs, self.surverrs) = read_output_file(path_read)
+                dict_file = {'depth': self.depths_mm, 'survival': self.survs, 'survivalerr': self.surverrs,
+                             'set_experimental': set_experimental, 'num_puntos': num_ptos_plot}
+                dosis_key = find_dose_from_filename(file)
+                dict_info[f'{dosis_key}'] = dict_file
+            self.senal_info_plots_backend.emit(dict_info)
         
         elif tipo_plot == 'Yield vs depth':
             for file in os.listdir(directory):
@@ -225,22 +227,26 @@ class Logica(QObject):
         particula = event['par_option_db'].currentText()
         seed = int(event['seed_db'].text())
         nocs = int(event['nocs'].text())
+        max_ke = int(event['energy_db_max'].text())
+        ke = int(event['energy_db_min'].text())
         db_type = event['db_type'].currentText()
         N = int(event['N_sim'].text())
         fijar_dato = event['db_tipo_dato_fijo'].currentText()
         dir = event['ident'][1]
-        if particula == 'p':
-            # 0.5 ~ 500 MeV
-            ke = 0.5
-            max_ke = 500
-            d = 0.1
-            max_d = 10
-        elif particula == '12C':
-            # 20 ~ 6000 MeV
-            ke = 20
-            max_ke = 6000
-            d = 0.1
-            max_d = 10
+        #if particula == 'p':
+        #    # 0.5 ~ 500 MeV
+        #    ke = 0.5
+        #    max_ke = 500
+        #    d = 0.1
+        #    max_d = 10
+        #elif particula == '12C':
+        #    # 20 ~ 6000 MeV
+        #    ke = 20
+        #    max_ke = 6000
+        #    d = 0.1
+        #    max_d = 10
+        d = 0.1
+        max_d = 10
         E_levels = np.logspace(np.log10(ke), np.log10(max_ke), N)
         D_levels = np.linspace(d, max_d, num=N)
         cont = 0
@@ -263,7 +269,7 @@ class Logica(QObject):
                 file = open(path, 'w')
                 #file.write("\nSIMCON: seed={} nocs={}\nRADX: PAR={} KE={} AD={}\n\n\n".format(seed,
                 #          nocs,particula,E, d))
-                file.write("CELL: DNA=5.6\nSIMCON: seed={} nocs={}\nRADX: PAR={} KE={} AD={}\n\n\n".format(seed,
+                file.write("CELL: DNA=5.6 NDIA=10\nSIMCON: seed={} nocs={}\nRADX: PAR={} KE={} AD={}\n\n\n".format(seed,
                           nocs,particula,E, d))
                 file.close()
                 cont += 1
@@ -273,7 +279,7 @@ class Logica(QObject):
                 file = open(path, 'w')
                 #file.write("\nSIMCON: seed={} nocs={}\nRADX: PAR={} KE={} AD={}\n\n\n".format(seed,
                 #           nocs,particula, ke, D))
-                file.write("CELL: DNA=5.6\nSIMCON: seed={} nocs={}\nRADX: PAR={} KE={} AD={}\n\n\n".format(seed,
+                file.write("CELL: DNA=5.6 NDIA=10\nSIMCON: seed={} nocs={}\nRADX: PAR={} KE={} AD={}\n\n\n".format(seed,
                            nocs,particula, ke, D))
                 file.close()
                 cont += 1
@@ -313,13 +319,13 @@ class Logica(QObject):
             contador += 1
         t2 = lista_output[donde_tablas[1]:donde_tablas[2]]
         t3 = lista_output[donde_tablas[2]:donde_tablas[3]]
-        LET_filtr = lista_output[48][20:].split('  ')
+        LET_filtr = lista_output[47][20:].split('  ')
 
         LET_cell_entry = float(LET_filtr[1])
         LET_nuc_entry = float(LET_filtr[3])
         LET_nuc_exit = float(LET_filtr[4])
 
-        energia_filtr = lista_output[46][20:].split('  ')
+        energia_filtr = lista_output[45][20:].split('  ')
         energia = float(energia_filtr[1])
         del t2[-4:]
         del t2[:5]
@@ -368,15 +374,15 @@ class Logica(QObject):
         for file in directory_sorted:
             path = os.path.join(directory, file)
             if file.endswith('.out'):
-                energia, y, yerr, let, LET_nuc_entry, LET_nuc_exit, lmbda, lmbdaerr, dose = self.read_Y_LET(path)
+                energia, y, yerr, let_cell_entry, LET_nuc_entry, LET_nuc_exit, l, lerr, dose = self.read_Y_LET(path)
                 #dose, y, yerr, lmbda, lmbdaerr = read_D_Y_lmbda(os.path.join(directory, file))
-                #survival = mech.mech_model_wlmbda(dose, ctype, y, lmbda)
-                survival = mech.mech_model(dose, ctype, let, y)
+                survival, lmbda = mech.mech_model(dose, ctype, LET_nuc_entry, y)
+                #survival = mech.mech_model_wlmbda(dose, ctype, y, l)
                 doses.append(dose)
                 yields.append(y)
                 yieldserr.append(yerr)
                 lmbdas.append(lmbda)
-                lmbdaserr.append(lmbdaerr)
+                lmbdaserr.append(0) # lmbdaerr = 0 mientras testeo esta parte
                 survivals.append(survival)
         with open(os.path.join(directory, f'survival_dose_{ctype}.db'), 'w') as file:
             file.write('Survival Dose Yield Yielderr Lambda Lambdaerr\n')

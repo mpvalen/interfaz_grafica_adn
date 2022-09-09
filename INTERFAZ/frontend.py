@@ -15,6 +15,7 @@ from PyQt5.QtGui import QKeySequence
 
 
 class Canvas(FigureCanvasQTAgg):
+    # Clase necesaria para la interfaz de ploteo. Contiene las funciones para graficar las distintas opciones
 
     def __init__(self, parent=None, width=5, height=4, dpi=100):
         fig = Figure(figsize=(width, height), dpi=dpi)
@@ -24,6 +25,11 @@ class Canvas(FigureCanvasQTAgg):
 
 
     def choose_plot(self, option, info, num_plot):
+        # Función que recibe información sobre cuál tipo de plot quiere el user y la información de este
+        # (directorios con info, labels, etc)
+        
+        # Primera parte de la función es para escoger el plot a mostrar de todos los posibles
+        # dada una carpeta con archivos, manteniendo el orden de estos
         # avanzar o retroceder de plot depende del largo de la lista info.keys (para no tener errores)
         n_min = 1
         n_max = len(info.keys()) - 1
@@ -39,7 +45,7 @@ class Canvas(FigureCanvasQTAgg):
         v['dosis'] = dosis_key
         if option == 'Survival vs depth':
             self.survival_vs_depth(v['survival'], v['depth'], v['survivalerr'], v['set_experimental'],
-                                   v['num_puntos'])
+                                   v['num_puntos'], v['dosis'])
             self.draw()
         
         elif option == 'Dose vs depth':
@@ -49,7 +55,7 @@ class Canvas(FigureCanvasQTAgg):
         
         elif option == 'Survival vs dose':
             self.survival_vs_dose(v['doses'], v['survival'], v['set_experimental'],
-                                  v['num_puntos'])
+                                 v['num_puntos'])
             self.draw()
         
         elif option == 'Yield vs depth':
@@ -62,18 +68,10 @@ class Canvas(FigureCanvasQTAgg):
                                  v['num_puntos'])
             self.draw()
         
-        #elif option == 'Test plot':
-        #    self.test_plot_survival(v['depth'], v['survival'], v['survivalerr'], v['set_experimental'],
-        #                            v['num_puntos'], v['dosis'])
-        #    self.draw()
-        
-        #elif option == 'Test plot 2':
-        #    self.test_plot_survival_dose(v['doses'], v['survival'], v['set_experimental'],
-        #                            v['num_puntos'])
-        #    self.draw()
 
 
     def dose_vs_depth(self, doses, doseserr, depth, set_experimental, num_puntos):
+        # Función para graficar dosis vs profundidad
         self.axes.clear()
         self.axes.plot(depth, doses, color='black', markevery= num_puntos)
         self.axes.errorbar(depth, doses, doseserr, color='black', errorevery= num_puntos)
@@ -88,6 +86,7 @@ class Canvas(FigureCanvasQTAgg):
 
     
     def survival_vs_dose(self, doses, surv, set_experimental, num_puntos):
+        # Función para graficar supervivencia vs dosis
         doses_sorted_id = np.argsort(doses)
         survival = surv[doses_sorted_id]
         #survivalerr = surverr[doses_sorted_id]
@@ -105,12 +104,14 @@ class Canvas(FigureCanvasQTAgg):
             self.axes.legend()
 
     
-    def survival_vs_depth(self, survival, depth, survivalerr, set_experimental, num_puntos):
+    def survival_vs_depth(self, survival, depth, survivalerr, set_experimental, num_puntos, dose):
+        # Función para graficar supervivencia vs profundidad
         self.axes.clear()
         self.axes.plot(depth, survival, color='black', markevery= num_puntos)
         self.axes.errorbar(depth, survival, survivalerr, color='black', errorevery= num_puntos)
         self.axes.set_xlabel('Depth [mm]')
         self.axes.set_ylabel('Survival fraction')
+        self.axes.set_title(f'{dose} Gy')
         if set_experimental != '':
             set_depth = set_experimental['set_x']
             set_survival = set_experimental['set_y']
@@ -119,6 +120,7 @@ class Canvas(FigureCanvasQTAgg):
             self.axes.legend()
 
     def yield_vs_depth(self, depth, dsbyields, dsbyieldserr, set_experimental, num_puntos):
+        # Función para graficar yield (número de DSBs) vs profundidad
         self.axes.clear()
         self.axes.plot(depth, dsbyields, color='black', markevery= num_puntos)
         self.axes.errorbar(depth, dsbyields, dsbyieldserr, color='black', errorevery= num_puntos)
@@ -133,6 +135,7 @@ class Canvas(FigureCanvasQTAgg):
 
 
     def lambda_vs_depth(self, lmbda, lmbdaerr, depth, set_experimental, num_puntos):
+        # Función para graficar lambda vs profundidad
         self.axes.clear()
         self.axes.plot(depth, lmbda, color='black', markevery= num_puntos)
         self.axes.errorbar(depth, lmbda, lmbdaerr, color='black', errorevery= num_puntos)
@@ -148,6 +151,7 @@ class Canvas(FigureCanvasQTAgg):
     def test_plot_survival(self, depth, SF_sim, SFerr_sim, comp_file, num_puntos, dosis, wouters2014_mode=0, wouters2014E=230, 
                            yscale='log', depth_elongation_factor=1.0, plot=1):
         
+        print(dosis)
         self.axes.clear()
         depths_sim = [i * depth_elongation_factor for i in depth]
         depths_exp = comp_file['set_x']
@@ -698,11 +702,17 @@ class TabParams(QTabWidget):
     def tab8UI(self):
         # Base de datos
         layout = QFormLayout()
+        layout_energies = QHBoxLayout()
 
         self.inputs['par_option_db'] = QComboBox()
         self.inputs['par_option_db'].addItems(['p', '12C'])   # añadir más después
         self.inputs['seed_db'] = QLineEdit()
         self.inputs['nocs'] = QLineEdit()
+
+        self.inputs['energy_db_min'] = QLineEdit()
+        self.inputs['energy_db_max'] = QLineEdit()
+
+        
         self.inputs['db_type'] = QComboBox()
         self.inputs['db_type'].addItems(['Puntos de energía', 'Puntos de dosis'])
         self.inputs['N_sim'] = QLineEdit()
@@ -714,6 +724,14 @@ class TabParams(QTabWidget):
         layout.addRow('Partícula', self.inputs['par_option_db'])
         layout.addRow('SEED', self.inputs['seed_db'])
         layout.addRow('NOCS', self.inputs['nocs'])
+
+        layout_energies.addWidget(QLabel('Energía min:'))
+        layout_energies.addSpacing(89)
+        layout_energies.addWidget(self.inputs['energy_db_min'])
+        layout_energies.addWidget(QLabel('Energía max:'))
+        layout_energies.addWidget(self.inputs['energy_db_max'])
+        layout.addRow(layout_energies)
+
         layout.addRow(self.inputs['db_type'], self.inputs['N_sim'])
         layout.addRow(self.inputs['db_tipo_dato_fijo'], self.inputs['db_dato_fijo'])
         layout.addRow(self.boton_generar_db)
