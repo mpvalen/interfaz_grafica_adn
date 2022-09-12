@@ -256,8 +256,7 @@ class Logica(QObject):
             d = float(event['db_dato_fijo'].text())
         else:
             # default MCDS
-            ke = 1
-            d = 1
+            pass
         try:
             os.mkdir(dir)
         except:
@@ -279,7 +278,7 @@ class Logica(QObject):
                 file = open(path, 'w')
                 #file.write("\nSIMCON: seed={} nocs={}\nRADX: PAR={} KE={} AD={}\n\n\n".format(seed,
                 #           nocs,particula, ke, D))
-                file.write("CELL: DNA=5.6 NDIA=10\nSIMCON: seed={} nocs={}\nRADX: PAR={} KE={} AD={}\n\n\n".format(seed,
+                file.write("CELL: DNA=5.6 NDIA=11\nSIMCON: seed={} nocs={}\nRADX: PAR={} KE={} AD={}\n\n\n".format(seed,
                            nocs,particula, ke, D))
                 file.close()
                 cont += 1
