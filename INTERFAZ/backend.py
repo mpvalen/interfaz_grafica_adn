@@ -225,14 +225,27 @@ class Logica(QObject):
     def generar_base_datos(self, event):
         # a partir del tipo de particula + seed, genera una base de datos para distintas energías/dosis
         particula = event['par_option_db'].currentText()
-        seed = int(event['seed_db'].text())
-        nocs = int(event['nocs'].text())
         max_ke = int(event['energy_db_max'].text())
         ke = int(event['energy_db_min'].text())
+        #max_d = int(event['dosis_db_max'].text())
+        #d = int(event['dosis_db_min'].text())
         db_type = event['db_type'].currentText()
         N = int(event['N_sim'].text())
         fijar_dato = event['db_tipo_dato_fijo'].currentText()
         dir = event['ident'][1]
+
+        datos_omitibles = {'nocs': event['nocs'].text(), 'seed': event['seed_db'].text(),
+                           'ndia': event['ndia_db'].text(), 'dna': event['dna_db'].text()}
+        for item in datos_omitibles.items():
+            if item[1] != '':
+                datos_omitibles[item[0]] = int(item[1])
+            else:
+                pass
+        
+        nocs = datos_omitibles['nocs']
+        seed = datos_omitibles['seed']
+        ndia = datos_omitibles['ndia']
+        dna = datos_omitibles['dna']
         #if particula == 'p':
         #    # 0.5 ~ 500 MeV
         #    ke = 0.5
@@ -268,8 +281,8 @@ class Logica(QObject):
                 file = open(path, 'w')
                 #file.write("\nSIMCON: seed={} nocs={}\nRADX: PAR={} KE={} AD={}\n\n\n".format(seed,
                 #          nocs,particula,E, d))
-                file.write("CELL: DNA=5.6 NDIA=10\nSIMCON: seed={} nocs={}\nRADX: PAR={} KE={} AD={}\n\n\n".format(seed,
-                          nocs,particula,E, d))
+                file.write("CELL: DNA={} NDIA={}\nSIMCON: seed={} nocs={}\nRADX: PAR={} KE={} AD={}\n\n\n".format(dna,
+                            ndia, seed, nocs, particula, E, d))
                 file.close()
                 cont += 1
         else:
@@ -278,8 +291,8 @@ class Logica(QObject):
                 file = open(path, 'w')
                 #file.write("\nSIMCON: seed={} nocs={}\nRADX: PAR={} KE={} AD={}\n\n\n".format(seed,
                 #           nocs,particula, ke, D))
-                file.write("CELL: DNA=5.6 NDIA=11\nSIMCON: seed={} nocs={}\nRADX: PAR={} KE={} AD={}\n\n\n".format(seed,
-                           nocs,particula, ke, D))
+                file.write("CELL: DNA={} NDIA={}\nSIMCON: seed={} nocs={}\nRADX: PAR={} KE={} AD={}\n\n\n".format(dna,
+                            ndia, seed, nocs, particula, ke, D))
                 file.close()
                 cont += 1
         

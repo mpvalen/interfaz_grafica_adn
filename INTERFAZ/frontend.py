@@ -9,7 +9,7 @@ from matplotlib.figure import Figure
 from PyQt5 import uic
 from PyQt5.QtWidgets import (QApplication, QFileDialog, QTabWidget, QWidget, QFormLayout, QLineEdit,
                              QComboBox, QPushButton, QLabel, QVBoxLayout, QHBoxLayout, QDialog, QShortcut,
-                             QSpinBox)
+                             QSpinBox, QFrame)
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtGui import QKeySequence
 
@@ -701,44 +701,91 @@ class TabParams(QTabWidget):
     
     def tab8UI(self):
         # Base de datos
+        self.frame_rango_energias = QFrame()
+        self.frame_rango_dosis = QFrame()
         layout = QFormLayout()
         layout_energies = QHBoxLayout()
+        layout_dosis = QHBoxLayout()
 
         self.inputs['par_option_db'] = QComboBox()
-        self.inputs['par_option_db'].addItems(['p', '12C'])   # añadir más después
+        self.inputs['par_option_db'].addItems(['e', 'p', '2He', '4He', '12C', '14N', '16O', '20N', '56Fe'])   # añadir más después
         self.inputs['seed_db'] = QLineEdit()
         self.inputs['nocs'] = QLineEdit()
+
+        self.inputs['ndia_db'] = QLineEdit()
+        self.inputs['dna_db'] = QLineEdit()
 
         self.inputs['energy_db_min'] = QLineEdit()
         self.inputs['energy_db_max'] = QLineEdit()
 
+        self.inputs['dosis_db_min'] = QLineEdit()
+        self.inputs['dosis_db_max'] = QLineEdit()
+
         
         self.inputs['db_type'] = QComboBox()
         self.inputs['db_type'].addItems(['Puntos de energía', 'Puntos de dosis'])
+        self.inputs['db_type'].setToolTip('Variar la energía o la dosis')
+
         self.inputs['N_sim'] = QLineEdit()
         self.inputs['db_tipo_dato_fijo'] = QComboBox()
-        self.inputs['db_tipo_dato_fijo'].addItems(['Default', 'Fijar energía cinética', 'Fijar dosis'])
+        self.inputs['db_tipo_dato_fijo'].addItems(['Rangos de energía/dosis', 
+                                                  'Fijar energía cinética', 'Fijar dosis'])
+        self.inputs['db_tipo_dato_fijo'].activated.connect(self.db_fijar_datos)
+        self.inputs['db_tipo_dato_fijo'].setToolTip('Fijar valores distintos a los predeterminados por MCDS.'\
+                                                    ' Si se omiten valores, se usan los de MCDS.')
+
         self.inputs['db_dato_fijo'] = QLineEdit()
         self.boton_generar_db = QPushButton('Generar base de datos')
 
         layout.addRow('Partícula', self.inputs['par_option_db'])
         layout.addRow('SEED', self.inputs['seed_db'])
         layout.addRow('NOCS', self.inputs['nocs'])
+        layout.addRow('NDIA', self.inputs['ndia_db'])
+        layout.addRow('DNA', self.inputs['dna_db'])
 
-        layout_energies.addWidget(QLabel('Energía min:'))
-        layout_energies.addSpacing(89)
-        layout_energies.addWidget(self.inputs['energy_db_min'])
-        layout_energies.addWidget(QLabel('Energía max:'))
-        layout_energies.addWidget(self.inputs['energy_db_max'])
-        layout.addRow(layout_energies)
 
         layout.addRow(self.inputs['db_type'], self.inputs['N_sim'])
         layout.addRow(self.inputs['db_tipo_dato_fijo'], self.inputs['db_dato_fijo'])
+
+        layout_energies.addSpacing(80)
+        layout_energies.addWidget(QLabel('Energía min:'))
+        #layout_energies.addSpacing(10)
+        layout_energies.addWidget(self.inputs['energy_db_min'])
+        layout_energies.addWidget(QLabel('Energía max:'))
+        layout_energies.addWidget(self.inputs['energy_db_max'])
+        self.frame_rango_energias.setLayout(layout_energies)
+        layout.addRow(self.frame_rango_energias)
+
+        layout_dosis.addSpacing(80)
+        layout_dosis.addWidget(QLabel('Dosis min:'))
+        #layout_dosis.addSpacing(92)
+        layout_dosis.addWidget(self.inputs['dosis_db_min'])
+        layout_dosis.addWidget(QLabel('Dosis max:'))
+        layout_dosis.addWidget(self.inputs['dosis_db_max'])
+        self.frame_rango_dosis.setLayout(layout_dosis)
+        layout.addRow(self.frame_rango_dosis)
+
         layout.addRow(self.boton_generar_db)
 
         self.setTabText(8, 'Base de datos')
         self.tab8.setLayout(layout)
         self.setTabVisible(8, False)
+    
+    def db_fijar_datos(self):
+        dato_fijo = self.inputs['db_tipo_dato_fijo'].currentText()
+        if dato_fijo == 'Fijar energía cinética':
+            # Eliminar rangos de energía, dar solo 1 espacio para rellenar valor fijo
+            self.frame_rango_energias.hide()
+            self.frame_rango_dosis.show()
+        elif dato_fijo == 'Fijar dosis':
+            # Eliminra rangos de dosis, dar solo 1 espacio para rellenar valor fijo
+            self.frame_rango_dosis.hide()
+            self.frame_rango_energias.show()
+        else:
+            # Mostrar rangos de energía y dosis
+            self.frame_rango_energias.show()
+            self.frame_rango_dosis.show()
+
 
     def open_dose_data(self):
         self.inputs['dose_data_path'] = QFileDialog.getExistingDirectory(self, 'Elegir carpeta')
