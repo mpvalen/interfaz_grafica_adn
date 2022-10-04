@@ -225,51 +225,38 @@ class Logica(QObject):
     def generar_base_datos(self, event):
         # a partir del tipo de particula + seed, genera una base de datos para distintas energías/dosis
         particula = event['par_option_db'].currentText()
-        max_ke = int(event['energy_db_max'].text())
-        ke = int(event['energy_db_min'].text())
-        #max_d = int(event['dosis_db_max'].text())
-        #d = int(event['dosis_db_min'].text())
         db_type = event['db_type'].currentText()
         N = int(event['N_sim'].text())
-        fijar_dato = event['db_tipo_dato_fijo'].currentText()
         dir = event['ident'][1]
 
         datos_omitibles = {'nocs': event['nocs'].text(), 'seed': event['seed_db'].text(),
                            'ndia': event['ndia_db'].text(), 'dna': event['dna_db'].text()}
         for item in datos_omitibles.items():
             if item[1] != '':
-                datos_omitibles[item[0]] = int(item[1])
+                datos_omitibles[item[0]] = float(item[1])
             else:
                 pass
-        
         nocs = datos_omitibles['nocs']
         seed = datos_omitibles['seed']
         ndia = datos_omitibles['ndia']
         dna = datos_omitibles['dna']
-        #if particula == 'p':
-        #    # 0.5 ~ 500 MeV
-        #    ke = 0.5
-        #    max_ke = 500
-        #    d = 0.1
-        #    max_d = 10
-        #elif particula == '12C':
-        #    # 20 ~ 6000 MeV
-        #    ke = 20
-        #    max_ke = 6000
-        #    d = 0.1
-        #    max_d = 10
-        d = 0.1
-        max_d = 10
+        energia_dosis = [0.5, 500, 0.1, 10] # energia min, max, dosis min y max
+
+        db_energia_dosis = [event['energy_db_min'].text(), event['energy_db_max'].text(),
+                            event['dosis_db_min'].text(), event['dosis_db_max'].text()]
+        print(len(db_energia_dosis))
+        for i, dato in enumerate(db_energia_dosis):
+            if dato != '':
+                energia_dosis[i] = int(dato)
+
+        ke = energia_dosis[0]
+        max_ke = energia_dosis[1]
+        d = energia_dosis[2]
+        max_d = energia_dosis[3]
         E_levels = np.logspace(np.log10(ke), np.log10(max_ke), N)
         D_levels = np.linspace(d, max_d, num=N)
         cont = 0
-        if fijar_dato == 'Fijar energía cinética':
-            ke = float(event['db_dato_fijo'].text())
-        elif fijar_dato == 'Fijar dosis':
-            d = float(event['db_dato_fijo'].text())
-        else:
-            # default MCDS
-            pass
+
         try:
             os.mkdir(dir)
         except:

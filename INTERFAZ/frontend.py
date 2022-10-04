@@ -725,16 +725,26 @@ class TabParams(QTabWidget):
         self.inputs['db_type'] = QComboBox()
         self.inputs['db_type'].addItems(['Puntos de energía', 'Puntos de dosis'])
         self.inputs['db_type'].setToolTip('Variar la energía o la dosis')
-
         self.inputs['N_sim'] = QLineEdit()
-        self.inputs['db_tipo_dato_fijo'] = QComboBox()
-        self.inputs['db_tipo_dato_fijo'].addItems(['Rangos de energía/dosis', 
-                                                  'Fijar energía cinética', 'Fijar dosis'])
-        self.inputs['db_tipo_dato_fijo'].activated.connect(self.db_fijar_datos)
-        self.inputs['db_tipo_dato_fijo'].setToolTip('Fijar valores distintos a los predeterminados por MCDS.'\
-                                                    ' Si se omiten valores, se usan los de MCDS.')
 
-        self.inputs['db_dato_fijo'] = QLineEdit()
+
+        self.boton_rangos_energia = QPushButton('Cambiar intervalo de energías')
+        self.boton_rangos_energia.setToolTip('Los valores predeterminados son energía mínima 0.5 MeV y máxima 500 MeV')
+        self.boton_rangos_dosis = QPushButton('Cambiar intervalo de dosis')
+        self.boton_rangos_dosis.setToolTip('Los valores predeterminados son dosis mínima 0.1 Gy y máxima 10 Gy')
+
+        self.boton_rangos_energia.clicked.connect(self.db_cambiar_energias)
+        self.boton_rangos_dosis.clicked.connect(self.db_cambiar_dosis)
+
+
+        #self.inputs['db_tipo_dato_fijo'] = QComboBox()
+        #self.inputs['db_tipo_dato_fijo'].addItems(['Rangos de energía/dosis', 
+        #                                          'Fijar energía cinética', 'Fijar dosis'])
+        #self.inputs['db_tipo_dato_fijo'].activated.connect(self.db_fijar_datos)
+        #self.inputs['db_tipo_dato_fijo'].setToolTip('Fijar valores distintos a los predeterminados por MCDS.'\
+        #                                            ' Si se omiten valores, se usan los de MCDS.')
+
+        #self.inputs['db_dato_fijo'] = QLineEdit()
         self.boton_generar_db = QPushButton('Generar base de datos')
 
         layout.addRow('Partícula', self.inputs['par_option_db'])
@@ -745,46 +755,53 @@ class TabParams(QTabWidget):
 
 
         layout.addRow(self.inputs['db_type'], self.inputs['N_sim'])
-        layout.addRow(self.inputs['db_tipo_dato_fijo'], self.inputs['db_dato_fijo'])
+        #layout.addRow(self.inputs['db_tipo_dato_fijo'], self.inputs['db_dato_fijo'])
 
-        layout_energies.addSpacing(80)
+        #layout_energies.addSpacing(80)
         layout_energies.addWidget(QLabel('Energía min:'))
         #layout_energies.addSpacing(10)
         layout_energies.addWidget(self.inputs['energy_db_min'])
         layout_energies.addWidget(QLabel('Energía max:'))
         layout_energies.addWidget(self.inputs['energy_db_max'])
         self.frame_rango_energias.setLayout(layout_energies)
-        layout.addRow(self.frame_rango_energias)
+        layout.addRow(self.boton_rangos_energia, self.frame_rango_energias)
 
-        layout_dosis.addSpacing(80)
+        #layout_dosis.addSpacing(80)
         layout_dosis.addWidget(QLabel('Dosis min:'))
         #layout_dosis.addSpacing(92)
         layout_dosis.addWidget(self.inputs['dosis_db_min'])
         layout_dosis.addWidget(QLabel('Dosis max:'))
         layout_dosis.addWidget(self.inputs['dosis_db_max'])
         self.frame_rango_dosis.setLayout(layout_dosis)
-        layout.addRow(self.frame_rango_dosis)
+        layout.addRow(self.boton_rangos_dosis, self.frame_rango_dosis)
 
         layout.addRow(self.boton_generar_db)
 
         self.setTabText(8, 'Base de datos')
+        self.frame_rango_energias.hide()
+        self.frame_rango_dosis.hide()
         self.tab8.setLayout(layout)
         self.setTabVisible(8, False)
     
-    def db_fijar_datos(self):
-        dato_fijo = self.inputs['db_tipo_dato_fijo'].currentText()
-        if dato_fijo == 'Fijar energía cinética':
-            # Eliminar rangos de energía, dar solo 1 espacio para rellenar valor fijo
-            self.frame_rango_energias.hide()
-            self.frame_rango_dosis.show()
-        elif dato_fijo == 'Fijar dosis':
-            # Eliminra rangos de dosis, dar solo 1 espacio para rellenar valor fijo
-            self.frame_rango_dosis.hide()
+    def db_cambiar_energias(self):
+        if self.frame_rango_energias.isHidden():
             self.frame_rango_energias.show()
+            self.boton_rangos_energia.setText('Usar intervalo predeterminado')
         else:
-            # Mostrar rangos de energía y dosis
-            self.frame_rango_energias.show()
+            self.frame_rango_energias.hide()
+            self.boton_rangos_energia.setText('Cambiar intervalo de energías')
+            self.inputs['energy_db_min'].setText('')
+            self.inputs['energy_db_max'].setText('')
+
+    def db_cambiar_dosis(self):
+        if self.frame_rango_dosis.isHidden():
             self.frame_rango_dosis.show()
+            self.boton_rangos_dosis.setText('Usar intervalo predeterminado')
+        else:
+            self.frame_rango_dosis.hide()
+            self.boton_rangos_dosis.setText('Cambiar intervalo de dosis')
+            self.inputs['dosis_db_min'].setText('')
+            self.inputs['dosis_db_max'].setText('')
 
 
     def open_dose_data(self):
