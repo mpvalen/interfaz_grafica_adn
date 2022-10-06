@@ -228,6 +228,7 @@ class Logica(QObject):
         db_type = event['db_type'].currentText()
         N = int(event['N_sim'].text())
         dir = event['ident'][1]
+        dato_fijo = event['db_energia_dosis_fija'].text()
 
         datos_omitibles = {'nocs': event['nocs'].text(), 'seed': event['seed_db'].text(),
                            'ndia': event['ndia_db'].text(), 'dna': event['dna_db'].text()}
@@ -244,7 +245,6 @@ class Logica(QObject):
 
         db_energia_dosis = [event['energy_db_min'].text(), event['energy_db_max'].text(),
                             event['dosis_db_min'].text(), event['dosis_db_max'].text()]
-        print(len(db_energia_dosis))
         for i, dato in enumerate(db_energia_dosis):
             if dato != '':
                 energia_dosis[i] = int(dato)
@@ -253,6 +253,12 @@ class Logica(QObject):
         max_ke = energia_dosis[1]
         d = energia_dosis[2]
         max_d = energia_dosis[3]
+        if dato_fijo != '' and db_type == 'Puntos de energía':
+            # Dosis fija
+            d = float(dato_fijo)
+        elif dato_fijo != '' and db_type == 'Puntos de dosis':
+            # Energía fija
+            ke = float(dato_fijo)
         E_levels = np.logspace(np.log10(ke), np.log10(max_ke), N)
         D_levels = np.linspace(d, max_d, num=N)
         cont = 0
