@@ -78,7 +78,7 @@ def mech_model(D,ctype,LET,Y):
             eta_infty = 0.0022
         R = 5.5  # um
         rho = 1  # Nucleus density g/cm3
-        N = (Y / 50) * D  # NÚMERO DE DSBS X CÉLULA
+        N = Y * D  # NÚMERO DE DSBS X CÉLULA
         lmbda = Y * (LET * 1.602 * 10 ** (-19)) / (math.pi * R ** 2 * rho * 10 ** (-18)) # =N/n
 
         #lmbda = 3

@@ -60,7 +60,7 @@ Una vez añadidos los parámetros necesarios, se selecciona `Generar plots`y el 
 
   
 
-Se puede generar una base de datos que puede usarse luego en la sección de **Fluka**. Se debe escoger el tipo de partícula, el número de puntos de energía o de dosis y se pueden especificar rangos de energía o dosis distintos a los predeterminados. Además se pueden especificar valores para la seed, número de simulaciones (nocs), diámetro nuclear y cantidad de adn, todo de forma opcional. 
+Se puede generar una base de datos que puede usarse luego en la sección de **Fluka**. Se debe escoger el tipo de partícula, el número de puntos de energía o de dosis y se pueden especificar rangos de energía/dosis distintos a los predeterminados. Además se pueden especificar valores para la seed, número de simulaciones (nocs), diámetro nuclear y cantidad de adn distintos a los valores predeterminados.
 
 Finalmente al seleccionar `Generar base de datos` se generan los inputs y outputs dentro de una carpeta con el nombre entregado en la ventana inicial y finalmente se crea un archivo `.database` que contiene:
 

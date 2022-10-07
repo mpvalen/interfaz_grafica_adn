@@ -9,7 +9,7 @@ from matplotlib.figure import Figure
 from PyQt5 import uic
 from PyQt5.QtWidgets import (QApplication, QFileDialog, QTabWidget, QWidget, QFormLayout, QLineEdit,
                              QComboBox, QPushButton, QLabel, QVBoxLayout, QHBoxLayout, QDialog, QShortcut,
-                             QSpinBox, QFrame)
+                             QSpinBox, QFrame, QSpinBox, QDoubleSpinBox)
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtGui import QKeySequence
 
@@ -712,11 +712,19 @@ class TabParams(QTabWidget):
 
         self.inputs['par_option_db'] = QComboBox()
         self.inputs['par_option_db'].addItems(['e', 'p', '2He', '4He', '12C', '14N', '16O', '20N', '56Fe'])   # añadir más después
-        self.inputs['seed_db'] = QLineEdit()
-        self.inputs['nocs'] = QLineEdit()
+        self.inputs['seed_db'] = QSpinBox()
+        self.inputs['seed_db'].setRange(1, 1000000000)
+        self.inputs['seed_db'].setValue(987654321)
+        self.inputs['nocs'] = QSpinBox()
+        self.inputs['nocs'].setRange(1, 1000000)
+        self.inputs['nocs'].setValue(1)
 
-        self.inputs['ndia_db'] = QLineEdit()
-        self.inputs['dna_db'] = QLineEdit()
+        self.inputs['ndia_db'] = QDoubleSpinBox()
+        self.inputs['ndia_db'].setRange(0, 1000)
+        self.inputs['ndia_db'].setValue(5)
+        self.inputs['dna_db'] = QDoubleSpinBox()
+        self.inputs['dna_db'].setRange(0, 1000)
+        self.inputs['dna_db'].setValue(6)
 
         self.inputs['energy_db_min'] = QLineEdit()
         self.inputs['energy_db_max'] = QLineEdit()
