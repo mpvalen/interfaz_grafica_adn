@@ -231,7 +231,7 @@ class Logica(QObject):
         dato_fijo = event['db_energia_dosis_fija'].text()
 
         datos_omitibles = {'nocs': event['nocs'].text(), 'seed': event['seed_db'].text(),
-                           'ndia': event['ndia_db'].text(), 'dna': event['dna_db'].text()}
+                           'ndia': event['ndia_db'].value(), 'dna': event['dna_db'].value()}
         for item in datos_omitibles.items():
             if item[1] != '':
                 datos_omitibles[item[0]] = float(item[1])
@@ -386,8 +386,8 @@ class Logica(QObject):
                 doses.append(dose)
                 yields.append(y)
                 yieldserr.append(yerr)
-                lmbdas.append(lmbda)
-                lmbdaserr.append(0) # lmbdaerr = 0 mientras testeo esta parte
+                lmbdas.append(l)
+                lmbdaserr.append(lerr)
                 survivals.append(survival)
         with open(os.path.join(directory, f'survival_dose_{ctype}.db'), 'w') as file:
             file.write('Survival Dose Yield Yielderr Lambda Lambdaerr\n')
