@@ -4,222 +4,15 @@ import os
 import matplotlib
 import numpy as np
 matplotlib.use('Qt5Agg')
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationToolbar2QT
-from matplotlib.figure import Figure
+from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT
+from clases_plots import Canvas, Plot, HorizontalLine
 from PyQt5 import uic
 from PyQt5.QtWidgets import (QApplication, QFileDialog, QTabWidget, QWidget, QFormLayout, QLineEdit,
                              QComboBox, QPushButton, QLabel, QVBoxLayout, QHBoxLayout, QDialog, QShortcut,
-                             QSpinBox, QFrame, QSpinBox, QDoubleSpinBox)
+                             QSpinBox, QFrame, QSpinBox, QDoubleSpinBox, QStackedLayout)
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtGui import QKeySequence
 
-
-class Canvas(FigureCanvasQTAgg):
-    # Clase necesaria para la interfaz de ploteo. Contiene las funciones para graficar las distintas opciones
-
-    def __init__(self, parent=None, width=5, height=4, dpi=100):
-        fig = Figure(figsize=(width, height), dpi=dpi)
-        self.axes = fig.add_subplot(111)
-        self.num_plot = 0
-        super(Canvas, self).__init__(fig)
-
-
-    def choose_plot(self, option, info, num_plot):
-        # Función que recibe información sobre cuál tipo de plot quiere el user y la información de este
-        # (directorios con info, labels, etc)
-        
-        # Primera parte de la función es para escoger el plot a mostrar de todos los posibles
-        # dada una carpeta con archivos, manteniendo el orden de estos
-        # avanzar o retroceder de plot depende del largo de la lista info.keys (para no tener errores)
-        n_min = 1
-        n_max = len(info.keys()) - 1
-        if (self.num_plot + num_plot) > n_max:
-            self.num_plot = n_min
-        elif (self.num_plot + num_plot) < n_min:
-            self.num_plot = n_max
-        else:
-            self.num_plot += num_plot
-
-        dosis_key = list(info.keys())[self.num_plot]
-        v = info[dosis_key]
-        v['dosis'] = dosis_key
-        if option == 'Survival vs depth':
-            self.survival_vs_depth(v['survival'], v['depth'], v['survivalerr'], v['set_experimental'],
-                                   v['num_puntos'], v['dosis'])
-            self.draw()
-        
-        elif option == 'Dose vs depth':
-            self.dose_vs_depth(v['doses'], v['doseserr'], v['depth'], v['set_experimental'],
-                               v['num_puntos'])
-            self.draw()
-        
-        elif option == 'Survival vs dose':
-            self.survival_vs_dose(v['doses'], v['survival'], v['set_experimental'],
-                                 v['num_puntos'])
-            self.draw()
-        
-        elif option == 'Yield vs depth':
-            self.yield_vs_depth(v['depth'], v['dsbyields'], v['dsbyieldserr'], v['set_experimental'],
-                                v['num_puntos'])
-            self.draw()
-
-        elif option == 'Lambda vs depth':
-            self.lambda_vs_depth(v['lambda'], v['lambdaerr'], v['depth'], v['set_experimental'],
-                                 v['num_puntos'])
-            self.draw()
-        
-
-
-    def dose_vs_depth(self, doses, doseserr, depth, set_experimental, num_puntos):
-        # Función para graficar dosis vs profundidad
-        self.axes.clear()
-        self.axes.plot(depth, doses, color='black', markevery= num_puntos)
-        self.axes.errorbar(depth, doses, doseserr, color='black', errorevery= num_puntos)
-        self.axes.set_xlabel('Depth [mm]')
-        self.axes.set_ylabel('Dose [Gy]')
-        if set_experimental != '':
-            set_depth = set_experimental['set_x']
-            set_doses = set_experimental['set_y']
-            label_set = set_experimental['label_set_experimental']
-            self.axes.scatter(set_depth, set_doses, color='green', label= label_set)
-            self.axes.legend()
-
-    
-    def survival_vs_dose(self, doses, surv, set_experimental, num_puntos):
-        # Función para graficar supervivencia vs dosis
-        doses_sorted_id = np.argsort(doses)
-        survival = surv[doses_sorted_id]
-        #survivalerr = surverr[doses_sorted_id]
-        doses.sort()
-        self.axes.clear()
-        self.axes.plot(doses, survival, color='black')
-        #self.axes.errorbar(doses, survival, survivalerr, color='black', errorevery= num_puntos)
-        self.axes.set_xlabel('Dose [Gy]')
-        self.axes.set_ylabel('Survival fraction')
-        if set_experimental != '':
-            set_doses = set_experimental['set_x']
-            set_survival = set_experimental['set_y']
-            label_set = set_experimental['label_set_experimental']
-            self.axes.scatter(set_doses, set_survival, color='green', label= label_set)
-            self.axes.legend()
-
-    
-    def survival_vs_depth(self, survival, depth, survivalerr, set_experimental, num_puntos, dose):
-        # Función para graficar supervivencia vs profundidad
-        self.axes.clear()
-        self.axes.plot(depth, survival, color='black', markevery= num_puntos)
-        self.axes.errorbar(depth, survival, survivalerr, color='black', errorevery= num_puntos)
-        self.axes.set_xlabel('Depth [mm]')
-        self.axes.set_ylabel('Survival fraction')
-        self.axes.set_title(f'{dose} Gy')
-        if set_experimental != '':
-            set_depth = set_experimental['set_x']
-            set_survival = set_experimental['set_y']
-            label_set = set_experimental['label_set_experimental']
-            self.axes.scatter(set_depth, set_survival, color='green', label= label_set)
-            self.axes.legend()
-
-    def yield_vs_depth(self, depth, dsbyields, dsbyieldserr, set_experimental, num_puntos):
-        # Función para graficar yield (número de DSBs) vs profundidad
-        self.axes.clear()
-        self.axes.plot(depth, dsbyields, color='black', markevery= num_puntos)
-        self.axes.errorbar(depth, dsbyields, dsbyieldserr, color='black', errorevery= num_puntos)
-        self.axes.set_xlabel('Depth [mm]')
-        self.axes.set_ylabel('DSB Yield')
-        if set_experimental != '':
-            set_depth = set_experimental['set_x']
-            set_dsbyields = set_experimental['set_y']
-            label_set = set_experimental['label_set_experimental']
-            self.axes.scatter(set_depth, set_dsbyields, color='green', label= label_set)
-            self.axes.legend()
-
-
-    def lambda_vs_depth(self, lmbda, lmbdaerr, depth, set_experimental, num_puntos):
-        # Función para graficar lambda vs profundidad
-        self.axes.clear()
-        self.axes.plot(depth, lmbda, color='black', markevery= num_puntos)
-        self.axes.errorbar(depth, lmbda, lmbdaerr, color='black', errorevery= num_puntos)
-        self.axes.set_xlabel('Depth [mm]')
-        self.axes.set_ylabel('Lambda')
-        if set_experimental != '':
-            set_depth = set_experimental['set_x']
-            set_lmbda = set_experimental['set_y']
-            label_set = set_experimental['label_set_experimental']
-            self.axes.scatter(set_depth, set_lmbda, color='green', label= label_set)
-            self.axes.legend()
-    
-    def test_plot_survival(self, depth, SF_sim, SFerr_sim, comp_file, num_puntos, dosis, wouters2014_mode=0, wouters2014E=230, 
-                           yscale='log', depth_elongation_factor=1.0, plot=1):
-        
-        print(dosis)
-        self.axes.clear()
-        depths_sim = [i * depth_elongation_factor for i in depth]
-        depths_exp = comp_file['set_x']
-        SF_exp = comp_file['set_y']
-        label_set = comp_file['label_set_experimental']
-
-        if wouters2014_mode == 1:
-            avg_SF_sim = []
-            avg_SFerr_sim = []
-            for index_exp, de in enumerate(depths_exp):
-                avg_SF_list = []
-                avg_SFerr_list = []
-                for index_sim, ds in enumerate(depths_sim):
-                    if wouters2014E == 230:
-                        if index_exp == 14:
-                            if de - 1 < ds and de + 1 > ds:
-                                avg_SF_list.append(SF_sim[index_sim])
-                                avg_SFerr_list.append(SFerr_sim[index_sim])
-                        else:
-                            if de - 2 < ds and de + 2 > ds:
-                                avg_SF_list.append(SF_sim[index_sim])
-                                avg_SFerr_list.append(SFerr_sim[index_sim])
-                    elif wouters2014E == 160:
-                        if index_exp == 10:
-                            if de - 1 < ds and de + 1 > ds:
-                                avg_SF_list.append(SF_sim[index_sim])
-                                avg_SFerr_list.append(SFerr_sim[index_sim])
-                        else:
-                            if de - 2 < ds and de + 2 > ds:
-                                avg_SF_list.append(SF_sim[index_sim])
-                                avg_SFerr_list.append(SFerr_sim[index_sim])
-                avg_SF_sim.append(np.mean(avg_SF_list))
-                avg_SFerr_sim.append(np.mean(avg_SFerr_list))
-            if plot == 1:
-                self.axes.errorbar(depths_exp, avg_SF_sim, avg_SFerr_sim, label='Sim', linewidth=0.5, capsize=3,
-                                   color='black', errorevery= num_puntos)
-        else:
-            if plot == 1:
-                self.axes.errorbar(depths_sim, SF_sim, SFerr_sim, label='Sim', linewidth=0.5, capsize=3, 
-                                   color='black', errorevery= num_puntos)
-        if plot == 1:
-            self.axes.scatter(depths_exp, SF_exp, marker='D', facecolor='none', label=label_set, color='green')
-            self.axes.set_xlabel('Depth[mm]')
-            self.axes.set_ylabel('Survival Fraction')
-            self.axes.set_yscale(yscale)
-            self.axes.legend()
-            self.axes.set_title(f'{dosis} Gy')
-            #self.axes.tight_layout()
-            #self.axes.set_ylim([0, 1.05])
-        if wouters2014_mode == 1:
-            return depths_exp, avg_SF_sim, avg_SFerr_sim, SF_exp
-        else:
-            return depths_sim, SF_sim, SFerr_sim, SF_exp
-
-    def test_plot_survival_dose(self, dose, surv, set_experimental, num_puntos):
-        self.axes.clear()
-        self.axes.plot(dose, surv, color='black', markevery=num_puntos)
-        #self.axes.errorbar(dose, surv, surverr, color='black', errorevery = num_puntos)
-        self.axes.set_xlabel('Dose (Gy)')
-        self.axes.set_ylabel('Survival fraction')
-        self.axes.set_yscale('log')
-        if set_experimental != '':
-            set_dose = set_experimental['set_x']
-            set_survival = set_experimental['set_y']
-            label_set = set_experimental['label_set_experimental']
-            self.axes.scatter(set_dose, set_survival, color='green', label=label_set)
-            self.axes.legend()
-    
 
 
 window_name, base_class = uic.loadUiType('ventana_principal.ui')
@@ -295,7 +88,7 @@ class VentanaPrincipal(window_name, base_class):
     
     def recibir_info_plots(self, event):
         # a partir del boton "generar plots", se muestra el "primer" plot del diccionario
-        self.tipo_plot = event['tipo_plot']
+        self.tipo_plot = event[0]['tipo_plot']
         self.info_ultimo_plot = event
         self.tab_widget.canvas.choose_plot(self.tipo_plot, event, 1)
 
@@ -412,6 +205,10 @@ class TabParams(QTabWidget):
         self.tab6 = QWidget()
         self.tab7 = QWidget()
         self.tab8 = QWidget()
+
+        # Lista de instancias de la clase Plot
+        self.inputs['plots'] = [Plot(1)]
+        self.plot_actual = self.inputs['plots'][0]
 
         self.addTab(self.tab0, "Tab 0")
         self.addTab(self.tab1, "Tab 1")
@@ -645,41 +442,35 @@ class TabParams(QTabWidget):
         toolbar = NavigationToolbar2QT(self.canvas, self)
 
         layout = QHBoxLayout()
-        v_layout = QVBoxLayout()
+        self.v_layout_plots = QVBoxLayout()
         
-        top_layout = QFormLayout()
-        tipo_plot = QLabel('Tipo de plot')
+        layout_plots = QHBoxLayout()
+        self.boton_nuevo_plot = QPushButton('Añadir otro plot')
+        self.boton_nuevo_plot.clicked.connect(self.nuevo_plot)
+        self.plot_seleccionado = QComboBox()
+        self.plot_seleccionado.activated.connect(self.cambiar_vista_plot)
+        self.plot_seleccionado.addItem('Plot 1')
         self.inputs['plot_options'] = QComboBox()
         self.inputs['plot_options'].addItems(['Survival vs dose', 'Dose vs depth', 'Survival vs depth',
                                               'Yield vs depth', 'Lambda vs depth'])
-        carpeta = QLabel('Carpeta')
-        carpeta.setToolTip('La carpeta que contiene los archivos output')
-        self.carpeta_plot = QPushButton('Elegir carpeta', self)
-        self.carpeta_plot.clicked.connect(self.open_carpeta_plots)
-
-        set_experimental = QLabel('Set experimental')
-        set_experimental.setToolTip('Archivo con datos experimentales, se genera un scatter de puntos')
-        self.set_experimental_button = QPushButton('Elegir archivo', self)
-        self.set_experimental_button.clicked.connect(self.open_set_experimental)
-
-        label_name = QLabel('Label del set')
-        self.inputs['label_set_experimental'] = QLineEdit()
-
-        label_puntos = QLabel('Separación de puntos')
-        self.inputs['num_puntos_plot'] = QSpinBox()
-        self.inputs['num_puntos_plot'].setValue(10)
-        self.inputs['num_puntos_plot'].setMinimum(1)
-
-        top_layout.addRow(tipo_plot, self.inputs['plot_options'])
-        top_layout.addRow(carpeta, self.carpeta_plot)
-        top_layout.addRow(set_experimental, self.set_experimental_button)
-        top_layout.addRow(label_name, self.inputs['label_set_experimental'])
-        top_layout.addRow(label_puntos, self.inputs['num_puntos_plot'])
-
-        v_layout.addLayout(top_layout)
+        layout_plots.addWidget(self.boton_nuevo_plot)
+        layout_plots.addWidget(self.plot_seleccionado)
         
+        tipo_plot_layout = QHBoxLayout()
+        tipo_plot_layout.addWidget(QLabel('Tipo plot'))
+        tipo_plot_layout.addWidget(self.inputs['plot_options'])
+
+        self.v_layout_plots.addLayout(layout_plots)
+        self.v_layout_plots.addLayout(tipo_plot_layout)
+        self.v_layout_plots.addWidget(HorizontalLine())
+
+        self.stackedLayout = QStackedLayout()
+        self.stackedLayout.addWidget(self.plot_actual)
+        self.v_layout_plots.addLayout(self.stackedLayout)
+
+        self.v_layout_plots.addWidget(HorizontalLine())
         self.generar_plots_button = QPushButton('Generar plots')
-        v_layout.addWidget(self.generar_plots_button)
+        self.v_layout_plots.addWidget(self.generar_plots_button)
 
         bottom_layout = QHBoxLayout()
         self.plots_left = QPushButton('Volver atras')
@@ -687,13 +478,13 @@ class TabParams(QTabWidget):
         bottom_layout.addWidget(self.plots_left)
         bottom_layout.addWidget(self.plots_right)
 
-        v_layout.addLayout(bottom_layout)
+        self.v_layout_plots.addLayout(bottom_layout)
 
         layout_canvas = QVBoxLayout()
         layout_canvas.addWidget(toolbar)
         layout_canvas.addWidget(self.canvas)
 
-        layout.addLayout(v_layout)
+        layout.addLayout(self.v_layout_plots)
         layout.addLayout(layout_canvas)
         self.setTabText(7,"Plots")
         self.tab7.setLayout(layout)
@@ -813,6 +604,21 @@ class TabParams(QTabWidget):
             self.boton_rangos_dosis.setText('Cambiar intervalo de dosis')
             self.inputs['dosis_db_min'].setText('')
             self.inputs['dosis_db_max'].setText('')
+    
+    def nuevo_plot(self):
+        # Crear una nueva instancia de Plot y guardarla
+        plot = Plot(len(self.inputs['plots']) + 1)
+        self.inputs['plots'].append(plot)
+        num_plots = len(self.inputs['plots'])
+        self.plot_seleccionado.addItem(f'Plot {num_plots}')
+        self.stackedLayout.addWidget(plot)
+    
+    def cambiar_vista_plot(self):
+        self.stackedLayout.setCurrentIndex(self.plot_seleccionado.currentIndex())
+        #plot = int(self.plot_seleccionado.currentText()[5:])
+        #self.plot_actual = self.inputs['plots'][plot - 1]
+
+        
 
     def fijar_energia_dosis(self):
         if self.inputs['db_type'].currentText() == 'Puntos de energía':

@@ -15,7 +15,7 @@ import natsort
 class Logica(QObject):
     # Clase que contiene gran parte de las funciones del backend de la interfaz. Se guarda información
     # recurrente como directorio escogido, parámetros dados por el user, etc.
-    senal_info_plots_backend = pyqtSignal(dict)
+    senal_info_plots_backend = pyqtSignal(list)
 
     def __init__(self):
         super().__init__()
@@ -118,108 +118,113 @@ class Logica(QObject):
     def info_plots(self, event):
         # recibe el tipo de plot, envia info necesaria para plotear
         tipo_plot = str(event['plot_options'].currentText())
-        directory = event['path_carpeta_plots']
-        dict_info = dict()
-        dict_info['tipo_plot'] = tipo_plot
-        label_set_experimental = event['label_set_experimental'].text()
-        num_ptos_plot = int(event['num_puntos_plot'].text())
-        try:
-            set_experimental_path = event['set_experimental'][0]
-            set_x, set_y = read_set_experimental(set_experimental_path)
-            set_experimental = {'set_x': set_x, 'set_y': set_y, 
-                                'label_set_experimental': label_set_experimental}
-        except (KeyError, FileNotFoundError) as error:
-            set_experimental = ''
-        if tipo_plot == 'Dose vs depth':
-            # Leer archivos de la carpeta
-            for file in os.listdir(directory):
-                path_read = os.path.join(directory, file)
-                (self.depths_mm, self.doses, self.doseerrs, self.dsbyields, self.dsbyielderrs,
-                self.lmbdas, self.lmbdaerrs, self.survs, self.surverrs) = read_output_file(path_read)
-                dict_file = {'doses': self.doses, 'doseserr': self.doseerrs, 
-                             'depth': self.depths_mm, 'set_experimental': set_experimental,
-                             'num_puntos': num_ptos_plot}
-                dosis_key = find_dose_from_filename(file)
-                dict_info[f'{dosis_key}'] = dict_file
-            self.senal_info_plots_backend.emit(dict_info)
-        
-        elif tipo_plot == 'Survival vs dose':
-            for file in os.listdir(directory):
-                if file.endswith('.db'):
-                    survival, dose = read_surv_dose_file(os.path.join(directory, file))
-                    dict_file = {'doses': dose, 'survival': survival,
-                                'set_experimental': set_experimental, 'num_puntos': num_ptos_plot}
-                    dosis_key = 0
-                    print(file[-6:-3])
-                    dict_info[f'{dosis_key}'] = dict_file
-                    self.senal_info_plots_backend.emit(dict_info)
 
-            #for file in os.listdir(directory):
-            #    path_read = os.path.join(directory, file)
-            #    (self.depths_mm, self.doses, self.doseerrs, self.dsbyields, self.dsbyielderrs,
-            #    self.lmbdas, self.lmbdaerrs, self.survs, self.surverrs) = read_output_file(path_read)
-            #    dict_file = {'doses': self.doses, 'survival': self.survs, 'survivalerr': self.surverrs,
-            #                 'set_experimental': set_experimental, 'num_puntos': num_ptos_plot}
-            #    dosis_key = find_dose_from_filename(file)
-            #    dict_info[f'{dosis_key}'] = dict_file
-            #self.senal_info_plots_backend.emit(dict_info)
-        
-        elif tipo_plot == 'Survival vs depth':
-            for file in os.listdir(directory):
-                path_read = os.path.join(directory, file)
-                (self.depths_mm, self.doses, self.doseerrs, self.dsbyields, self.dsbyielderrs,
-                self.lmbdas, self.lmbdaerrs, self.survs, self.surverrs) = read_output_file(path_read)
-                dict_file = {'depth': self.depths_mm, 'survival': self.survs, 'survivalerr': self.surverrs,
-                             'set_experimental': set_experimental, 'num_puntos': num_ptos_plot}
-                dosis_key = find_dose_from_filename(file)
-                dict_info[f'{dosis_key}'] = dict_file
-            self.senal_info_plots_backend.emit(dict_info)
-        
-        elif tipo_plot == 'Yield vs depth':
-            for file in os.listdir(directory):
-                path_read = os.path.join(directory, file)
-                (self.depths_mm, self.doses, self.doseerrs, self.dsbyields, self.dsbyielderrs,
-                self.lmbdas, self.lmbdaerrs, self.survs, self.surverrs) = read_output_file(path_read)
-                dict_file = {'depth': self.depths_mm, 'dsbyields': self.dsbyields,
-                             'dsbyieldserr': self.dsbyielderrs, 'set_experimental': set_experimental,
-                             'num_puntos': num_ptos_plot}
-                dosis_key = find_dose_from_filename(file)
-                dict_info[f'{dosis_key}'] = dict_file
-            self.senal_info_plots_backend.emit(dict_info)
-
-        elif tipo_plot == 'Lambda vs depth':
-            for file in os.listdir(directory):
-                path_read = os.path.join(directory, file)
-                (self.depths_mm, self.doses, self.doseerrs, self.dsbyields, self.dsbyielderrs,
-                self.lmbdas, self.lmbdaerrs, self.survs, self.surverrs) = read_output_file(path_read)
-                dict_file = {'depth': self.depths_mm, 'lambda': self.lmbdas, 'lambdaerr': self.lmbdaerrs,
-                             'set_experimental': set_experimental, 'num_puntos': num_ptos_plot}
-                dosis_key = find_dose_from_filename(file)
-                dict_info[f'{dosis_key}'] = dict_file
-            self.senal_info_plots_backend.emit(dict_info)
-        
-        elif tipo_plot == 'Test plot':
-            for file in os.listdir(directory):
-                path_read = os.path.join(directory, file)
-                (self.depths_mm, self.doses, self.doseerrs, self.dsbyields, self.dsbyielderrs,
-                self.lmbdas, self.lmbdaerrs, self.survs, self.surverrs) = read_output_file(path_read)
-                dict_file = {'depth': self.depths_mm, 'survival': self.survs, 'survivalerr': self.surverrs,
-                             'set_experimental': set_experimental, 'num_puntos': num_ptos_plot}
-                dosis_key = find_dose_from_filename(file)
-                dict_info[f'{dosis_key}'] = dict_file
-            self.senal_info_plots_backend.emit(dict_info)
-        
-        elif tipo_plot == 'Test plot 2':
-            # Leer archivo survival_dose
-            for file in os.listdir(directory):
-                if file.endswith('.db'):
-                    survival, dose = read_surv_dose_file(os.path.join(directory, file))
-                    dict_file = {'doses': dose, 'survival': survival,
-                                'set_experimental': set_experimental, 'num_puntos': num_ptos_plot}
-                    dosis_key = 0
-                    print(file[-6:-3])
+        plots = event['plots']
+        info_dicts = []
+        for plot in plots:
+            directory = plot.path_carpeta_plots
+            dict_info = dict()
+            dict_info['tipo_plot'] = tipo_plot
+            label_set_experimental = plot.label.text()
+            num_ptos_plot = plot.num_puntos_plot.text()
+            try:
+                set_experimental_path = event['set_experimental'][0]
+                set_x, set_y = read_set_experimental(set_experimental_path)
+                set_experimental = {'set_x': set_x, 'set_y': set_y, 
+                                    'label_set_experimental': label_set_experimental}
+            except (KeyError, FileNotFoundError) as error:
+                set_experimental = ''
+            if tipo_plot == 'Dose vs depth':
+                # Leer archivos de la carpeta
+                for file in os.listdir(directory):
+                    path_read = os.path.join(directory, file)
+                    (self.depths_mm, self.doses, self.doseerrs, self.dsbyields, self.dsbyielderrs,
+                    self.lmbdas, self.lmbdaerrs, self.survs, self.surverrs) = read_output_file(path_read)
+                    dict_file = {'doses': self.doses, 'doseserr': self.doseerrs, 
+                                'depth': self.depths_mm, 'set_experimental': set_experimental,
+                                'num_puntos': num_ptos_plot}
+                    dosis_key = find_dose_from_filename(file)
                     dict_info[f'{dosis_key}'] = dict_file
-                    self.senal_info_plots_backend.emit(dict_info)
+                    info_dicts.append(dict_info)
+                self.senal_info_plots_backend.emit(dict_info)
+            
+            elif tipo_plot == 'Survival vs dose':
+                for file in os.listdir(directory):
+                    if file.endswith('.db'):
+                        survival, dose = read_surv_dose_file(os.path.join(directory, file))
+                        dict_file = {'doses': dose, 'survival': survival,
+                                    'set_experimental': set_experimental, 'num_puntos': num_ptos_plot}
+                        dosis_key = 0
+                        dict_info[f'{dosis_key}'] = dict_file
+                info_dicts.append(dict_info)
+                self.senal_info_plots_backend.emit(info_dicts)
+
+                #for file in os.listdir(directory):
+                #    path_read = os.path.join(directory, file)
+                #    (self.depths_mm, self.doses, self.doseerrs, self.dsbyields, self.dsbyielderrs,
+                #    self.lmbdas, self.lmbdaerrs, self.survs, self.surverrs) = read_output_file(path_read)
+                #    dict_file = {'doses': self.doses, 'survival': self.survs, 'survivalerr': self.surverrs,
+                #                 'set_experimental': set_experimental, 'num_puntos': num_ptos_plot}
+                #    dosis_key = find_dose_from_filename(file)
+                #    dict_info[f'{dosis_key}'] = dict_file
+                #self.senal_info_plots_backend.emit(dict_info)
+            
+            elif tipo_plot == 'Survival vs depth':
+                for file in os.listdir(directory):
+                    path_read = os.path.join(directory, file)
+                    (self.depths_mm, self.doses, self.doseerrs, self.dsbyields, self.dsbyielderrs,
+                    self.lmbdas, self.lmbdaerrs, self.survs, self.surverrs) = read_output_file(path_read)
+                    dict_file = {'depth': self.depths_mm, 'survival': self.survs, 'survivalerr': self.surverrs,
+                                'set_experimental': set_experimental, 'num_puntos': num_ptos_plot}
+                    dosis_key = find_dose_from_filename(file)
+                    dict_info[f'{dosis_key}'] = dict_file
+                self.senal_info_plots_backend.emit(dict_info)
+            
+            elif tipo_plot == 'Yield vs depth':
+                for file in os.listdir(directory):
+                    path_read = os.path.join(directory, file)
+                    (self.depths_mm, self.doses, self.doseerrs, self.dsbyields, self.dsbyielderrs,
+                    self.lmbdas, self.lmbdaerrs, self.survs, self.surverrs) = read_output_file(path_read)
+                    dict_file = {'depth': self.depths_mm, 'dsbyields': self.dsbyields,
+                                'dsbyieldserr': self.dsbyielderrs, 'set_experimental': set_experimental,
+                                'num_puntos': num_ptos_plot}
+                    dosis_key = find_dose_from_filename(file)
+                    dict_info[f'{dosis_key}'] = dict_file
+                self.senal_info_plots_backend.emit(dict_info)
+
+            elif tipo_plot == 'Lambda vs depth':
+                for file in os.listdir(directory):
+                    path_read = os.path.join(directory, file)
+                    (self.depths_mm, self.doses, self.doseerrs, self.dsbyields, self.dsbyielderrs,
+                    self.lmbdas, self.lmbdaerrs, self.survs, self.surverrs) = read_output_file(path_read)
+                    dict_file = {'depth': self.depths_mm, 'lambda': self.lmbdas, 'lambdaerr': self.lmbdaerrs,
+                                'set_experimental': set_experimental, 'num_puntos': num_ptos_plot}
+                    dosis_key = find_dose_from_filename(file)
+                    dict_info[f'{dosis_key}'] = dict_file
+                self.senal_info_plots_backend.emit(dict_info)
+            
+            elif tipo_plot == 'Test plot':
+                for file in os.listdir(directory):
+                    path_read = os.path.join(directory, file)
+                    (self.depths_mm, self.doses, self.doseerrs, self.dsbyields, self.dsbyielderrs,
+                    self.lmbdas, self.lmbdaerrs, self.survs, self.surverrs) = read_output_file(path_read)
+                    dict_file = {'depth': self.depths_mm, 'survival': self.survs, 'survivalerr': self.surverrs,
+                                'set_experimental': set_experimental, 'num_puntos': num_ptos_plot}
+                    dosis_key = find_dose_from_filename(file)
+                    dict_info[f'{dosis_key}'] = dict_file
+                self.senal_info_plots_backend.emit(dict_info)
+            
+            elif tipo_plot == 'Test plot 2':
+                # Leer archivo survival_dose
+                for file in os.listdir(directory):
+                    if file.endswith('.db'):
+                        survival, dose = read_surv_dose_file(os.path.join(directory, file))
+                        dict_file = {'doses': dose, 'survival': survival,
+                                    'set_experimental': set_experimental, 'num_puntos': num_ptos_plot}
+                        dosis_key = 0
+                        print(file[-6:-3])
+                        dict_info[f'{dosis_key}'] = dict_file
+                        self.senal_info_plots_backend.emit(dict_info)
 
 
     def generar_base_datos(self, event):
@@ -487,9 +492,15 @@ def read_set_experimental(file):
     y = []
     data = open(file, 'r')
     for line in data:
+        line = line.replace(';', '')
         line_list = line.split(' ')
-        x.append(float(line_list[0]))
-        y.append(float(line_list[1]))
+        try:
+            x.append(float(line_list[0]))
+            y.append(float(line_list[1]))
+        except ValueError as error:
+            # hay que cambiar las comas (,) por puntos (.) en los datos
+            x.append(float(line_list[0].replace(',', '.')))
+            y.append(float(line_list[1].replace(',', '.')))
     return x, y
 
 def all_doses_and_surv(directory):
