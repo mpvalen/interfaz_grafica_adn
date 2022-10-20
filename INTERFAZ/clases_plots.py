@@ -56,8 +56,7 @@ class Canvas(FigureCanvasQTAgg):
             self.draw()
 
         elif option == 'Lambda vs depth':
-            self.lambda_vs_depth(v['lambda'], v['lambdaerr'], v['depth'], v['set_experimental'],
-                                v['num_puntos'])
+            self.lambda_vs_depth(info_plots)
             self.draw()
         
 
@@ -150,7 +149,6 @@ class Canvas(FigureCanvasQTAgg):
                 self.axes.scatter(set_depth, set_dsbyields, color='green', label= label_set)
                 self.axes.legend()
 
-
     def lambda_vs_depth(self, info_plots):
         # Función para graficar lambda vs profundidad
         self.axes.clear()
@@ -171,11 +169,6 @@ class Canvas(FigureCanvasQTAgg):
                 self.axes.scatter(set_depth, set_lmbda, color='green', label= label_set)
                 self.axes.legend()
     
-
-
-
-
-
 
 class Plot(QFrame):
 

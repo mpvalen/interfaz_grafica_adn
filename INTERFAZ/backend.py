@@ -128,7 +128,7 @@ class Logica(QObject):
             label_set_experimental = plot.label.text()
             num_ptos_plot = plot.num_puntos_plot.text()
             try:
-                set_experimental_path = event['set_experimental'][0]
+                set_experimental_path = plot.set_experimental[0]
                 set_x, set_y = read_set_experimental(set_experimental_path)
                 set_experimental = {'set_x': set_x, 'set_y': set_y, 
                                     'label_set_experimental': label_set_experimental}
