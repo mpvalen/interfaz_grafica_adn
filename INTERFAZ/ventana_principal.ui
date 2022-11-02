@@ -77,7 +77,14 @@
     <property name="title">
      <string>Modelo</string>
     </property>
-    <addaction name="actionWang"/>
+    <widget class="QMenu" name="menuWang_2018">
+     <property name="title">
+      <string>Wang (2018)</string>
+     </property>
+     <addaction name="actionParametros_originales"/>
+     <addaction name="actionParametros_Sophia"/>
+    </widget>
+    <addaction name="menuWang_2018"/>
    </widget>
    <addaction name="menu_Vista"/>
    <addaction name="menuFluka"/>
@@ -200,14 +207,6 @@
     <string>Fluka -&gt; Survival</string>
    </property>
   </action>
-  <action name="actionWang">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Wang (2018)</string>
-   </property>
-  </action>
   <action name="actionNueva_carpeta_proc">
    <property name="text">
     <string>Nueva carpeta output</string>
@@ -226,6 +225,32 @@
   <action name="actionCelula_V79">
    <property name="text">
     <string>Celula V79</string>
+   </property>
+  </action>
+  <action name="actionPar_metros_originales">
+   <property name="text">
+    <string>Parametros originales</string>
+   </property>
+  </action>
+  <action name="actionPar_metros_Sophia">
+   <property name="text">
+    <string>Parametros Sophia</string>
+   </property>
+  </action>
+  <action name="actionParametros_originales">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Parametros originales</string>
+   </property>
+  </action>
+  <action name="actionParametros_Sophia">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Parametros Sophia</string>
    </property>
   </action>
  </widget>

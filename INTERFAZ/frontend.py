@@ -5,7 +5,7 @@ import matplotlib
 import numpy as np
 matplotlib.use('Qt5Agg')
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT
-from clases_plots import Canvas, Plot, HorizontalLine
+from clases_plots import Canvas, Plot, HorizontalLine, VentanaFontSize
 from PyQt5 import uic
 from PyQt5.QtWidgets import (QApplication, QFileDialog, QTabWidget, QWidget, QFormLayout, QLineEdit,
                              QComboBox, QPushButton, QLabel, QVBoxLayout, QHBoxLayout, QDialog, QShortcut,
@@ -38,6 +38,8 @@ class VentanaPrincipal(window_name, base_class):
         self.tab_widget = TabParams()
         self.setCentralWidget(self.tab_widget)
         self.inputs = dict()
+        self.setWindowTitle('CELL: Interfaz para simular daño al ADN')
+        self.ventana_fontsize = VentanaFontSize(parent=self)
 
         # Conexiones Generar input/Lanzar simulacion
         self.actionGenerar_input.triggered.connect(self.generar_input)
@@ -66,14 +68,19 @@ class VentanaPrincipal(window_name, base_class):
         self.tab_widget.generar_plots_button.clicked.connect(self.enviar_info_plots)
         self.tab_widget.plots_right.clicked.connect(self.plot_siguiente)
         self.tab_widget.plots_left.clicked.connect(self.plot_anterior)
+        self.tab_widget.boton_fontsize.clicked.connect(self.change_fontsize)
 
         # Base de datos
         self.actionGenerar_base_de_datos.triggered.connect(self.database)
         self.tab_widget.boton_generar_db.clicked.connect(self.generar_base_datos)
 
         # Modelos
-        self.actionWang.setChecked(True)
-        self.actionWang.triggered.connect(self.modelo_wang)
+        self.actionParametros_originales.setChecked(True)
+        self.actionParametros_originales.triggered.connect(self.modelo_wang_params)
+
+        self.actionParametros_Sophia.triggered.connect(self.modelo_wang_params_sophia)
+        #self.actionWang.setChecked(True)
+        #self.actionWang.triggered.connect(self.modelo_wang)
 
         # Shortcut
         self.shortcut_generar = QShortcut(QKeySequence('Ctrl+Q'), self)
@@ -105,6 +112,9 @@ class VentanaPrincipal(window_name, base_class):
             self.tab_widget.canvas.choose_plot(self.tipo_plot, self.info_ultimo_plot, -1)
         except AttributeError as error:
             print('Primero se debe presionar "generar plots')
+    
+    def change_fontsize(self):
+        self.ventana_fontsize.show()
     
     def generar_base_datos(self):
         self.inputs.update(self.tab_widget.inputs)
@@ -186,9 +196,14 @@ class VentanaPrincipal(window_name, base_class):
         self.inputs.update(self.tab_widget.inputs)
         self.senal_yield_survival.emit(self.inputs)
     
-    def modelo_wang(self):
+    def modelo_wang_params(self):
         # Por ahora se usa solo Wang, por lo tanto se deja siempre marcada esta opción
-        self.actionWang.setChecked(True)
+        self.actionParametros_originales.setChecked(True)
+        self.actionParametros_Sophia.setChecked(False)
+    
+    def modelo_wang_params_sophia(self):
+        self.actionParametros_Sophia.setChecked(True)
+        self.actionParametros_originales.setChecked(False)
     
 
 class TabParams(QTabWidget):
@@ -469,6 +484,11 @@ class TabParams(QTabWidget):
         self.v_layout_plots.addLayout(self.stackedLayout)
 
         self.v_layout_plots.addWidget(HorizontalLine())
+        
+        self.boton_fontsize = QPushButton('Cambiar tamaño de letra')
+        self.v_layout_plots.addWidget(self.boton_fontsize)
+        self.v_layout_plots.addWidget(HorizontalLine())
+
         self.generar_plots_button = QPushButton('Generar plots')
         self.v_layout_plots.addWidget(self.generar_plots_button)
 

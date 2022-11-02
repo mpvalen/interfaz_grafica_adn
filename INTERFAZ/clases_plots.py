@@ -4,7 +4,8 @@ matplotlib.use('Qt5Agg')
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 from matplotlib.figure import Figure
 from PyQt5.QtWidgets import (QFileDialog, QWidget, QFormLayout, QLabel, QPushButton, QFrame, QComboBox,
-                            QLineEdit, QSpinBox)
+                            QLineEdit, QSpinBox, QVBoxLayout, QHBoxLayout, QFormLayout)
+from PyQt5.QtCore import pyqtSignal
 
 
 class Canvas(FigureCanvasQTAgg):
@@ -72,14 +73,16 @@ class Canvas(FigureCanvasQTAgg):
             depth = v['depth']
             set_experimental = v['set_experimental']
             num_puntos = v['num_puntos']
-            self.axes.plot(depth, doses, color='black', markevery= num_puntos)
-            self.axes.errorbar(depth, doses, doseserr, color='black', errorevery= num_puntos)
-            if set_experimental != '':
+            if set_experimental['values']:
                 set_depth = set_experimental['set_x']
                 set_doses = set_experimental['set_y']
                 label_set = set_experimental['label_set_experimental']
                 self.axes.scatter(set_depth, set_doses, color='green', label= label_set)
-                self.axes.legend()
+            else:
+                label_set = set_experimental['label_set_experimental']
+            self.axes.plot(depth, doses, markevery= num_puntos, label=label_set)
+            self.axes.errorbar(depth, doses, doseserr, errorevery= num_puntos)
+            self.axes.legend()
 
     
     def survival_vs_dose(self, info_plots):
@@ -97,21 +100,24 @@ class Canvas(FigureCanvasQTAgg):
             survival = surv[doses_sorted_id]
             #survivalerr = surverr[doses_sorted_id]
             doses.sort()
-            self.axes.plot(doses, survival, color='black')
             #self.axes.errorbar(doses, survival, survivalerr, color='black', errorevery= num_puntos)
-            if set_experimental != '':
+            if set_experimental['values'] == True:
                 set_doses = set_experimental['set_x']
                 set_survival = set_experimental['set_y']
                 label_set = set_experimental['label_set_experimental']
-                self.axes.scatter(set_doses, set_survival, color='green', label= label_set)
-                self.axes.legend()
+                self.axes.scatter(set_doses, set_survival, label= label_set)
+            else:
+                label_set = set_experimental['label_set_experimental']
+            self.axes.plot(doses, survival, label=label_set)
+            self.axes.legend()
 
     
     def survival_vs_depth(self, info_plots):
         # Función para graficar supervivencia vs profundidad
         self.axes.clear()
-        self.axes.set_xlabel('Depth [mm]')
-        self.axes.set_ylabel('Survival fraction')
+        self.axes.set_xlabel('Depth [mm]', fontsize=30)
+        self.axes.set_ylabel('Survival fraction', fontsize=30)
+        self.axes.tick_params(axis='both', labelsize=15)
         for v in info_plots:
             survival = v['survival']
             depth = v['depth']
@@ -119,15 +125,17 @@ class Canvas(FigureCanvasQTAgg):
             set_experimental = v['set_experimental']
             num_puntos = v['num_puntos']
             dose = v['dosis']
-            self.axes.plot(depth, survival, color='black', markevery= num_puntos)
-            self.axes.errorbar(depth, survival, survivalerr, color='black', errorevery= num_puntos)
-            if set_experimental != '':
+            if set_experimental['values']:
                 set_depth = set_experimental['set_x']
                 set_survival = set_experimental['set_y']
                 label_set = set_experimental['label_set_experimental']
-                self.axes.scatter(set_depth, set_survival, color='green', label= label_set)
-                self.axes.legend()
-        self.axes.set_title(f'{dose} Gy')
+                self.axes.scatter(set_depth, set_survival, color='green', label= 'wouters 2014')
+            else:
+                label_set = set_experimental['label_set_experimental']
+            #self.axes.plot(depth, survival, markevery= int(num_puntos), label=label_set)
+            self.axes.errorbar(depth, survival, survivalerr, errorevery= int(num_puntos), label=label_set)
+            self.axes.legend(fontsize=20)
+        self.axes.set_title(f'Dosis {dose} Gy', fontsize=30)
 
     def yield_vs_depth(self, info_plots):
         # Función para graficar yield (número de DSBs) vs profundidad
@@ -140,14 +148,17 @@ class Canvas(FigureCanvasQTAgg):
             dsbyieldserr = v['dsbyieldserr']
             set_experimental = v['set_experimental']
             num_puntos = v['num_puntos']
-            self.axes.plot(depth, dsbyields, color='black', markevery= num_puntos)
-            self.axes.errorbar(depth, dsbyields, dsbyieldserr, color='black', errorevery= num_puntos)
-            if set_experimental != '':
+            if set_experimental['values']:
                 set_depth = set_experimental['set_x']
                 set_dsbyields = set_experimental['set_y']
                 label_set = set_experimental['label_set_experimental']
                 self.axes.scatter(set_depth, set_dsbyields, color='green', label= label_set)
-                self.axes.legend()
+            else:
+                label_set = set_experimental['label_set_experimental']
+
+            self.axes.plot(depth, dsbyields, markevery= num_puntos, label=label_set)
+            self.axes.errorbar(depth, dsbyields, dsbyieldserr, errorevery= num_puntos)
+            self.axes.legend()
 
     def lambda_vs_depth(self, info_plots):
         # Función para graficar lambda vs profundidad
@@ -160,14 +171,16 @@ class Canvas(FigureCanvasQTAgg):
             depth = v['depth']
             set_experimental = v['set_experimental']
             num_puntos = v['num_puntos']
-            self.axes.plot(depth, lmbda, color='black', markevery= num_puntos)
-            self.axes.errorbar(depth, lmbda, lmbdaerr, color='black', errorevery= num_puntos)
-            if set_experimental != '':
+            if set_experimental['values']:
                 set_depth = set_experimental['set_x']
                 set_lmbda = set_experimental['set_y']
                 label_set = set_experimental['label_set_experimental']
                 self.axes.scatter(set_depth, set_lmbda, color='green', label= label_set)
-                self.axes.legend()
+            else:
+                label_set = set_experimental['label_set_experimental']
+            self.axes.plot(depth, lmbda, markevery= num_puntos, label=label_set)
+            self.axes.errorbar(depth, lmbda, lmbdaerr, errorevery= num_puntos)
+            self.axes.legend()
     
 
 class Plot(QFrame):
@@ -176,6 +189,7 @@ class Plot(QFrame):
         super().__init__()
         self.id = id # Número identificador del plot
         self.new_plot = QFormLayout()
+        self.set_experimental = ''
 
         carpeta = QLabel('Carpeta')
         carpeta.setToolTip('La carpeta que contiene los archivos output')
@@ -214,3 +228,63 @@ class HorizontalLine(QFrame):
         super().__init__()
         self.setFrameShape(QFrame.HLine)
         self.setFrameShadow(QFrame.Sunken)
+
+
+class VentanaFontSize(QWidget):
+
+    senal_fontsize_plot = pyqtSignal(dict)    
+
+    def __init__(self, parent=None):
+        self.parent = parent
+        super().__init__()
+        self.setWindowTitle('Cambiar tamaño de letra')
+        prect1 = self.parent.geometry()
+        center = prect1.center()
+        self.move(center)
+        self.data = dict()
+
+        layout_principal = QVBoxLayout()
+        layout_botones = QHBoxLayout()
+        layout_texto = QFormLayout()
+
+        self.data['title_fontsize'] = QSpinBox()
+        self.data['title_fontsize'].setValue(10)
+        
+        self.data['labels_fontsize'] = QSpinBox()
+        self.data['labels_fontsize'].setValue(10)
+
+        self.data['axisticks_fontsize'] = QSpinBox()
+        self.data['axisticks_fontsize'].setValue(10)
+
+        self.data['axistext_fontsize'] = QSpinBox()
+        self.data['axistext_fontsize'].setValue(10)
+
+        layout_texto.addRow(QLabel('Título'), self.data['title_fontsize'])
+        layout_texto.addRow(QLabel('Labels'), self.data['labels_fontsize'])
+        layout_texto.addRow(QLabel('Ejes (Números)'), self.data['axisticks_fontsize'])
+        layout_texto.addRow(QLabel('Ejes (texto)'), self.data['axistext_fontsize'])
+        layout_principal.addLayout(layout_texto)
+
+        self.boton_ok = QPushButton('Ok')
+        self.boton_ok.clicked.connect(self.opcion_ok)
+        self.boton_cancelar = QPushButton('Cancelar')
+        self.boton_cancelar.clicked.connect(self.cerrar_ventana)
+        self.boton_aplicar = QPushButton('Aplicar')
+        self.boton_aplicar.clicked.connect(self.aplicar_cambios)
+
+        layout_botones.addWidget(self.boton_ok)
+        layout_botones.addWidget(self.boton_cancelar)
+        layout_botones.addWidget(self.boton_aplicar)
+        layout_principal.addLayout(layout_botones)
+
+        self.setLayout(layout_principal)
+
+    def cerrar_ventana(self):
+        self.hide()
+    
+    def opcion_ok(self):
+        self.senal_fontsize_plot.emit(self.data)
+        self.hide()
+
+    def aplicar_cambios(self):
+        self.senal_fontsize_plot.emit(self.data)

@@ -121,7 +121,7 @@ class Logica(QObject):
 
         plots = event['plots']
         info_dicts = []
-        for plot in plots:
+        for i, plot in enumerate(plots):
             directory = plot.path_carpeta_plots
             dict_info = dict()
             dict_info['tipo_plot'] = tipo_plot
@@ -130,10 +130,13 @@ class Logica(QObject):
             try:
                 set_experimental_path = plot.set_experimental[0]
                 set_x, set_y = read_set_experimental(set_experimental_path)
-                set_experimental = {'set_x': set_x, 'set_y': set_y, 
+                set_experimental = {'values': True, 'set_x': set_x, 'set_y': set_y, 
                                     'label_set_experimental': label_set_experimental}
-            except (KeyError, FileNotFoundError) as error:
-                set_experimental = ''
+            except (KeyError, FileNotFoundError, IndexError) as error:
+                if label_set_experimental != '':
+                    set_experimental = {'values': False, 'label_set_experimental': label_set_experimental}
+                else:
+                    set_experimental = {'values': False, 'label_set_experimental': f'Plot {i}'}
             if tipo_plot == 'Dose vs depth':
                 # Leer archivos de la carpeta
                 for file in os.listdir(directory):
@@ -178,7 +181,8 @@ class Logica(QObject):
                                 'set_experimental': set_experimental, 'num_puntos': num_ptos_plot}
                     dosis_key = find_dose_from_filename(file)
                     dict_info[f'{dosis_key}'] = dict_file
-                self.senal_info_plots_backend.emit(dict_info)
+                info_dicts.append(dict_info)
+                self.senal_info_plots_backend.emit(info_dicts)
             
             elif tipo_plot == 'Yield vs depth':
                 for file in os.listdir(directory):
@@ -190,7 +194,8 @@ class Logica(QObject):
                                 'num_puntos': num_ptos_plot}
                     dosis_key = find_dose_from_filename(file)
                     dict_info[f'{dosis_key}'] = dict_file
-                self.senal_info_plots_backend.emit(dict_info)
+                info_dicts.append(dict_info)
+                self.senal_info_plots_backend.emit(info_dicts)
 
             elif tipo_plot == 'Lambda vs depth':
                 for file in os.listdir(directory):
@@ -201,7 +206,8 @@ class Logica(QObject):
                                 'set_experimental': set_experimental, 'num_puntos': num_ptos_plot}
                     dosis_key = find_dose_from_filename(file)
                     dict_info[f'{dosis_key}'] = dict_file
-                self.senal_info_plots_backend.emit(dict_info)
+                info_dicts.append(dict_info)
+                self.senal_info_plots_backend.emit(info_dicts)
             
             elif tipo_plot == 'Test plot':
                 for file in os.listdir(directory):
@@ -212,7 +218,8 @@ class Logica(QObject):
                                 'set_experimental': set_experimental, 'num_puntos': num_ptos_plot}
                     dosis_key = find_dose_from_filename(file)
                     dict_info[f'{dosis_key}'] = dict_file
-                self.senal_info_plots_backend.emit(dict_info)
+                info_dicts.append(dict_info)
+                self.senal_info_plots_backend.emit(info_dicts)
             
             elif tipo_plot == 'Test plot 2':
                 # Leer archivo survival_dose
@@ -224,7 +231,8 @@ class Logica(QObject):
                         dosis_key = 0
                         print(file[-6:-3])
                         dict_info[f'{dosis_key}'] = dict_file
-                        self.senal_info_plots_backend.emit(dict_info)
+                info_dicts.append(dict_info)
+                self.senal_info_plots_backend.emit(info_dicts)
 
 
     def generar_base_datos(self, event):
