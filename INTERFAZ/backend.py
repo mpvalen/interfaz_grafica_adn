@@ -121,6 +121,10 @@ class Logica(QObject):
 
         plots = event['plots']
         info_dicts = []
+        dict_fontsize = {'title_fontsize': int(event['title_fontsize'].text()),
+                         'labels_fontsize': int(event['labels_fontsize'].text()),
+                         'axisticks_fontsize': int(event['axisticks_fontsize'].text()),
+                         'axistext_fontsize': int(event['axistext_fontsize'].text())}
         for i, plot in enumerate(plots):
             directory = plot.path_carpeta_plots
             dict_info = dict()
@@ -137,6 +141,7 @@ class Logica(QObject):
                     set_experimental = {'values': False, 'label_set_experimental': label_set_experimental}
                 else:
                     set_experimental = {'values': False, 'label_set_experimental': f'Plot {i}'}
+            set_experimental.update(dict_fontsize)
             if tipo_plot == 'Dose vs depth':
                 # Leer archivos de la carpeta
                 for file in os.listdir(directory):
@@ -149,7 +154,7 @@ class Logica(QObject):
                     dosis_key = find_dose_from_filename(file)
                     dict_info[f'{dosis_key}'] = dict_file
                     info_dicts.append(dict_info)
-                self.senal_info_plots_backend.emit(dict_info)
+                self.senal_info_plots_backend.emit(info_dicts)
             
             elif tipo_plot == 'Survival vs dose':
                 for file in os.listdir(directory):
@@ -162,15 +167,6 @@ class Logica(QObject):
                 info_dicts.append(dict_info)
                 self.senal_info_plots_backend.emit(info_dicts)
 
-                #for file in os.listdir(directory):
-                #    path_read = os.path.join(directory, file)
-                #    (self.depths_mm, self.doses, self.doseerrs, self.dsbyields, self.dsbyielderrs,
-                #    self.lmbdas, self.lmbdaerrs, self.survs, self.surverrs) = read_output_file(path_read)
-                #    dict_file = {'doses': self.doses, 'survival': self.survs, 'survivalerr': self.surverrs,
-                #                 'set_experimental': set_experimental, 'num_puntos': num_ptos_plot}
-                #    dosis_key = find_dose_from_filename(file)
-                #    dict_info[f'{dosis_key}'] = dict_file
-                #self.senal_info_plots_backend.emit(dict_info)
             
             elif tipo_plot == 'Survival vs depth':
                 for file in os.listdir(directory):

@@ -1,4 +1,5 @@
 import matplotlib
+import matplotlib.pylab as pylab
 import numpy as np
 matplotlib.use('Qt5Agg')
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
@@ -64,9 +65,8 @@ class Canvas(FigureCanvasQTAgg):
 
     def dose_vs_depth(self, info_plots):
         # Función para graficar dosis vs profundidad
+        self.title = self.axes.get_title()
         self.axes.clear()
-        self.axes.set_xlabel('Depth [mm]')
-        self.axes.set_ylabel('Dose [Gy]')
         for v in info_plots:
             doses = v['doses']
             doseserr = v['doseserr']
@@ -80,16 +80,18 @@ class Canvas(FigureCanvasQTAgg):
                 self.axes.scatter(set_depth, set_doses, color='green', label= label_set)
             else:
                 label_set = set_experimental['label_set_experimental']
-            self.axes.plot(depth, doses, markevery= num_puntos, label=label_set)
-            self.axes.errorbar(depth, doses, doseserr, errorevery= num_puntos)
-            self.axes.legend()
+            self.axes.set_xlabel('Depth [mm]', fontsize=set_experimental['axistext_fontsize'])
+            self.axes.set_ylabel('Dose [Gy]', fontsize=set_experimental['axistext_fontsize'])
+            self.axes.set_title(self.title, fontsize=set_experimental['title_fontsize'])
+            self.axes.tick_params(axis='both', labelsize=set_experimental['axisticks_fontsize'])
+            self.axes.errorbar(depth, doses, doseserr, errorevery= num_puntos, label=label_set)
+            self.axes.legend(fontsize=set_experimental['labels_fontsize'])
 
     
     def survival_vs_dose(self, info_plots):
         # info_plots es una lista con al menos 1 diccionario con información para graficar
+        self.title = self.axes.get_title()
         self.axes.clear()
-        self.axes.set_xlabel('Dose [Gy]')
-        self.axes.set_ylabel('Survival fraction')
         for v in info_plots:
             doses = v['doses']
             surv = v['survival']
@@ -108,16 +110,19 @@ class Canvas(FigureCanvasQTAgg):
                 self.axes.scatter(set_doses, set_survival, label= label_set)
             else:
                 label_set = set_experimental['label_set_experimental']
+
+            self.axes.set_xlabel('Dose [Gy]', fontsize=set_experimental['axistext_fontsize'])
+            self.axes.set_ylabel('Survival fraction', fontsize=set_experimental['axistext_fontsize'])
+            self.axes.set_title(self.title, fontsize=set_experimental['title_fontsize'])
+            self.axes.tick_params(axis='both', labelsize=set_experimental['axisticks_fontsize'])
             self.axes.plot(doses, survival, label=label_set)
-            self.axes.legend()
+            self.axes.legend(fontsize=set_experimental['labels_fontsize'])
 
     
     def survival_vs_depth(self, info_plots):
         # Función para graficar supervivencia vs profundidad
+        self.title = self.axes.get_title()
         self.axes.clear()
-        self.axes.set_xlabel('Depth [mm]', fontsize=30)
-        self.axes.set_ylabel('Survival fraction', fontsize=30)
-        self.axes.tick_params(axis='both', labelsize=15)
         for v in info_plots:
             survival = v['survival']
             depth = v['depth']
@@ -129,19 +134,20 @@ class Canvas(FigureCanvasQTAgg):
                 set_depth = set_experimental['set_x']
                 set_survival = set_experimental['set_y']
                 label_set = set_experimental['label_set_experimental']
-                self.axes.scatter(set_depth, set_survival, color='green', label= 'wouters 2014')
+                self.axes.scatter(set_depth, set_survival, color='green', label= label_set)
             else:
                 label_set = set_experimental['label_set_experimental']
-            #self.axes.plot(depth, survival, markevery= int(num_puntos), label=label_set)
+            self.axes.set_xlabel('Depth [mm]', fontsize=set_experimental['axistext_fontsize'])
+            self.axes.set_ylabel('Survival fraction', fontsize=set_experimental['axistext_fontsize'])
+            self.axes.tick_params(axis='both', labelsize=set_experimental['axisticks_fontsize'])
             self.axes.errorbar(depth, survival, survivalerr, errorevery= int(num_puntos), label=label_set)
-            self.axes.legend(fontsize=20)
-        self.axes.set_title(f'Dosis {dose} Gy', fontsize=30)
+            self.axes.legend(fontsize=set_experimental['labels_fontsize'])
+        self.axes.set_title(f'Dosis {dose} Gy', fontsize=set_experimental['title_fontsize'])
 
     def yield_vs_depth(self, info_plots):
         # Función para graficar yield (número de DSBs) vs profundidad
+        self.title = self.axes.get_title()
         self.axes.clear()
-        self.axes.set_xlabel('Depth [mm]')
-        self.axes.set_ylabel('DSB Yield')
         for v in info_plots:
             depth = v['depth']
             dsbyields = v['dsbyields']
@@ -156,15 +162,17 @@ class Canvas(FigureCanvasQTAgg):
             else:
                 label_set = set_experimental['label_set_experimental']
 
-            self.axes.plot(depth, dsbyields, markevery= num_puntos, label=label_set)
+            self.axes.set_xlabel('Depth [mm]', fontsize=set_experimental['axistext_fontsize'])
+            self.axes.set_ylabel('DSB Yield', fontsize=set_experimental['axistext_fontsize'])
+            self.axes.tick_params(axis='both', labelsize=set_experimental['axisticks_fontsize'])
+            self.axes.set_title(self.title, fontsize=set_experimental['title_fontsize'])
             self.axes.errorbar(depth, dsbyields, dsbyieldserr, errorevery= num_puntos)
-            self.axes.legend()
+            self.axes.legend(fontsize=set_experimental['labels_fontsize'])
 
     def lambda_vs_depth(self, info_plots):
         # Función para graficar lambda vs profundidad
+        self.title = self.axes.get_title()
         self.axes.clear()
-        self.axes.set_xlabel('Depth [mm]')
-        self.axes.set_ylabel('Lambda')
         for v in info_plots:
             lmbda = v['lambda']
             lmbdaerr = v['lambdaerr']
@@ -178,9 +186,12 @@ class Canvas(FigureCanvasQTAgg):
                 self.axes.scatter(set_depth, set_lmbda, color='green', label= label_set)
             else:
                 label_set = set_experimental['label_set_experimental']
-            self.axes.plot(depth, lmbda, markevery= num_puntos, label=label_set)
-            self.axes.errorbar(depth, lmbda, lmbdaerr, errorevery= num_puntos)
-            self.axes.legend()
+            self.axes.set_xlabel('Depth [mm]', fontsize=set_experimental['axistext_fontsize'])
+            self.axes.set_ylabel('Lambda', fontsize=set_experimental['axistext_fontsize'])
+            self.axes.tick_params(axis='both', labelsize=set_experimental['axisticks_fontsize'])
+            self.axes.set_title(self.title, fontsize=set_experimental['title_fontsize'])
+            self.axes.errorbar(depth, lmbda, lmbdaerr, errorevery= num_puntos, label=label_set)
+            self.axes.legend(fontsize=set_experimental['labels_fontsize'])
     
 
 class Plot(QFrame):
@@ -269,12 +280,9 @@ class VentanaFontSize(QWidget):
         self.boton_ok.clicked.connect(self.opcion_ok)
         self.boton_cancelar = QPushButton('Cancelar')
         self.boton_cancelar.clicked.connect(self.cerrar_ventana)
-        self.boton_aplicar = QPushButton('Aplicar')
-        self.boton_aplicar.clicked.connect(self.aplicar_cambios)
 
         layout_botones.addWidget(self.boton_ok)
         layout_botones.addWidget(self.boton_cancelar)
-        layout_botones.addWidget(self.boton_aplicar)
         layout_principal.addLayout(layout_botones)
 
         self.setLayout(layout_principal)
@@ -285,6 +293,3 @@ class VentanaFontSize(QWidget):
     def opcion_ok(self):
         self.senal_fontsize_plot.emit(self.data)
         self.hide()
-
-    def aplicar_cambios(self):
-        self.senal_fontsize_plot.emit(self.data)

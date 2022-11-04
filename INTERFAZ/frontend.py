@@ -40,6 +40,7 @@ class VentanaPrincipal(window_name, base_class):
         self.inputs = dict()
         self.setWindowTitle('CELL: Interfaz para simular daño al ADN')
         self.ventana_fontsize = VentanaFontSize(parent=self)
+        self.inputs.update(self.ventana_fontsize.data)
 
         # Conexiones Generar input/Lanzar simulacion
         self.actionGenerar_input.triggered.connect(self.generar_input)
@@ -88,6 +89,9 @@ class VentanaPrincipal(window_name, base_class):
         self.shortcut_lanzar = QShortcut(QKeySequence('Ctrl+W'), self)
         self.shortcut_lanzar.activated.connect(self.lanzar_simulacion)
 
+
+    def change_fontsize_plot(self, event):
+        self.inputs.update(event)
 
     def enviar_info_plots(self):
         self.inputs.update(self.tab_widget.inputs)

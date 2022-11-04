@@ -25,6 +25,7 @@ if __name__ == '__main__':
     ventana_principal.senal_generar_db.connect(logica.generar_base_datos)
     ventana_principal.senal_nueva_carpeta.connect(popup_inicio.nueva_carpeta)
     ventana_principal.senal_mcds_supervivencia.connect(logica.calcular_supervivencia)
+    ventana_principal.ventana_fontsize.senal_fontsize_plot.connect(ventana_principal.change_fontsize_plot)
 
     logica.senal_info_plots_backend.connect(ventana_principal.recibir_info_plots)
     ventana_principal.show()
