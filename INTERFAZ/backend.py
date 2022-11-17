@@ -389,9 +389,8 @@ class Logica(QObject):
             path = os.path.join(directory, file)
             if file.endswith('.out'):
                 energia, y, yerr, let_cell_entry, LET_nuc_entry, LET_nuc_exit, l, lerr, dose = self.read_Y_LET(path)
-                #dose, y, yerr, lmbda, lmbdaerr = read_D_Y_lmbda(os.path.join(directory, file))
-                survival, lmbda = mech.mech_model(dose, ctype, LET_nuc_entry, y)
-                #survival = mech.mech_model_wlmbda(dose, ctype, y, l)
+                #survival, lmbda = mech.mech_model(dose, ctype, LET_nuc_entry, y)
+                survival, survivalerr = mech.mech_model_wlmbda_uncert(ctype, dose, 0, y, yerr, l, lerr)
                 doses.append(dose)
                 yields.append(y)
                 yieldserr.append(yerr)

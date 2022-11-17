@@ -4,6 +4,41 @@ from uncertainties import ufloat
 from uncertainties import correlated_values
 from uncertainties.umath import *
 
+
+def mech_model_test(ctype,dose,doseerr,Yld,Ylderr,lmbda,lmbdaerr,DNA,NDIA):
+    if dose!=0 and lmbda!=0:
+        if ctype.lower()=="v79":
+            mu_x = ufloat(0.9568,0.0236)
+            mu_y = ufloat(0.0300,0.0177)
+            zeta = ufloat(0.0412,0.0209)
+            xi = ufloat(0.0608,0.0381)
+            eta_1 = ufloat(9.78e-4,0.10e-4)
+            eta_infty = ufloat(0.0065,0.0001)
+        elif ctype.lower()=="hsg":
+            mu_x = ufloat(0.9817,0.0056)
+            mu_y = ufloat(0.0891,0.0068)
+            zeta = ufloat(0.1025,0.0065)
+            xi = ufloat(0.0572,0.0027)
+            eta_1 = ufloat(7.26e-4,0.04e-4)
+            eta_infty = ufloat(0.0022,0.0001)
+        D=ufloat(dose,doseerr)
+        Y=ufloat(Yld,Ylderr)
+        lmbda=ufloat(lmbda,lmbdaerr)
+        N = Y * D  # NÚMERO DE DSBS X CÉLULA
+        n_p = Y*D/lmbda * (1 - exp(-lmbda))
+        lmbda_p = lmbda / (1 - exp(-lmbda))
+        eta = eta_infty - (eta_infty - eta_1) / lmbda_p
+        Pint = (1 - exp(-eta * n_p)) / (eta * n_p)
+        Ptrack = (1 - exp(-xi * lmbda_p)) / (xi * lmbda_p)
+        Pcorrect = mu_x * Pint * Ptrack
+        Pcontrib = (1 - exp(-zeta * lmbda_p)) / (zeta * lmbda_p)
+        N_death = mu_y * N * Pcontrib * (1 - Pcorrect)
+        S = exp(-N_death)
+        return S.nominal_value, S.std_dev
+    else:
+        return 1, 0
+
+
 def mech_model(ctype,dose,doseerr,Yld,Ylderr,lmbda,lmbdaerr,DNA,NDIA):
     if dose!=0 and lmbda!=0:
         if ctype.lower()=="v79":
@@ -252,6 +287,7 @@ def fluka_to_data(spectrum_data_path,dose_data_path,database_path,
     yerr = np.interp(Ebins, energies, yielderrs)
     l = np.interp(Ebins, energies, lambdas)
     lerr = np.interp(Ebins, energies, lambdaerrs)
+    print(f'y: {y}\n l: {l}')
     for index,detector_depth in enumerate(detector_depths):
         spectrum_at_detector_depth=spectrum_avg[index]
         if sum(spectrum_at_detector_depth)!=0:

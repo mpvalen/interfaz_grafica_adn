@@ -60,7 +60,11 @@ def mech_model_simple(D,lmbda):
     S = math.exp(-N_death)
     return S
 
-def mech_model(D,ctype,LET,Y):
+def mech_model(D,ctype,LET,Y, DNA=5.6, NDIA=11):
+    #Y = Y * DNA / 6
+    #Ylderr = Ylderr * DNA / 6
+    #lmbdas = lmbdas * 25 / (NDIA ** 2)
+    #lmbdaesrr = lmbdaesrr * 25 / (NDIA ** 2)
     if D!=0:
         if ctype.lower()=="v79":
             mu_x = 0.9568
@@ -91,12 +95,6 @@ def mech_model(D,ctype,LET,Y):
         Pcontrib = (1 - math.exp(-zeta * lmbda_p)) / (zeta * lmbda_p)
         N_death = mu_y * N * Pcontrib * (1 - Pcorrect)
         S = math.exp(-N_death)
-
-
-        database_mech_model = open('database_mech_model.database', 'a')
-        database_mech_model.write('LAMBDA n_p LAMBDA_p ETA P_int P_track P_correct P_contrib S\n')
-        database_mech_model.write('{} {} {} {} {} {} {} {} {}\n'.format(lmbda, n_p, lmbda_p, eta, Pint,
-                                                                         Ptrack, Pcorrect, Pcontrib, S))
 
 
         return S, lmbda
@@ -144,6 +142,10 @@ def mech_model_wlmbda(D,ctype,Y,lmbda):
 
 
 def mech_model_wlmbda_uncert(ctype,dose,doseerr,Yld,Ylderr,lmbdas,lmbdaesrr,d=10):
+    #Yld = Yld * DNA / 6
+    #Ylderr = Ylderr * DNA / 6
+    #lmbdas = lmbdas * 25 / (NDIA ** 2)
+    #lmbdaesrr = lmbdaesrr * 25 / (NDIA ** 2)
     if dose!=0:
         if ctype.lower()=="v79":
             mu_x = ufloat(0.9568,0.0236)
