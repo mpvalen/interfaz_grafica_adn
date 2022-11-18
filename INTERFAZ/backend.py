@@ -295,7 +295,7 @@ class Logica(QObject):
                 file = open(path, 'w')
                 #file.write("\nSIMCON: seed={} nocs={}\nRADX: PAR={} KE={} AD={}\n\n\n".format(seed,
                 #           nocs,particula, ke, D))
-                file.write("CELL: DNA={} NDIA={}\nSIMCON: seed={} nocs={}\nRADX: PAR={} KE={} AD={}\n\n\n".format(dna,
+                file.write("CELL: DNA={} NDIA={} CDIA=11\nSIMCON: seed={} nocs={}\nRADX: PAR={} KE={} AD={}\n\n\n".format(dna,
                             ndia, seed, nocs, particula, ke, D))
                 file.close()
                 cont += 1

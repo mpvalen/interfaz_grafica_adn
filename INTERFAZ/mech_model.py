@@ -147,6 +147,7 @@ def mech_model_wlmbda_uncert(ctype,dose,doseerr,Yld,Ylderr,lmbdas,lmbdaesrr,mode
     #Ylderr = Ylderr * DNA / 6
     #lmbdas = lmbdas * 25 / (NDIA ** 2)
     #lmbdaesrr = lmbdaesrr * 25 / (NDIA ** 2)
+    Yld = Yld / dose
     if dose!=0:
         if modelo == 'Wang':
             if ctype.lower()=="v79":
