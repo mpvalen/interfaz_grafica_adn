@@ -2,9 +2,9 @@ import matplotlib
 import matplotlib.pylab as pylab
 import numpy as np
 matplotlib.use('Qt5Agg')
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationToolbar2QT
 from matplotlib.figure import Figure
-from PyQt5.QtWidgets import (QFileDialog, QWidget, QFormLayout, QLabel, QPushButton, QFrame, QComboBox,
+from PyQt5.QtWidgets import (QFileDialog, QWidget, QFormLayout, QLabel, QPushButton, QFrame,
                             QLineEdit, QSpinBox, QVBoxLayout, QHBoxLayout, QFormLayout)
 from PyQt5.QtCore import pyqtSignal
 
@@ -17,6 +17,7 @@ class Canvas(FigureCanvasQTAgg):
         self.axes = fig.add_subplot(111)
         self.num_plot = 0
         super(Canvas, self).__init__(fig)
+    
 
 
     def choose_plot(self, option, info, num_plot):
@@ -88,10 +89,11 @@ class Canvas(FigureCanvasQTAgg):
             self.axes.legend(fontsize=set_experimental['labels_fontsize'])
 
     
-    def survival_vs_dose(self, info_plots):
+    def survival_vs_dose(self, info):
         # info_plots es una lista con al menos 1 diccionario con información para graficar
         self.title = self.axes.get_title()
         self.axes.clear()
+        info_plots = sorted(info, key=lambda d: d['set_experimental']['label_set_experimental'])
         for v in info_plots:
             doses = v['doses']
             surv = v['survival']
@@ -116,7 +118,9 @@ class Canvas(FigureCanvasQTAgg):
             self.axes.set_ylabel('Survival fraction', fontsize=set_experimental['axistext_fontsize'])
             self.axes.set_title(self.title, fontsize=set_experimental['title_fontsize'])
             self.axes.tick_params(axis='both', labelsize=set_experimental['axisticks_fontsize'])
-            self.axes.plot(doses, survival, label=label_set)
+            self.axes.set_yscale('log')
+            p = self.axes.plot(doses, survival, label=label_set)
+            #print(p[0].get_color())
             #self.axes.errorbar(doses, survivalerr, label=label_set)
             self.axes.legend(fontsize=set_experimental['labels_fontsize'])
 
