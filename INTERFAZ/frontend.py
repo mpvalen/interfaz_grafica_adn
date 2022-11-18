@@ -31,6 +31,8 @@ class VentanaPrincipal(window_name, base_class):
     senal_fluka_abrir_carpeta = pyqtSignal(str)
     senal_fluka_nueva_carpeta = pyqtSignal(bool)
     senal_mcds_supervivencia = pyqtSignal(dict)
+    senal_ciclo_celular = pyqtSignal(bool)
+    senal_modelo = pyqtSignal(str)
 
     def __init__(self):
         super().__init__()
@@ -82,6 +84,11 @@ class VentanaPrincipal(window_name, base_class):
         self.actionParametros_Sophia.triggered.connect(self.modelo_wang_params_sophia)
         #self.actionWang.setChecked(True)
         #self.actionWang.triggered.connect(self.modelo_wang)
+
+        # Ciclo celular
+        self.actionG1.setChecked(True)
+        self.actionG1.triggered.connect(self.ciclo_celular_g1)
+        self.actionG2.triggered.connect(self.ciclo_celular_g2)
 
         # Shortcut
         self.shortcut_generar = QShortcut(QKeySequence('Ctrl+Q'), self)
@@ -204,10 +211,23 @@ class VentanaPrincipal(window_name, base_class):
         # Por ahora se usa solo Wang, por lo tanto se deja siempre marcada esta opción
         self.actionParametros_originales.setChecked(True)
         self.actionParametros_Sophia.setChecked(False)
+        self.senal_modelo.emit('Wang')
     
     def modelo_wang_params_sophia(self):
         self.actionParametros_Sophia.setChecked(True)
         self.actionParametros_originales.setChecked(False)
+        self.senal_modelo.emit('Wang-Sophia')
+    
+    def ciclo_celular_g1(self):
+        self.actionG1.setChecked(True)
+        self.actionG2.setChecked(False)
+        self.senal_ciclo_celular.emit(True) # True es etapa G1 (mantener la cantidad de ADN)
+
+
+    def ciclo_celular_g2(self):
+        self.actionG1.setChecked(False)
+        self.actionG2.setChecked(True)
+        self.senal_ciclo_celular.emit(False) # False es etapa G2 (multiplicar x2 el ADN)
     
 
 class TabParams(QTabWidget):

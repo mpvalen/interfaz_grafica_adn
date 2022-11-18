@@ -95,6 +95,7 @@ class Canvas(FigureCanvasQTAgg):
         for v in info_plots:
             doses = v['doses']
             surv = v['survival']
+            #survivalerr = v['surverr']
             set_experimental = v['set_experimental']
             num_puntos = v['num_puntos']
             # Función para graficar supervivencia vs dosis
@@ -116,6 +117,7 @@ class Canvas(FigureCanvasQTAgg):
             self.axes.set_title(self.title, fontsize=set_experimental['title_fontsize'])
             self.axes.tick_params(axis='both', labelsize=set_experimental['axisticks_fontsize'])
             self.axes.plot(doses, survival, label=label_set)
+            #self.axes.errorbar(doses, survivalerr, label=label_set)
             self.axes.legend(fontsize=set_experimental['labels_fontsize'])
 
     

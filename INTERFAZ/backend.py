@@ -21,6 +21,8 @@ class Logica(QObject):
         super().__init__()
         self.contador_inputs_mcds = 0
         self.path_mcds = os.path.join('mcds', 'bin', 'mcds.exe')
+        self.g1 = True
+        self.modelo = 'Wang'
         #self.database_particles = [''] añadir protones y carbono12
     
 
@@ -384,24 +386,39 @@ class Logica(QObject):
         lmbdas = []
         lmbdaserr = []
         survivals = []
+        surverrs = []
         let = []
         for file in directory_sorted:
             path = os.path.join(directory, file)
             if file.endswith('.out'):
                 energia, y, yerr, let_cell_entry, LET_nuc_entry, LET_nuc_exit, l, lerr, dose = self.read_Y_LET(path)
                 #survival, lmbda = mech.mech_model(dose, ctype, LET_nuc_entry, y)
-                survival, survivalerr = mech.mech_model_wlmbda_uncert(ctype, dose, 0, y, yerr, l, lerr)
+                survival, survivalerr = mech.mech_model_wlmbda_uncert(ctype, dose, 0, y, yerr, l, lerr, self.modelo)
                 doses.append(dose)
                 yields.append(y)
                 yieldserr.append(yerr)
                 lmbdas.append(l)
                 lmbdaserr.append(lerr)
                 survivals.append(survival)
+                surverrs.append(survivalerr)
         with open(os.path.join(directory, f'survival_dose_{ctype}.db'), 'w') as file:
             file.write('Survival Dose Yield Yielderr Lambda Lambdaerr\n')
             for (s, d, y, yerr, l, lerr) in zip(survivals, doses, yields,
                                                       yieldserr, lmbdas, lmbdaserr):
                 file.write('{} {} {} {} {} {}\n'.format(s, d, y, yerr, l, lerr))
+    
+
+    def info_ciclo_celular(self, event):
+        if event:
+            self.g1 = True
+        else:
+            self.g1 = False
+    
+    def modelo_escogido(self, event):
+        self.modelo = event
+
+
+######### Fin de la clase ############################
 
 def read_D_Y_lmbda(path_file):
     mcds_output = open(path_file, 'r')

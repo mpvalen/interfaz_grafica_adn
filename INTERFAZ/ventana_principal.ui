@@ -86,11 +86,19 @@
     </widget>
     <addaction name="menuWang_2018"/>
    </widget>
+   <widget class="QMenu" name="menuCiclo_celular">
+    <property name="title">
+     <string>Ciclo celular</string>
+    </property>
+    <addaction name="actionG1"/>
+    <addaction name="actionG2"/>
+   </widget>
    <addaction name="menu_Vista"/>
    <addaction name="menuFluka"/>
    <addaction name="menuGraficar"/>
    <addaction name="menuBase_de_datos"/>
    <addaction name="menuModelo"/>
+   <addaction name="menuCiclo_celular"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionCelula">
@@ -251,6 +259,22 @@
    </property>
    <property name="text">
     <string>Parametros Sophia</string>
+   </property>
+  </action>
+  <action name="actionG1">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>G1</string>
+   </property>
+  </action>
+  <action name="actionG2">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>G2 (ADN x2)</string>
    </property>
   </action>
  </widget>
