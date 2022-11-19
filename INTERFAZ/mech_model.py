@@ -143,10 +143,6 @@ def mech_model_wlmbda(D,ctype,Y,lmbda):
 
 
 def mech_model_wlmbda_uncert(ctype,dose,doseerr,Yld,Ylderr,lmbdas,lmbdaesrr,modelo, d=10):
-    #Yld = Yld * DNA / 6
-    #Ylderr = Ylderr * DNA / 6
-    #lmbdas = lmbdas * 25 / (NDIA ** 2)
-    #lmbdaesrr = lmbdaesrr * 25 / (NDIA ** 2)
     Yld = Yld / dose
     if dose!=0:
         if modelo == 'Wang':
@@ -204,7 +200,7 @@ def mech_model_wlmbda_uncert(ctype,dose,doseerr,Yld,Ylderr,lmbdas,lmbdaesrr,mode
                 eta_1 = ufloat(0.005333, 0)
                 eta_infty = ufloat(0.005599, 0)
         elif modelo == 'Wang-Sophia':
-            # Hay que modificar los errores
+            # Por ahora tienen incertidumbre de Wang
             if ctype == 'v79':
                 mu_x = ufloat(0.9454,0.0236)
                 mu_y = ufloat(0.03,0.0177)

@@ -560,6 +560,9 @@ class TabParams(QTabWidget):
         self.inputs['dna_db'] = QDoubleSpinBox()
         self.inputs['dna_db'].setRange(0, 1000)
         self.inputs['dna_db'].setValue(6)
+        self.inputs['cdia_db'] = QDoubleSpinBox()
+        self.inputs['cdia_db'].setRange(0, 1000)
+        self.inputs['cdia_db'].setValue(0)
 
         self.inputs['energy_db_min'] = QLineEdit()
         self.inputs['energy_db_max'] = QLineEdit()
@@ -593,7 +596,9 @@ class TabParams(QTabWidget):
         layout.addRow('SEED', self.inputs['seed_db'])
         layout.addRow('NOCS', self.inputs['nocs'])
         layout.addRow('NDIA', self.inputs['ndia_db'])
+        layout.addRow('CDIA', self.inputs['cdia_db'])
         layout.addRow('DNA', self.inputs['dna_db'])
+
 
         layout_fijar_energia_dosis.addWidget(self.inputs['db_type'])
         layout_fijar_energia_dosis.addWidget(self.inputs['N_sim'])

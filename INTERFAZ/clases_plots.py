@@ -5,7 +5,7 @@ matplotlib.use('Qt5Agg')
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationToolbar2QT
 from matplotlib.figure import Figure
 from PyQt5.QtWidgets import (QFileDialog, QWidget, QFormLayout, QLabel, QPushButton, QFrame,
-                            QLineEdit, QSpinBox, QVBoxLayout, QHBoxLayout, QFormLayout)
+                            QLineEdit, QSpinBox, QVBoxLayout, QHBoxLayout, QFormLayout, QCheckBox)
 from PyQt5.QtCore import pyqtSignal
 
 
@@ -97,7 +97,7 @@ class Canvas(FigureCanvasQTAgg):
         for v in info_plots:
             doses = v['doses']
             surv = v['survival']
-            #survivalerr = v['surverr']
+            survivalerr = v['surverr']
             set_experimental = v['set_experimental']
             num_puntos = v['num_puntos']
             # Función para graficar supervivencia vs dosis
@@ -119,9 +119,10 @@ class Canvas(FigureCanvasQTAgg):
             self.axes.set_title(self.title, fontsize=set_experimental['title_fontsize'])
             self.axes.tick_params(axis='both', labelsize=set_experimental['axisticks_fontsize'])
             self.axes.set_yscale('log')
-            p = self.axes.plot(doses, survival, label=label_set)
-            #print(p[0].get_color())
-            #self.axes.errorbar(doses, survivalerr, label=label_set)
+            if set_experimental['barras_error']:
+                self.axes.errorbar(doses, survival, survivalerr, label=label_set)
+            else:
+                self.axes.plot(doses, survival, label=label_set)
             self.axes.legend(fontsize=set_experimental['labels_fontsize'])
 
     
@@ -226,10 +227,13 @@ class Plot(QFrame):
         self.num_puntos_plot.setValue(10)
         self.num_puntos_plot.setMinimum(1)
 
+        self.barras_error_check = QCheckBox('Incluir barras de error', self)
+
         self.new_plot.addRow(carpeta, self.carpeta_plot)
         self.new_plot.addRow(set_experimental, self.set_experimental_button)
         self.new_plot.addRow(label_name, self.label)
         self.new_plot.addRow(label_puntos, self.num_puntos_plot)
+        self.new_plot.addRow(QLabel(''), self.barras_error_check)
 
         self.setLayout(self.new_plot)
 

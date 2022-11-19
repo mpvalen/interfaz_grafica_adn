@@ -133,16 +133,20 @@ class Logica(QObject):
             dict_info['tipo_plot'] = tipo_plot
             label_set_experimental = plot.label.text()
             num_ptos_plot = plot.num_puntos_plot.text()
+            usar_barras_error = plot.barras_error_check.isChecked()
             try:
                 set_experimental_path = plot.set_experimental[0]
                 set_x, set_y = read_set_experimental(set_experimental_path)
                 set_experimental = {'values': True, 'set_x': set_x, 'set_y': set_y, 
-                                    'label_set_experimental': label_set_experimental}
+                                    'label_set_experimental': label_set_experimental, 
+                                    'barras_error': usar_barras_error}
             except (KeyError, FileNotFoundError, IndexError) as error:
                 if label_set_experimental != '':
-                    set_experimental = {'values': False, 'label_set_experimental': label_set_experimental}
+                    set_experimental = {'values': False, 'label_set_experimental': label_set_experimental,
+                                        'barras_error': usar_barras_error}
                 else:
-                    set_experimental = {'values': False, 'label_set_experimental': f'Plot {i}'}
+                    set_experimental = {'values': False, 'label_set_experimental': f'Plot {i}',
+                                        'barras_error': usar_barras_error}
             set_experimental.update(dict_fontsize)
             if tipo_plot == 'Dose vs depth':
                 # Leer archivos de la carpeta
@@ -161,8 +165,8 @@ class Logica(QObject):
             elif tipo_plot == 'Survival vs dose':
                 for file in os.listdir(directory):
                     if file.endswith('.db'):
-                        survival, dose = read_surv_dose_file(os.path.join(directory, file))
-                        dict_file = {'doses': dose, 'survival': survival,
+                        survival, surverr, dose = read_surv_dose_file(os.path.join(directory, file))
+                        dict_file = {'doses': dose, 'survival': survival, 'surverr': surverr,
                                     'set_experimental': set_experimental, 'num_puntos': num_ptos_plot}
                         dosis_key = 0
                         dict_info[f'{dosis_key}'] = dict_file
@@ -242,7 +246,8 @@ class Logica(QObject):
         dato_fijo = event['db_energia_dosis_fija'].text()
 
         datos_omitibles = {'nocs': event['nocs'].text(), 'seed': event['seed_db'].text(),
-                           'ndia': event['ndia_db'].value(), 'dna': event['dna_db'].value()}
+                           'ndia': event['ndia_db'].value(), 'dna': event['dna_db'].value(),
+                           'cdia': event['cdia_db'].value()}
         for item in datos_omitibles.items():
             if item[1] != '':
                 datos_omitibles[item[0]] = float(item[1])
@@ -252,6 +257,7 @@ class Logica(QObject):
         seed = datos_omitibles['seed']
         ndia = datos_omitibles['ndia']
         dna = datos_omitibles['dna']
+        cdia = datos_omitibles['cdia']
         energia_dosis = [0.5, 500, 0.1, 10] # energia min, max, dosis min y max
 
         db_energia_dosis = [event['energy_db_min'].text(), event['energy_db_max'].text(),
@@ -285,8 +291,8 @@ class Logica(QObject):
                 file = open(path, 'w')
                 #file.write("\nSIMCON: seed={} nocs={}\nRADX: PAR={} KE={} AD={}\n\n\n".format(seed,
                 #          nocs,particula,E, d))
-                file.write("CELL: DNA={} NDIA={}\nSIMCON: seed={} nocs={}\nRADX: PAR={} KE={} AD={}\n\n\n".format(dna,
-                            ndia, seed, nocs, particula, E, d))
+                file.write("CELL: DNA={} NDIA={} CDIA={}\nSIMCON: seed={} nocs={}\nRADX: PAR={} KE={} AD={}\n\n\n".format(dna,
+                            ndia, cdia, seed, nocs, particula, E, d))
                 file.close()
                 cont += 1
         else:
@@ -295,8 +301,8 @@ class Logica(QObject):
                 file = open(path, 'w')
                 #file.write("\nSIMCON: seed={} nocs={}\nRADX: PAR={} KE={} AD={}\n\n\n".format(seed,
                 #           nocs,particula, ke, D))
-                file.write("CELL: DNA={} NDIA={} CDIA=11\nSIMCON: seed={} nocs={}\nRADX: PAR={} KE={} AD={}\n\n\n".format(dna,
-                            ndia, seed, nocs, particula, ke, D))
+                file.write("CELL: DNA={} NDIA={} CDIA={}\nSIMCON: seed={} nocs={}\nRADX: PAR={} KE={} AD={}\n\n\n".format(dna,
+                            ndia, cdia, seed, nocs, particula, ke, D))
                 file.close()
                 cont += 1
         
@@ -402,8 +408,8 @@ class Logica(QObject):
                 survivals.append(survival)
                 surverrs.append(survivalerr)
         with open(os.path.join(directory, f'survival_dose_{ctype}.db'), 'w') as file:
-            file.write('Survival Dose Yield Yielderr Lambda Lambdaerr\n')
-            for (s, d, y, yerr, l, lerr) in zip(survivals, doses, yields,
+            file.write('Survival Survivalerr Dose Yield Yielderr Lambda Lambdaerr\n')
+            for (s, d, y, yerr, l, lerr) in zip(survivals, surverrs, doses, yields,
                                                       yieldserr, lmbdas, lmbdaserr):
                 file.write('{} {} {} {} {} {}\n'.format(s, d, y, yerr, l, lerr))
     
@@ -454,13 +460,13 @@ def read_surv_dose_file(path):
     file = open(path, 'r')
     next(file)
     survivals = []
-    #surverr = []
+    surverr = []
     doses = []
     for line in file:
         survivals.append(float(line.split(' ')[0]))
-        #surverr.append(float(line.split(' ')[1]))
-        doses.append(float(line.split(' ')[1]))
-    return np.asarray(survivals), np.asarray(doses)
+        surverr.append(float(line.split(' ')[1]))
+        doses.append(float(line.split(' ')[2]))
+    return np.asarray(survivals), np.asarray(surverr), np.asarray(doses)
 
 
 def read_output_file(path):
