@@ -243,7 +243,7 @@ class Logica(QObject):
         db_type = event['db_type'].currentText()
         N = int(event['N_sim'].text())
         dir = event['ident'][1]
-        dato_fijo = event['db_energia_dosis_fija'].text()
+        dato_fijo = float(event['db_energia_dosis_fija'].text().replace(',', '.'))
 
         datos_omitibles = {'nocs': event['nocs'].text(), 'seed': event['seed_db'].text(),
                            'ndia': event['ndia_db'].value(), 'dna': event['dna_db'].value(),
@@ -401,17 +401,17 @@ class Logica(QObject):
                 #survival, lmbda = mech.mech_model(dose, ctype, LET_nuc_entry, y)
                 survival, survivalerr = mech.mech_model_wlmbda_uncert(ctype, dose, 0, y, yerr, l, lerr, self.modelo)
                 doses.append(dose)
-                yields.append(y)
-                yieldserr.append(yerr)
+                yields.append(y/dose)
+                yieldserr.append(yerr/dose)
                 lmbdas.append(l)
                 lmbdaserr.append(lerr)
                 survivals.append(survival)
                 surverrs.append(survivalerr)
         with open(os.path.join(directory, f'survival_dose_{ctype}.db'), 'w') as file:
             file.write('Survival Survivalerr Dose Yield Yielderr Lambda Lambdaerr\n')
-            for (s, d, y, yerr, l, lerr) in zip(survivals, surverrs, doses, yields,
+            for (s, serr, d, y, yerr, l, lerr) in zip(survivals, surverrs, doses, yields,
                                                       yieldserr, lmbdas, lmbdaserr):
-                file.write('{} {} {} {} {} {}\n'.format(s, d, y, yerr, l, lerr))
+                file.write('{} {} {} {} {} {} {}\n'.format(s, serr, d, y, yerr, l, lerr))
     
 
     def info_ciclo_celular(self, event):
