@@ -477,8 +477,8 @@ class TabParams(QTabWidget):
     def tab7UI(self):
         self.canvas = Canvas(self, width=5, height=4, dpi=100)
         # plots
-        #self.canvas.axes.plot([0,1,2,3,4], [10,1,20,3,40])
         toolbar = NavigationToolbar2QT(self.canvas, self)
+        #toolbar.addWidget(QLineEdit('uwu'))
 
         layout = QHBoxLayout()
         self.v_layout_plots = QVBoxLayout()

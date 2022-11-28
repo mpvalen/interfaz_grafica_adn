@@ -7,6 +7,7 @@ from matplotlib.figure import Figure
 from PyQt5.QtWidgets import (QFileDialog, QWidget, QFormLayout, QLabel, QPushButton, QFrame,
                             QLineEdit, QSpinBox, QVBoxLayout, QHBoxLayout, QFormLayout, QCheckBox)
 from PyQt5.QtCore import pyqtSignal
+#import figureoptions
 
 
 class Canvas(FigureCanvasQTAgg):
@@ -77,15 +78,15 @@ class Canvas(FigureCanvasQTAgg):
             if set_experimental['values']:
                 set_depth = set_experimental['set_x']
                 set_doses = set_experimental['set_y']
-                label_set = set_experimental['label_set_experimental']
-                self.axes.scatter(set_depth, set_doses, color='green', label= label_set)
+                label_curva = set_experimental['label_curva']
+                self.axes.scatter(set_depth, set_doses, color='green', label= label_curva)
             else:
-                label_set = set_experimental['label_set_experimental']
+                label_curva = set_experimental['label_curva']
             self.axes.set_xlabel('Depth [mm]', fontsize=set_experimental['axistext_fontsize'])
             self.axes.set_ylabel('Dose [Gy]', fontsize=set_experimental['axistext_fontsize'])
             self.axes.set_title(self.title, fontsize=set_experimental['title_fontsize'])
             self.axes.tick_params(axis='both', labelsize=set_experimental['axisticks_fontsize'])
-            self.axes.errorbar(depth, doses, doseserr, errorevery= num_puntos, label=label_set)
+            self.axes.errorbar(depth, doses, doseserr, errorevery= num_puntos, label=label_curva)
             self.axes.legend(fontsize=set_experimental['labels_fontsize'])
 
     
@@ -93,7 +94,7 @@ class Canvas(FigureCanvasQTAgg):
         # info_plots es una lista con al menos 1 diccionario con información para graficar
         self.title = self.axes.get_title()
         self.axes.clear()
-        info_plots = sorted(info, key=lambda d: d['set_experimental']['label_set_experimental'])
+        info_plots = sorted(info, key=lambda d: d['set_experimental']['label_curva'])
         for v in info_plots:
             doses = v['doses']
             surv = v['survival']
@@ -109,10 +110,11 @@ class Canvas(FigureCanvasQTAgg):
             if set_experimental['values'] == True:
                 set_doses = set_experimental['set_x']
                 set_survival = set_experimental['set_y']
-                label_set = set_experimental['label_set_experimental']
-                self.axes.scatter(set_doses, set_survival, label= label_set)
+                label_curva = set_experimental['label_curva']
+                label_experimental = set_experimental['label_experimental']
+                self.axes.scatter(set_doses, set_survival, label=label_experimental)
             else:
-                label_set = set_experimental['label_set_experimental']
+                label_curva = set_experimental['label_curva']
 
             self.axes.set_xlabel('Dose [Gy]', fontsize=set_experimental['axistext_fontsize'])
             self.axes.set_ylabel('Survival fraction', fontsize=set_experimental['axistext_fontsize'])
@@ -120,9 +122,9 @@ class Canvas(FigureCanvasQTAgg):
             self.axes.tick_params(axis='both', labelsize=set_experimental['axisticks_fontsize'])
             self.axes.set_yscale('log')
             if set_experimental['barras_error']:
-                self.axes.errorbar(doses, survival, survivalerr, label=label_set)
+                self.axes.errorbar(doses, survival, survivalerr, label=label_curva)
             else:
-                self.axes.plot(doses, survival, label=label_set)
+                self.axes.plot(doses, survival, label=label_curva)
             self.axes.legend(fontsize=set_experimental['labels_fontsize'])
 
     
@@ -140,14 +142,14 @@ class Canvas(FigureCanvasQTAgg):
             if set_experimental['values']:
                 set_depth = set_experimental['set_x']
                 set_survival = set_experimental['set_y']
-                label_set = set_experimental['label_set_experimental']
-                self.axes.scatter(set_depth, set_survival, color='green', label= label_set)
+                label_curva = set_experimental['label_curva']
+                self.axes.scatter(set_depth, set_survival, color='green', label= label_curva)
             else:
-                label_set = set_experimental['label_set_experimental']
+                label_curva = set_experimental['label_curva']
             self.axes.set_xlabel('Depth [mm]', fontsize=set_experimental['axistext_fontsize'])
             self.axes.set_ylabel('Survival fraction', fontsize=set_experimental['axistext_fontsize'])
             self.axes.tick_params(axis='both', labelsize=set_experimental['axisticks_fontsize'])
-            self.axes.errorbar(depth, survival, survivalerr, errorevery= int(num_puntos), label=label_set)
+            self.axes.errorbar(depth, survival, survivalerr, errorevery= int(num_puntos), label=label_curva)
             self.axes.legend(fontsize=set_experimental['labels_fontsize'])
         self.axes.set_title(f'Dosis {dose} Gy', fontsize=set_experimental['title_fontsize'])
 
@@ -164,10 +166,10 @@ class Canvas(FigureCanvasQTAgg):
             if set_experimental['values']:
                 set_depth = set_experimental['set_x']
                 set_dsbyields = set_experimental['set_y']
-                label_set = set_experimental['label_set_experimental']
-                self.axes.scatter(set_depth, set_dsbyields, color='green', label= label_set)
+                label_curva = set_experimental['label_curva']
+                self.axes.scatter(set_depth, set_dsbyields, color='green', label= label_curva)
             else:
-                label_set = set_experimental['label_set_experimental']
+                label_curva = set_experimental['label_curva']
 
             self.axes.set_xlabel('Depth [mm]', fontsize=set_experimental['axistext_fontsize'])
             self.axes.set_ylabel('DSB Yield', fontsize=set_experimental['axistext_fontsize'])
@@ -189,15 +191,15 @@ class Canvas(FigureCanvasQTAgg):
             if set_experimental['values']:
                 set_depth = set_experimental['set_x']
                 set_lmbda = set_experimental['set_y']
-                label_set = set_experimental['label_set_experimental']
-                self.axes.scatter(set_depth, set_lmbda, color='green', label= label_set)
+                label_curva = set_experimental['label_curva']
+                self.axes.scatter(set_depth, set_lmbda, color='green', label= label_curva)
             else:
-                label_set = set_experimental['label_set_experimental']
+                label_curva = set_experimental['label_curva']
             self.axes.set_xlabel('Depth [mm]', fontsize=set_experimental['axistext_fontsize'])
             self.axes.set_ylabel('Lambda', fontsize=set_experimental['axistext_fontsize'])
             self.axes.tick_params(axis='both', labelsize=set_experimental['axisticks_fontsize'])
             self.axes.set_title(self.title, fontsize=set_experimental['title_fontsize'])
-            self.axes.errorbar(depth, lmbda, lmbdaerr, errorevery= num_puntos, label=label_set)
+            self.axes.errorbar(depth, lmbda, lmbdaerr, errorevery= num_puntos, label=label_curva)
             self.axes.legend(fontsize=set_experimental['labels_fontsize'])
     
 
@@ -206,6 +208,9 @@ class Plot(QFrame):
     def __init__(self, id):
         super().__init__()
         self.id = id # Número identificador del plot
+        self.layout_principal = QVBoxLayout()
+        layout_horizontal = QHBoxLayout()
+        layout_label_experimental = QHBoxLayout()
         self.new_plot = QFormLayout()
         self.set_experimental = ''
 
@@ -214,12 +219,7 @@ class Plot(QFrame):
         self.carpeta_plot = QPushButton('Elegir carpeta', self)
         self.carpeta_plot.clicked.connect(self.open_carpeta_plots)
 
-        set_experimental = QLabel('Set experimental')
-        set_experimental.setToolTip('Archivo con datos experimentales, se genera un scatter de puntos')
-        self.set_experimental_button = QPushButton(f'Elegir archivo', self)
-        self.set_experimental_button.clicked.connect(self.open_set_experimental)
-
-        label_name = QLabel('Label del set')
+        label_name = QLabel('Label gráfico')
         self.label = QLineEdit()
 
         label_puntos = QLabel('Separación de puntos')
@@ -230,12 +230,30 @@ class Plot(QFrame):
         self.barras_error_check = QCheckBox('Incluir barras de error', self)
 
         self.new_plot.addRow(carpeta, self.carpeta_plot)
-        self.new_plot.addRow(set_experimental, self.set_experimental_button)
         self.new_plot.addRow(label_name, self.label)
         self.new_plot.addRow(label_puntos, self.num_puntos_plot)
         self.new_plot.addRow(QLabel(''), self.barras_error_check)
 
-        self.setLayout(self.new_plot)
+        set_experimental = QLabel('Set experimental')
+        set_experimental.setToolTip('Archivo con datos experimentales, se genera un scatter de puntos')
+        self.set_experimental_button = QPushButton(f'Elegir archivo', self)
+        self.set_experimental_button.clicked.connect(self.open_set_experimental)
+        layout_horizontal.addWidget(set_experimental)
+        layout_horizontal.addWidget(self.set_experimental_button)
+
+        label_experimental = QLabel('Label set experimental')
+        self.label_experimental = QLineEdit()
+        layout_label_experimental.addWidget(label_experimental)
+        layout_label_experimental.addWidget(self.label_experimental)
+
+
+        self.layout_principal.addLayout(self.new_plot)
+        self.layout_principal.addWidget(HorizontalLine())
+        self.layout_principal.addLayout(layout_horizontal)
+        self.layout_principal.addLayout(layout_label_experimental)
+
+
+        self.setLayout(self.layout_principal)
 
     def open_carpeta_plots(self):
         self.path_carpeta_plots = QFileDialog.getExistingDirectory(self, "Elegir carpeta")

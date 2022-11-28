@@ -131,21 +131,24 @@ class Logica(QObject):
             directory = plot.path_carpeta_plots
             dict_info = dict()
             dict_info['tipo_plot'] = tipo_plot
-            label_set_experimental = plot.label.text()
+            label_curva = plot.label.text()
+            label_set_experimental = plot.label_experimental.text()
             num_ptos_plot = plot.num_puntos_plot.text()
             usar_barras_error = plot.barras_error_check.isChecked()
             try:
                 set_experimental_path = plot.set_experimental[0]
                 set_x, set_y = read_set_experimental(set_experimental_path)
                 set_experimental = {'values': True, 'set_x': set_x, 'set_y': set_y, 
-                                    'label_set_experimental': label_set_experimental, 
+                                    'label_curva': label_curva, 'label_experimental': label_set_experimental, 
                                     'barras_error': usar_barras_error}
             except (KeyError, FileNotFoundError, IndexError) as error:
-                if label_set_experimental != '':
-                    set_experimental = {'values': False, 'label_set_experimental': label_set_experimental,
+                if label_curva != '':
+                    set_experimental = {'values': False, 'label_curva': label_curva,
+                                        'label_experimental': label_set_experimental,
                                         'barras_error': usar_barras_error}
                 else:
-                    set_experimental = {'values': False, 'label_set_experimental': f'Plot {i}',
+                    set_experimental = {'values': False, 'label_curva': f'Plot {i}',
+                                        'label_experimental': label_set_experimental,
                                         'barras_error': usar_barras_error}
             set_experimental.update(dict_fontsize)
             if tipo_plot == 'Dose vs depth':
