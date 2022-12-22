@@ -86,9 +86,9 @@ class VentanaPrincipal(window_name, base_class):
         #self.actionWang.triggered.connect(self.modelo_wang)
 
         # Ciclo celular
-        self.actionG1.setChecked(True)
-        self.actionG1.triggered.connect(self.ciclo_celular_g1)
-        self.actionG2.triggered.connect(self.ciclo_celular_g2)
+        #self.actionG1.setChecked(True)
+        #self.actionG1.triggered.connect(self.ciclo_celular_g1)
+        #self.actionG2.triggered.connect(self.ciclo_celular_g2)
 
         # Shortcut
         self.shortcut_generar = QShortcut(QKeySequence('Ctrl+Q'), self)
