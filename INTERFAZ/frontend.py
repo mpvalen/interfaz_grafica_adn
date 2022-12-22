@@ -510,8 +510,8 @@ class TabParams(QTabWidget):
         self.v_layout_plots.addWidget(HorizontalLine())
         
         self.boton_fontsize = QPushButton('Cambiar tamaño de letra')
-        self.v_layout_plots.addWidget(self.boton_fontsize)
-        self.v_layout_plots.addWidget(HorizontalLine())
+        #self.v_layout_plots.addWidget(self.boton_fontsize)
+        #self.v_layout_plots.addWidget(HorizontalLine())
 
         self.generar_plots_button = QPushButton('Generar plots')
         self.v_layout_plots.addWidget(self.generar_plots_button)

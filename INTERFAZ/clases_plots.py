@@ -7,7 +7,7 @@ from matplotlib.figure import Figure
 from PyQt5.QtWidgets import (QFileDialog, QWidget, QFormLayout, QLabel, QPushButton, QFrame,
                             QLineEdit, QSpinBox, QVBoxLayout, QHBoxLayout, QFormLayout, QCheckBox)
 from PyQt5.QtCore import pyqtSignal
-#import figureoptions
+import figureoptions
 
 
 class Canvas(FigureCanvasQTAgg):
@@ -122,7 +122,8 @@ class Canvas(FigureCanvasQTAgg):
             self.axes.tick_params(axis='both', labelsize=set_experimental['axisticks_fontsize'])
             self.axes.set_yscale('log')
             if set_experimental['barras_error']:
-                self.axes.errorbar(doses, survival, survivalerr, label=label_curva)
+                self.axes.errorbar(doses, survival, survivalerr, label=label_curva, fmt='none')
+                self.axes.plot(doses, survival, label=label_curva)
             else:
                 self.axes.plot(doses, survival, label=label_curva)
             self.axes.legend(fontsize=set_experimental['labels_fontsize'])
