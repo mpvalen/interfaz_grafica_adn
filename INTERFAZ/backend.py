@@ -11,7 +11,6 @@ import os
 import natsort
 
 
-
 class Logica(QObject):
     # Clase que contiene gran parte de las funciones del backend de la interfaz. Se guarda información
     # recurrente como directorio escogido, parámetros dados por el user, etc.
@@ -23,36 +22,43 @@ class Logica(QObject):
         self.path_mcds = os.path.join('mcds', 'bin', 'mcds.exe')
         self.g1 = True
         self.modelo = 'Wang'
-        #self.database_particles = [''] añadir protones y carbono12
-    
+        # self.database_particles = [''] añadir protones y carbono12
 
     def recibir_input_mcds(self, e):
         # recibe un diccionario con parámetros y escribe archivo input
         ident = e['ident'][1]
         if str(e['oxygen_type'].currentText()) == '%O2':
-            inp_text = fop.mcds_inp(e['dna'].text(), e['ndia'].text(), e['cdia'].text(), 
-                                e['wem'].text(), e['seed'].text(), e['nocs'].text(), '', # FN (Fluka)
-                                str(e['par'].currentText()), e['ke'].text(), e['mev/a'].text(), e['ad'].text(), 
-                                e['oxygen'].text(), '', e['m0'].text(), e['k'].text(), e['q'].text(),
-                                e['r'].text(), e['fbl'].text(), e['conc'].text(), e['fnsd'].text(), e['chmx'].text())
+            inp_text = fop.mcds_inp(e['dna'].text(), e['ndia'].text(), e['cdia'].text(),
+                                    e['wem'].text(), e['seed'].text(
+            ), e['nocs'].text(), '',  # FN (Fluka)
+                str(e['par'].currentText()), e['ke'].text(
+            ), e['mev/a'].text(), e['ad'].text(),
+                e['oxygen'].text(), '', e['m0'].text(
+            ), e['k'].text(), e['q'].text(),
+                e['r'].text(), e['fbl'].text(), e['conc'].text(), e['fnsd'].text(), e['chmx'].text())
         else:
-            inp_text = fop.mcds_inp(e['dna'].text(), e['ndia'].text(), e['cdia'].text(), 
-                                e['wem'].text(), e['seed'].text(), e['nocs'].text(), '',
-                                str(e['par'].currentText()), e['ke'].text(), e['mev/a'].text(), e['ad'].text(), 
-                                '', e['oxygen'].text(), e['m0'].text(), e['k'].text(), e['q'].text(),
-                                e['r'].text(), e['fbl'].text(), e['conc'].text(), e['fnsd'].text(), e['chmx'].text())
+            inp_text = fop.mcds_inp(e['dna'].text(), e['ndia'].text(), e['cdia'].text(),
+                                    e['wem'].text(), e['seed'].text(
+            ), e['nocs'].text(), '',
+                str(e['par'].currentText()), e['ke'].text(
+            ), e['mev/a'].text(), e['ad'].text(),
+                '', e['oxygen'].text(), e['m0'].text(
+            ), e['k'].text(), e['q'].text(),
+                e['r'].text(), e['fbl'].text(), e['conc'].text(), e['fnsd'].text(), e['chmx'].text())
         dir = os.path.join(os.getcwd(), ident)
         try:
             os.mkdir(dir)
         except:
             # se usa el mismo directorio
-            self.contador_inputs_mcds = len([f for f in os.listdir(dir) if f.endswith('.inp')])
-        gen_inp = open(os.path.join(dir, f'{ident}_{self.contador_inputs_mcds}.inp'), 'w')
+            self.contador_inputs_mcds = len(
+                [f for f in os.listdir(dir) if f.endswith('.inp')])
+        gen_inp = open(os.path.join(
+            dir, f'{ident}_{self.contador_inputs_mcds}.inp'), 'w')
         gen_inp.write(inp_text)
         gen_inp.close()
 
         self.contador_inputs_mcds += 1
-    
+
     def lanzar_simulaciones(self, event):
         # iniciar simulaciones con los inputs de la carpeta (MCDS)
         if event == '*':
@@ -61,22 +67,22 @@ class Logica(QObject):
         else:
             ident = event
             dir = ident
-            cont_bats=0
+            cont_bats = 0
             try:
                 for archivo in os.listdir(dir):
                     if archivo.endswith('inp'):
                         ruta = os.path.join(dir, archivo)
-                        bat_path = os.path.join(dir, f'{ident}_bat_{cont_bats}.bat')
+                        bat_path = os.path.join(
+                            dir, f'{ident}_bat_{cont_bats}.bat')
                         bat = open(bat_path, 'w')
                         bat.write(fop.mcds_bat(ruta, self.path_mcds))
                         bat.close()
                         subprocess.call([r'{}'.format(bat_path)])
                         os.remove(bat_path)
-                        cont_bats+=1
+                        cont_bats += 1
             except FileNotFoundError as error:
-                print('Error: Debe seleccionar una carpeta válida para lanzar las simulaciones')
-
-
+                print(
+                    'Error: Debe seleccionar una carpeta válida para lanzar las simulaciones')
 
     def recibir_input_fluka_yield(self, event):
         # recibe diccionario con path de plotdats, tablis, separacion detectores
@@ -95,27 +101,27 @@ class Logica(QObject):
             self.ndia = float(event['fluka_ndia'].text())
             self.dose_norm_max = float(event['dose_norm_max'].text())
             self.proc_output_path = event['proc_folder_path']
-            
 
             Ndet = int((self.depth_max - self.depth_min) / self.sep_ptos)
-            detector_depth = [self.depth_min + i * self.sep_ptos for i in range(0, Ndet + 1)]
+            detector_depth = [self.depth_min + i *
+                              self.sep_ptos for i in range(0, Ndet + 1)]
 
             # si es windows, arregla el path
             if '\\' in self.dose_data_path:
                 self.dose_data_path = self.dose_data_path.replace('\\', '\\\\')
             if '\\' in self.spectrum_data_path:
-                self.spectrum_data_path = self.spectrum_data_path.replace('\\', '\\\\')
+                self.spectrum_data_path = self.spectrum_data_path.replace(
+                    '\\', '\\\\')
             if '\\' in self.databasefolder_path:
-                self.databasefolder_path = self.databasefolder_path.replace('\\', '\\\\')
+                self.databasefolder_path = self.databasefolder_path.replace(
+                    '\\', '\\\\')
 
             data = ftd.fluka_to_data(self.spectrum_data_path, self.dose_data_path, self.databasefolder_path,
                                      detector_depth, self.ctype, self.dna, self.ndia, self.dose_norm_max,
                                      self.proc_output_path)
-        
+
         except KeyError as error:
             print('Error: debe escoger una carpeta válida')
-
-
 
     def info_plots(self, event):
         # recibe el tipo de plot, envia info necesaria para plotear
@@ -138,8 +144,8 @@ class Logica(QObject):
             try:
                 set_experimental_path = plot.set_experimental[0]
                 set_x, set_y = read_set_experimental(set_experimental_path)
-                set_experimental = {'values': True, 'set_x': set_x, 'set_y': set_y, 
-                                    'label_curva': label_curva, 'label_experimental': label_set_experimental, 
+                set_experimental = {'values': True, 'set_x': set_x, 'set_y': set_y,
+                                    'label_curva': label_curva, 'label_experimental': label_set_experimental,
                                     'barras_error': usar_barras_error}
             except (KeyError, FileNotFoundError, IndexError) as error:
                 if label_curva != '':
@@ -156,47 +162,47 @@ class Logica(QObject):
                 for file in os.listdir(directory):
                     path_read = os.path.join(directory, file)
                     (self.depths_mm, self.doses, self.doseerrs, self.dsbyields, self.dsbyielderrs,
-                    self.lmbdas, self.lmbdaerrs, self.survs, self.surverrs) = read_output_file(path_read)
-                    dict_file = {'doses': self.doses, 'doseserr': self.doseerrs, 
-                                'depth': self.depths_mm, 'set_experimental': set_experimental,
-                                'num_puntos': num_ptos_plot}
+                     self.lmbdas, self.lmbdaerrs, self.survs, self.surverrs) = read_output_file(path_read)
+                    dict_file = {'doses': self.doses, 'doseserr': self.doseerrs,
+                                 'depth': self.depths_mm, 'set_experimental': set_experimental,
+                                 'num_puntos': num_ptos_plot}
                     dosis_key = find_dose_from_filename(file)
                     dict_info[f'{dosis_key}'] = dict_file
                     info_dicts.append(dict_info)
                 self.senal_info_plots_backend.emit(info_dicts)
-            
+
             elif tipo_plot == 'Survival vs dose':
                 for file in os.listdir(directory):
                     if file.endswith('.db'):
-                        survival, surverr, dose = read_surv_dose_file(os.path.join(directory, file))
+                        survival, surverr, dose = read_surv_dose_file(
+                            os.path.join(directory, file))
                         dict_file = {'doses': dose, 'survival': survival, 'surverr': surverr,
-                                    'set_experimental': set_experimental, 'num_puntos': num_ptos_plot}
+                                     'set_experimental': set_experimental, 'num_puntos': num_ptos_plot}
                         dosis_key = 0
                         dict_info[f'{dosis_key}'] = dict_file
                 info_dicts.append(dict_info)
                 self.senal_info_plots_backend.emit(info_dicts)
 
-            
             elif tipo_plot == 'Survival vs depth':
                 for file in os.listdir(directory):
                     path_read = os.path.join(directory, file)
                     (self.depths_mm, self.doses, self.doseerrs, self.dsbyields, self.dsbyielderrs,
-                    self.lmbdas, self.lmbdaerrs, self.survs, self.surverrs) = read_output_file(path_read)
+                     self.lmbdas, self.lmbdaerrs, self.survs, self.surverrs) = read_output_file(path_read)
                     dict_file = {'depth': self.depths_mm, 'survival': self.survs, 'survivalerr': self.surverrs,
-                                'set_experimental': set_experimental, 'num_puntos': num_ptos_plot}
+                                 'set_experimental': set_experimental, 'num_puntos': num_ptos_plot}
                     dosis_key = find_dose_from_filename(file)
                     dict_info[f'{dosis_key}'] = dict_file
                 info_dicts.append(dict_info)
                 self.senal_info_plots_backend.emit(info_dicts)
-            
+
             elif tipo_plot == 'Yield vs depth':
                 for file in os.listdir(directory):
                     path_read = os.path.join(directory, file)
                     (self.depths_mm, self.doses, self.doseerrs, self.dsbyields, self.dsbyielderrs,
-                    self.lmbdas, self.lmbdaerrs, self.survs, self.surverrs) = read_output_file(path_read)
+                     self.lmbdas, self.lmbdaerrs, self.survs, self.surverrs) = read_output_file(path_read)
                     dict_file = {'depth': self.depths_mm, 'dsbyields': self.dsbyields,
-                                'dsbyieldserr': self.dsbyielderrs, 'set_experimental': set_experimental,
-                                'num_puntos': num_ptos_plot}
+                                 'dsbyieldserr': self.dsbyielderrs, 'set_experimental': set_experimental,
+                                 'num_puntos': num_ptos_plot}
                     dosis_key = find_dose_from_filename(file)
                     dict_info[f'{dosis_key}'] = dict_file
                 info_dicts.append(dict_info)
@@ -206,47 +212,54 @@ class Logica(QObject):
                 for file in os.listdir(directory):
                     path_read = os.path.join(directory, file)
                     (self.depths_mm, self.doses, self.doseerrs, self.dsbyields, self.dsbyielderrs,
-                    self.lmbdas, self.lmbdaerrs, self.survs, self.surverrs) = read_output_file(path_read)
+                     self.lmbdas, self.lmbdaerrs, self.survs, self.surverrs) = read_output_file(path_read)
                     dict_file = {'depth': self.depths_mm, 'lambda': self.lmbdas, 'lambdaerr': self.lmbdaerrs,
-                                'set_experimental': set_experimental, 'num_puntos': num_ptos_plot}
+                                 'set_experimental': set_experimental, 'num_puntos': num_ptos_plot}
                     dosis_key = find_dose_from_filename(file)
                     dict_info[f'{dosis_key}'] = dict_file
                 info_dicts.append(dict_info)
                 self.senal_info_plots_backend.emit(info_dicts)
-            
+
             elif tipo_plot == 'Test plot':
                 for file in os.listdir(directory):
                     path_read = os.path.join(directory, file)
                     (self.depths_mm, self.doses, self.doseerrs, self.dsbyields, self.dsbyielderrs,
-                    self.lmbdas, self.lmbdaerrs, self.survs, self.surverrs) = read_output_file(path_read)
+                     self.lmbdas, self.lmbdaerrs, self.survs, self.surverrs) = read_output_file(path_read)
                     dict_file = {'depth': self.depths_mm, 'survival': self.survs, 'survivalerr': self.surverrs,
-                                'set_experimental': set_experimental, 'num_puntos': num_ptos_plot}
+                                 'set_experimental': set_experimental, 'num_puntos': num_ptos_plot}
                     dosis_key = find_dose_from_filename(file)
                     dict_info[f'{dosis_key}'] = dict_file
                 info_dicts.append(dict_info)
                 self.senal_info_plots_backend.emit(info_dicts)
-            
+
             elif tipo_plot == 'Test plot 2':
                 # Leer archivo survival_dose
                 for file in os.listdir(directory):
                     if file.endswith('.db'):
-                        survival, dose = read_surv_dose_file(os.path.join(directory, file))
+                        survival, dose = read_surv_dose_file(
+                            os.path.join(directory, file))
                         dict_file = {'doses': dose, 'survival': survival,
-                                    'set_experimental': set_experimental, 'num_puntos': num_ptos_plot}
+                                     'set_experimental': set_experimental, 'num_puntos': num_ptos_plot}
                         dosis_key = 0
                         print(file[-6:-3])
                         dict_info[f'{dosis_key}'] = dict_file
                 info_dicts.append(dict_info)
                 self.senal_info_plots_backend.emit(info_dicts)
 
-
     def generar_base_datos(self, event):
         # a partir del tipo de particula + seed, genera una base de datos para distintas energías/dosis
         particula = event['par_option_db'].currentText()
         db_type = event['db_type'].currentText()
-        N = int(event['N_sim'].text())
+        try:
+            N = int(event['N_sim'].text())
+        except ValueError as err:
+            N = ''
         dir = event['ident'][1]
-        dato_fijo = float(event['db_energia_dosis_fija'].text().replace(',', '.'))
+        try:
+            dato_fijo = float(
+                event['db_energia_dosis_fija'].text().replace(',', '.'))
+        except ValueError as error:
+            dato_fijo = ''
 
         datos_omitibles = {'nocs': event['nocs'].text(), 'seed': event['seed_db'].text(),
                            'ndia': event['ndia_db'].value(), 'dna': event['dna_db'].value(),
@@ -261,7 +274,8 @@ class Logica(QObject):
         ndia = datos_omitibles['ndia']
         dna = datos_omitibles['dna']
         cdia = datos_omitibles['cdia']
-        energia_dosis = [0.5, 500, 0.1, 10] # energia min, max, dosis min y max
+        # energia min, max, dosis min y max
+        energia_dosis = [0.5, 500, 0.1, 10]
 
         db_energia_dosis = [event['energy_db_min'].text(), event['energy_db_max'].text(),
                             event['dosis_db_min'].text(), event['dosis_db_max'].text()]
@@ -292,25 +306,25 @@ class Logica(QObject):
             for E in E_levels:
                 path = os.path.join(dir, f'{particula}_{cont}.inp')
                 file = open(path, 'w')
-                #file.write("\nSIMCON: seed={} nocs={}\nRADX: PAR={} KE={} AD={}\n\n\n".format(seed,
+                # file.write("\nSIMCON: seed={} nocs={}\nRADX: PAR={} KE={} AD={}\n\n\n".format(seed,
                 #          nocs,particula,E, d))
                 file.write("CELL: DNA={} NDIA={} CDIA={}\nSIMCON: seed={} nocs={}\nRADX: PAR={} KE={} AD={}\n\n\n".format(dna,
-                            ndia, cdia, seed, nocs, particula, E, d))
+                                                                                                                          ndia, cdia, seed, nocs, particula, E, d))
                 file.close()
                 cont += 1
         else:
             for D in D_levels:
                 path = os.path.join(dir, f'{particula}_{cont}.inp')
                 file = open(path, 'w')
-                #file.write("\nSIMCON: seed={} nocs={}\nRADX: PAR={} KE={} AD={}\n\n\n".format(seed,
+                # file.write("\nSIMCON: seed={} nocs={}\nRADX: PAR={} KE={} AD={}\n\n\n".format(seed,
                 #           nocs,particula, ke, D))
                 file.write("CELL: DNA={} NDIA={} CDIA={}\nSIMCON: seed={} nocs={}\nRADX: PAR={} KE={} AD={}\n\n\n".format(dna,
-                            ndia, cdia, seed, nocs, particula, ke, D))
+                                                                                                                          ndia, cdia, seed, nocs, particula, ke, D))
                 file.close()
                 cont += 1
-        
+
         # lanzar simulación con los inputs
-        cont_bats=0
+        cont_bats = 0
         for archivo in os.listdir(dir):
             if archivo.endswith('inp'):
                 ruta = os.path.join(dir, archivo)
@@ -320,11 +334,10 @@ class Logica(QObject):
                 bat.close()
                 subprocess.call([r'{}'.format(bat_path)])
                 os.remove(bat_path)
-                cont_bats+=1
+                cont_bats += 1
 
         # leer Yield y LET
         self.write_database(dir)
-
 
     def read_Y_LET(self, file_route):
         mcds_output = open(file_route, 'r')
@@ -359,7 +372,7 @@ class Logica(QObject):
         mcds_output.close()
         filtr2 = list(
             filter(None, (t2[-1].strip()).split(" ")))  # deja una lista con los valores aislados de la fila "total"
-        filtr3 =list(
+        filtr3 = list(
             filter(None, (t3[-1].strip()).split(" ")))
         Y = float(filtr2[1])
         Yerr = float(filtr2[2])
@@ -367,22 +380,23 @@ class Logica(QObject):
         lmbdaerr = float(filtr3[2])
         return energia, Y, Yerr, LET_cell_entry, LET_nuc_entry, LET_nuc_exit, lmbda, lmbdaerr, dose
 
-
     def write_database(self, path_directory):
         # lee todos los outputs en una carpeta, los ordena en un solo archivo (LET's, Y)
-        path_database = os.path.join(path_directory, f'{path_directory}.database')
+        path_database = os.path.join(
+            path_directory, f'{path_directory}.database')
         database = open(path_database, 'w')
-        database.write(f'energia LET_cell_entry LET_nuc_entry LET_nuc_exit Yield Yielde lambda lambdae\n')
-        #database.write(f'Y      Yerr    LET cell entry  LET nucleus entry   LET nucleus exit\n')
+        database.write(
+            f'energia LET_cell_entry LET_nuc_entry LET_nuc_exit Yield Yielde lambda lambdae\n')
+        # database.write(f'Y      Yerr    LET cell entry  LET nucleus entry   LET nucleus exit\n')
         directory_sorted = natsort.natsorted(os.listdir(path_directory))
         for filename in directory_sorted:
             if filename.endswith('.out'):
                 path_file = os.path.join(path_directory, filename)
-                energia, Y, Yerr, LET_cell_entry, LET_nuc_entry, LET_nuc_exit, lmbda, lmbdaerr, d = self.read_Y_LET(path_file)
-                database.write('{} {} {} {} {} {} {} {}\n'.format(energia, LET_cell_entry, LET_nuc_entry, 
-                                                           LET_nuc_exit, Y, Yerr, lmbda, lmbdaerr))
+                energia, Y, Yerr, LET_cell_entry, LET_nuc_entry, LET_nuc_exit, lmbda, lmbdaerr, d = self.read_Y_LET(
+                    path_file)
+                database.write('{} {} {} {} {} {} {} {}\n'.format(energia, LET_cell_entry, LET_nuc_entry,
+                                                                  LET_nuc_exit, Y, Yerr, lmbda, lmbdaerr))
         database.close()
-
 
     def calcular_supervivencia(self, info):
         # El usuario debe haber creado previamente suficientes archivos .out
@@ -400,9 +414,11 @@ class Logica(QObject):
         for file in directory_sorted:
             path = os.path.join(directory, file)
             if file.endswith('.out'):
-                energia, y, yerr, let_cell_entry, LET_nuc_entry, LET_nuc_exit, l, lerr, dose = self.read_Y_LET(path)
-                #survival, lmbda = mech.mech_model(dose, ctype, LET_nuc_entry, y)
-                survival, survivalerr = mech.mech_model_wlmbda_uncert(ctype, dose, 0, y, yerr, l, lerr, self.modelo)
+                energia, y, yerr, let_cell_entry, LET_nuc_entry, LET_nuc_exit, l, lerr, dose = self.read_Y_LET(
+                    path)
+                # survival, lmbda = mech.mech_model(dose, ctype, LET_nuc_entry, y)
+                survival, survivalerr = mech.mech_model_wlmbda_uncert(
+                    ctype, dose, 0, y, yerr, l, lerr, self.modelo)
                 doses.append(dose)
                 yields.append(y/dose)
                 yieldserr.append(yerr/dose)
@@ -411,18 +427,19 @@ class Logica(QObject):
                 survivals.append(survival)
                 surverrs.append(survivalerr)
         with open(os.path.join(directory, f'survival_dose_{ctype}.db'), 'w') as file:
-            file.write('Survival Survivalerr Dose Yield Yielderr Lambda Lambdaerr\n')
+            file.write(
+                'Survival Survivalerr Dose Yield Yielderr Lambda Lambdaerr\n')
             for (s, serr, d, y, yerr, l, lerr) in zip(survivals, surverrs, doses, yields,
                                                       yieldserr, lmbdas, lmbdaserr):
-                file.write('{} {} {} {} {} {} {}\n'.format(s, serr, d, y, yerr, l, lerr))
-    
+                file.write('{} {} {} {} {} {} {}\n'.format(
+                    s, serr, d, y, yerr, l, lerr))
 
     def info_ciclo_celular(self, event):
         if event:
             self.g1 = True
         else:
             self.g1 = False
-    
+
     def modelo_escogido(self, event):
         self.modelo = event
 
@@ -451,13 +468,14 @@ def read_D_Y_lmbda(path_file):
     mcds_output.close()
     filtr2 = list(
         filter(None, (t2[-1].strip()).split(" ")))  # deja una lista con los valores aislados de la fila "total"
-    filtr3 =list(
+    filtr3 = list(
         filter(None, (t3[-1].strip()).split(" ")))
     Y = float(filtr2[1])
     Yerr = float(filtr2[2])
     lmbda = float(filtr3[1])
     lmbdaerr = float(filtr3[2])
     return dose, Y, Yerr, lmbda, lmbdaerr
+
 
 def read_surv_dose_file(path):
     file = open(path, 'r')
@@ -476,15 +494,15 @@ def read_output_file(path):
     # Recibe un archivo con datos procesados, guarda los valores (despues usados para graficar)
     data = open(path, 'r')
     next(data)
-    depths=[]
-    doses=[]
-    doseerrs=[]
-    dsbyields=[]
-    dsbyielderrs=[]
-    lmbdas=[]
-    lmbdaerrs=[]
-    survs=[]
-    surverrs=[]
+    depths = []
+    doses = []
+    doseerrs = []
+    dsbyields = []
+    dsbyielderrs = []
+    lmbdas = []
+    lmbdaerrs = []
+    survs = []
+    surverrs = []
     for line in data:
         depths.append(float(line.split(' ')[0]))
         doses.append(float(line.split(' ')[1]))
@@ -495,11 +513,12 @@ def read_output_file(path):
         lmbdaerrs.append(float(line.split(' ')[6]))
         survs.append(float(line.split(' ')[7]))
         surverrs.append(float(line.split(' ')[8]))
-    
+
     (depths, doses, doseerrs, dsbyields, dsbyielderrs,
-    lmbdas, lmbdaerrs, survs, surverrs) = (np.asarray(depths), np.asarray(doses), np.asarray(doseerrs),
-                                          np.asarray(dsbyields), np.asarray(dsbyielderrs), np.asarray(lmbdas),
-                                          np.asarray(lmbdaerrs), np.asarray(survs), np.asarray(surverrs))
+     lmbdas, lmbdaerrs, survs, surverrs) = (np.asarray(depths), np.asarray(doses), np.asarray(doseerrs),
+                                            np.asarray(dsbyields), np.asarray(
+                                                dsbyielderrs), np.asarray(lmbdas),
+                                            np.asarray(lmbdaerrs), np.asarray(survs), np.asarray(surverrs))
 
     return depths, doses, doseerrs, dsbyields, dsbyielderrs, lmbdas, lmbdaerrs, survs, surverrs
 
@@ -515,6 +534,7 @@ def find_dose_from_filename(filename):
             break
     dose.reverse()
     return float(''.join(dose))
+
 
 def read_set_experimental(file):
     x = []
@@ -532,6 +552,7 @@ def read_set_experimental(file):
             y.append(float(line_list[1].replace(',', '.')))
     return x, y
 
+
 def all_doses_and_surv(directory):
     all_doses = []
     all_surv = []
@@ -539,10 +560,10 @@ def all_doses_and_surv(directory):
     for file in os.listdir(directory):
         # asumiendo que el directorio tiene exclusivamente archivos output y nada raro entremedio
         (depths, doses, doseerrs, dsbyields, dsbyielderrs, lmbdas,
-        lmbdaerrs, survs, surverrs) = read_output_file(os.path.join(directory, file))
+         lmbdaerrs, survs, surverrs) = read_output_file(os.path.join(directory, file))
         all_doses.extend(doses)
         all_surv.extend(survs)
         all_surverr.extend(surverrs)
-    all_doses, all_surv, all_surverr = np.asarray(all_doses), np.asarray(all_surv), np.asarray(all_surverr)
+    all_doses, all_surv, all_surverr = np.asarray(
+        all_doses), np.asarray(all_surv), np.asarray(all_surverr)
     return all_doses, all_surv, all_surverr
-

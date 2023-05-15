@@ -1,21 +1,21 @@
+from PyQt5.QtGui import QKeySequence
+from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtWidgets import (QApplication, QFileDialog, QTabWidget, QWidget, QFormLayout, QLineEdit,
+                             QComboBox, QPushButton, QLabel, QVBoxLayout, QHBoxLayout, QDialog, QShortcut,
+                             QSpinBox, QFrame, QSpinBox, QDoubleSpinBox, QStackedLayout)
+from PyQt5 import uic
+from clases_plots import Canvas, Plot, HorizontalLine, VentanaFontSize
+from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT
 from re import A
 import sys
 import os
 import matplotlib
 import numpy as np
 matplotlib.use('Qt5Agg')
-from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT
-from clases_plots import Canvas, Plot, HorizontalLine, VentanaFontSize
-from PyQt5 import uic
-from PyQt5.QtWidgets import (QApplication, QFileDialog, QTabWidget, QWidget, QFormLayout, QLineEdit,
-                             QComboBox, QPushButton, QLabel, QVBoxLayout, QHBoxLayout, QDialog, QShortcut,
-                             QSpinBox, QFrame, QSpinBox, QDoubleSpinBox, QStackedLayout)
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtGui import QKeySequence
-
 
 
 window_name, base_class = uic.loadUiType('ventana_principal.ui')
+
 
 class VentanaPrincipal(window_name, base_class):
 
@@ -46,10 +46,10 @@ class VentanaPrincipal(window_name, base_class):
 
         # Conexiones Generar input/Lanzar simulacion
         self.actionGenerar_input.triggered.connect(self.generar_input)
-        self.actionLanzar_simulaciones.triggered.connect(self.lanzar_simulacion)
+        self.actionLanzar_simulaciones.triggered.connect(
+            self.lanzar_simulacion)
         self.actionNueva_carpeta.triggered.connect(self.nueva_carpeta)
-        
-        
+
         # Calcular supervivencia (elegir célula)
         self.actionCelula_HSG.triggered.connect(self.mcds_supervivencia_HSG)
         self.actionCelula_V79.triggered.connect(self.mcds_supervivencia_V79)
@@ -57,38 +57,47 @@ class VentanaPrincipal(window_name, base_class):
         # conexiones (MCDS)
         self.actionCelula.triggered.connect(self.param_celula)
         self.actionOxigenacion.triggered.connect(self.param_oxigenacion)
-        self.actionControl_simulacion.triggered.connect(self.param_control_simulacion)
-        self.actionCampo_de_radiacion.triggered.connect(self.param_campo_radiacion)
+        self.actionControl_simulacion.triggered.connect(
+            self.param_control_simulacion)
+        self.actionCampo_de_radiacion.triggered.connect(
+            self.param_campo_radiacion)
         self.actionFBL.triggered.connect(self.param_FBL)
-        self.actionReductor_de_radicales.triggered.connect(self.param_reductor_radicales)
+        self.actionReductor_de_radicales.triggered.connect(
+            self.param_reductor_radicales)
         # FLUKA
         self.actionFluka.triggered.connect(self.param_fluka)
         self.actionFluka_Survival.triggered.connect(self.fluka_survival)
-        self.actionNueva_carpeta_proc.triggered.connect(self.fluka_nueva_carpeta)
-        self.actionCarpeta_output_proc.triggered.connect(self.fluka_abrir_carpeta)
+        self.actionNueva_carpeta_proc.triggered.connect(
+            self.fluka_nueva_carpeta)
+        self.actionCarpeta_output_proc.triggered.connect(
+            self.fluka_abrir_carpeta)
         # Plots
         self.actionInterfaz_de_ploteo.triggered.connect(self.interfaz_ploteo)
-        self.tab_widget.generar_plots_button.clicked.connect(self.enviar_info_plots)
+        self.tab_widget.generar_plots_button.clicked.connect(
+            self.enviar_info_plots)
         self.tab_widget.plots_right.clicked.connect(self.plot_siguiente)
         self.tab_widget.plots_left.clicked.connect(self.plot_anterior)
         self.tab_widget.boton_fontsize.clicked.connect(self.change_fontsize)
 
         # Base de datos
         self.actionGenerar_base_de_datos.triggered.connect(self.database)
-        self.tab_widget.boton_generar_db.clicked.connect(self.generar_base_datos)
+        self.tab_widget.boton_generar_db.clicked.connect(
+            self.generar_base_datos)
 
         # Modelos
         self.actionParametros_originales.setChecked(True)
-        self.actionParametros_originales.triggered.connect(self.modelo_wang_params)
+        self.actionParametros_originales.triggered.connect(
+            self.modelo_wang_params)
 
-        self.actionParametros_Sophia.triggered.connect(self.modelo_wang_params_sophia)
-        #self.actionWang.setChecked(True)
-        #self.actionWang.triggered.connect(self.modelo_wang)
+        self.actionParametros_Sophia.triggered.connect(
+            self.modelo_wang_params_sophia)
+        # self.actionWang.setChecked(True)
+        # self.actionWang.triggered.connect(self.modelo_wang)
 
         # Ciclo celular
-        #self.actionG1.setChecked(True)
-        #self.actionG1.triggered.connect(self.ciclo_celular_g1)
-        #self.actionG2.triggered.connect(self.ciclo_celular_g2)
+        # self.actionG1.setChecked(True)
+        # self.actionG1.triggered.connect(self.ciclo_celular_g1)
+        # self.actionG2.triggered.connect(self.ciclo_celular_g2)
 
         # Shortcut
         self.shortcut_generar = QShortcut(QKeySequence('Ctrl+Q'), self)
@@ -96,14 +105,13 @@ class VentanaPrincipal(window_name, base_class):
         self.shortcut_lanzar = QShortcut(QKeySequence('Ctrl+W'), self)
         self.shortcut_lanzar.activated.connect(self.lanzar_simulacion)
 
-
     def change_fontsize_plot(self, event):
         self.inputs.update(event)
 
     def enviar_info_plots(self):
         self.inputs.update(self.tab_widget.inputs)
         self.senal_info_plots.emit(self.inputs)
-    
+
     def recibir_info_plots(self, event):
         # a partir del boton "generar plots", se muestra el "primer" plot del diccionario
         self.tipo_plot = event[0]['tipo_plot']
@@ -113,61 +121,63 @@ class VentanaPrincipal(window_name, base_class):
     def plot_siguiente(self):
         self.inputs.update(self.tab_widget.inputs)
         try:
-            self.tab_widget.canvas.choose_plot(self.tipo_plot, self.info_ultimo_plot, 1)
+            self.tab_widget.canvas.choose_plot(
+                self.tipo_plot, self.info_ultimo_plot, 1)
         except AttributeError as error:
             print('Primero se debe presionar "generar plots')
 
     def plot_anterior(self):
         self.inputs.update(self.tab_widget.inputs)
         try:
-            self.tab_widget.canvas.choose_plot(self.tipo_plot, self.info_ultimo_plot, -1)
+            self.tab_widget.canvas.choose_plot(
+                self.tipo_plot, self.info_ultimo_plot, -1)
         except AttributeError as error:
             print('Primero se debe presionar "generar plots')
-    
+
     def change_fontsize(self):
         self.ventana_fontsize.show()
-    
+
     def generar_base_datos(self):
         self.inputs.update(self.tab_widget.inputs)
         self.senal_generar_db.emit(self.inputs)
-    
+
     def param_celula(self, state):
         self.tab_widget.setTabVisible(0, state)
-    
+
     def param_control_simulacion(self, state):
         self.tab_widget.setTabVisible(1, state)
-    
+
     def param_campo_radiacion(self, state):
         self.tab_widget.setTabVisible(2, state)
 
     def param_oxigenacion(self, state):
         self.tab_widget.setTabVisible(3, state)
-    
+
     def param_FBL(self, state):
         self.tab_widget.setTabVisible(4, state)
 
     def param_reductor_radicales(self, state):
         self.tab_widget.setTabVisible(5, state)
-    
+
     def param_fluka(self, state):
         self.tab_widget.setTabVisible(6, state)
-    
+
     def fluka_nueva_carpeta(self):
         self.senal_fluka_nueva_carpeta.emit(True)
 
     def fluka_abrir_carpeta(self):
         folder = QFileDialog.getExistingDirectory(self, 'Elegir carpeta')
         self.inputs['proc_folder_path'] = folder
-    
+
     def interfaz_ploteo(self, state):
         self.tab_widget.setTabVisible(7, state)
 
     def database(self, state):
         self.tab_widget.setTabVisible(8, state)
-    
+
     def recibir_carpeta_ident(self, event):
         tipo = event[0]
-        if tipo == 1: # nueva carpeta fluka
+        if tipo == 1:  # nueva carpeta fluka
             self.inputs['proc_folder_path'] = event[1]
         else:
             self.inputs['ident'] = event
@@ -177,24 +187,23 @@ class VentanaPrincipal(window_name, base_class):
         self.senal_generar_input.emit(self.inputs)
 
     def lanzar_simulacion(self):
-        buscar_carpeta = QFileDialog.getExistingDirectory(self, "Elegir carpeta")
+        buscar_carpeta = QFileDialog.getExistingDirectory(
+            self, "Elegir carpeta")
         self.senal_lanzar_simulacion.emit(buscar_carpeta)
-    
+
     def mcds_supervivencia_HSG(self):
         directory = QFileDialog.getExistingDirectory(self, "Elegir carpeta")
         dict_surv = {'directory': directory, 'ctype': 'HSG'}
         self.senal_mcds_supervivencia.emit(dict_surv)
-
 
     def mcds_supervivencia_V79(self):
         directory = QFileDialog.getExistingDirectory(self, "Elegir carpeta")
         dict_surv = {'directory': directory, 'ctype': 'v79'}
         self.senal_mcds_supervivencia.emit(dict_surv)
 
-    
     def nueva_carpeta(self):
         self.senal_nueva_carpeta.emit(True)
-    
+
     def fluka_to_yield(self):
         self.inputs.update(self.tab_widget.inputs)
         self.senal_fluka_yield.emit(self.inputs)
@@ -206,29 +215,30 @@ class VentanaPrincipal(window_name, base_class):
     def yield_to_survival(self):
         self.inputs.update(self.tab_widget.inputs)
         self.senal_yield_survival.emit(self.inputs)
-    
+
     def modelo_wang_params(self):
         # Por ahora se usa solo Wang, por lo tanto se deja siempre marcada esta opción
         self.actionParametros_originales.setChecked(True)
         self.actionParametros_Sophia.setChecked(False)
         self.senal_modelo.emit('Wang')
-    
+
     def modelo_wang_params_sophia(self):
         self.actionParametros_Sophia.setChecked(True)
         self.actionParametros_originales.setChecked(False)
         self.senal_modelo.emit('Wang-Sophia')
-    
+
     def ciclo_celular_g1(self):
         self.actionG1.setChecked(True)
         self.actionG2.setChecked(False)
-        self.senal_ciclo_celular.emit(True) # True es etapa G1 (mantener la cantidad de ADN)
-
+        # True es etapa G1 (mantener la cantidad de ADN)
+        self.senal_ciclo_celular.emit(True)
 
     def ciclo_celular_g2(self):
         self.actionG1.setChecked(False)
         self.actionG2.setChecked(True)
-        self.senal_ciclo_celular.emit(False) # False es etapa G2 (multiplicar x2 el ADN)
-    
+        # False es etapa G2 (multiplicar x2 el ADN)
+        self.senal_ciclo_celular.emit(False)
+
 
 class TabParams(QTabWidget):
 
@@ -286,16 +296,17 @@ class TabParams(QTabWidget):
 
         wem = QLabel('WEM')
         self.inputs['wem'] = QLineEdit()
-        wem.setToolTip('Profundidad de la capa de agua en 10um (Ej: WEM=1 = 10um de agua)')
+        wem.setToolTip(
+            'Profundidad de la capa de agua en 10um (Ej: WEM=1 = 10um de agua)')
 
         layout.addRow(dna, self.inputs['dna'])
         layout.addRow(ndia, self.inputs['ndia'])
         layout.addRow(cdia, self.inputs['cdia'])
         layout.addRow(wem, self.inputs['wem'])
-        self.setTabText(0,"Parámetros célula")
+        self.setTabText(0, "Parámetros célula")
         self.tab0.setLayout(layout)
         self.setTabVisible(0, False)
-    
+
     def tab1UI(self):
         layout = QFormLayout()
         # Parámetros + explicacion (tooltip)
@@ -317,7 +328,8 @@ class TabParams(QTabWidget):
         layout = QFormLayout()
         # Parámetros + explicación (tooltip)
         self.inputs['par'] = QComboBox()
-        self.inputs['par'].addItems(['e', 'p', '2He', '4He', '12C', '14N', '16O', '20N', '56Fe'])
+        self.inputs['par'].addItems(
+            ['e', 'p', '2He', '4He', '12C', '14N', '16O', '20N', '56Fe'])
         par_label = QLabel('PAR')
         par_label.setToolTip('Partícula para haz monoenergético (e,p,4He,etc)')
 
@@ -337,7 +349,7 @@ class TabParams(QTabWidget):
         layout.addRow(ke, self.inputs['ke'])
         layout.addRow(mev, self.inputs['mev/a'])
         layout.addRow(ad, self.inputs['ad'])
-        self.setTabText(2,"Campo de radiación")
+        self.setTabText(2, "Campo de radiación")
         self.tab2.setLayout(layout)
         self.setTabVisible(2, False)
 
@@ -346,14 +358,16 @@ class TabParams(QTabWidget):
         # Parámetros + explicación (tooltip)
         self.inputs['oxygen_type'] = QComboBox()
         self.inputs['oxygen_type'].addItems(['%O2', 'mmHg'])
-        self.inputs['oxygen_type'].setToolTip('%02: Concentración de oxígeno en %<br>mmHg: Concentración de oxígeno en mmHg, 100%=760mmHg')
+        self.inputs['oxygen_type'].setToolTip(
+            '%02: Concentración de oxígeno en %<br>mmHg: Concentración de oxígeno en mmHg, 100%=760mmHg')
         self.inputs['oxygen'] = QLineEdit()
         m0 = QLabel('m0')
         self.inputs['m0'] = QLineEdit()
         m0.setToolTip('OER máximo')
         k = QLabel('K')
         self.inputs['k'] = QLineEdit()
-        k.setToolTip('Concentración de referencia para la función de rep. química')
+        k.setToolTip(
+            'Concentración de referencia para la función de rep. química')
         q = QLabel('q')
         self.inputs['q'] = QLineEdit()
         q.setToolTip('Primer parámetro de calidad de radiación')
@@ -366,7 +380,7 @@ class TabParams(QTabWidget):
         layout.addRow(k, self.inputs['k'])
         layout.addRow(q, self.inputs['q'])
         layout.addRow(r, self.inputs['r'])
-        self.setTabText(3,"Oxigenación")
+        self.setTabText(3, "Oxigenación")
         self.tab3.setLayout(layout)
         self.setTabVisible(3, False)
 
@@ -377,7 +391,7 @@ class TabParams(QTabWidget):
         fbl.setToolTip('Fracción de sitios abásicos')
 
         layout.addRow(fbl, self.inputs['fbl'])
-        self.setTabText(4,"Tipo de daño a bases")
+        self.setTabText(4, "Tipo de daño a bases")
         self.tab4.setLayout(layout)
         self.setTabVisible(4, False)
 
@@ -396,12 +410,12 @@ class TabParams(QTabWidget):
         layout.addRow(conc, self.inputs['conc'])
         layout.addRow(fnsd, self.inputs['fnsd'])
         layout.addRow(chmx, self.inputs['chmx'])
-        self.setTabText(5,"Reductor de radicales")
+        self.setTabText(5, "Reductor de radicales")
         self.tab5.setLayout(layout)
         self.setTabVisible(5, False)
-    
+
     def tab6UI(self):
-        # FLUKA 
+        # FLUKA
         layout1 = QHBoxLayout()
         layout2 = QHBoxLayout()
         layout3 = QHBoxLayout()
@@ -420,7 +434,8 @@ class TabParams(QTabWidget):
         path_default = os.path.join(os.getcwd(), '..', 'MCDS', 'p-50-samples')
         if os.path.exists(path_default):
             self.inputs['databasefolder_path'] = path_default
-            self.database.setText('{}'.format(self.inputs['databasefolder_path']))
+            self.database.setText('{}'.format(
+                self.inputs['databasefolder_path']))
 
         # Layouts
         layout1.addWidget(QLabel('Dose data'))
@@ -449,12 +464,11 @@ class TabParams(QTabWidget):
         self.inputs['fluka_ndia'] = QLineEdit()
         self.inputs['dose_norm_max'] = QLineEdit()
 
-
         # Conexion botones
         self.dose_data_path_button.clicked.connect(self.open_dose_data)
         self.spectrum_data_path_button.clicked.connect(self.open_spectrum_data)
-        self.databasefolderpath_button.clicked.connect(self.open_databasefolder)
-
+        self.databasefolderpath_button.clicked.connect(
+            self.open_databasefolder)
 
         layout.addRow('Profundidad mínima', self.inputs['depth_min'])
         layout.addRow('Profundidad máxima', self.inputs['depth_max'])
@@ -464,25 +478,24 @@ class TabParams(QTabWidget):
         layout.addRow('NDIA', self.inputs['fluka_ndia'])
         layout.addRow('dose norm max', self.inputs['dose_norm_max'])
 
-
         layout_final.addLayout(layout1)
         layout_final.addLayout(layout2)
         layout_final.addLayout(layout3)
         layout_final.addLayout(layout)
 
-        self.setTabText(6,"Parámetros Fluka")
+        self.setTabText(6, "Parámetros Fluka")
         self.tab6.setLayout(layout_final)
         self.setTabVisible(6, False)
-    
+
     def tab7UI(self):
         self.canvas = Canvas(self, width=5, height=4, dpi=100)
         # plots
         toolbar = NavigationToolbar2QT(self.canvas, self)
-        #toolbar.addWidget(QLineEdit('uwu'))
+        # toolbar.addWidget(QLineEdit('uwu'))
 
         layout = QHBoxLayout()
         self.v_layout_plots = QVBoxLayout()
-        
+
         layout_plots = QHBoxLayout()
         self.boton_nuevo_plot = QPushButton('Añadir otro plot')
         self.boton_nuevo_plot.clicked.connect(self.nuevo_plot)
@@ -494,7 +507,7 @@ class TabParams(QTabWidget):
                                               'Yield vs depth', 'Lambda vs depth'])
         layout_plots.addWidget(self.boton_nuevo_plot)
         layout_plots.addWidget(self.plot_seleccionado)
-        
+
         tipo_plot_layout = QHBoxLayout()
         tipo_plot_layout.addWidget(QLabel('Tipo plot'))
         tipo_plot_layout.addWidget(self.inputs['plot_options'])
@@ -508,10 +521,10 @@ class TabParams(QTabWidget):
         self.v_layout_plots.addLayout(self.stackedLayout)
 
         self.v_layout_plots.addWidget(HorizontalLine())
-        
+
         self.boton_fontsize = QPushButton('Cambiar tamaño de letra')
-        #self.v_layout_plots.addWidget(self.boton_fontsize)
-        #self.v_layout_plots.addWidget(HorizontalLine())
+        # self.v_layout_plots.addWidget(self.boton_fontsize)
+        # self.v_layout_plots.addWidget(HorizontalLine())
 
         self.generar_plots_button = QPushButton('Generar plots')
         self.v_layout_plots.addWidget(self.generar_plots_button)
@@ -530,10 +543,10 @@ class TabParams(QTabWidget):
 
         layout.addLayout(self.v_layout_plots)
         layout.addLayout(layout_canvas)
-        self.setTabText(7,"Plots")
+        self.setTabText(7, "Plots")
         self.tab7.setLayout(layout)
         self.setTabVisible(7, False)
-    
+
     def tab8UI(self):
         # Base de datos
         self.frame_rango_energias = QFrame()
@@ -544,9 +557,9 @@ class TabParams(QTabWidget):
         self.frame_ptos_energia_dosis = QFrame()
         layout_fijar_energia_dosis = QHBoxLayout()
 
-
         self.inputs['par_option_db'] = QComboBox()
-        self.inputs['par_option_db'].addItems(['e', 'p', '2He', '4He', '12C', '14N', '16O', '20N', '56Fe'])   # añadir más después
+        self.inputs['par_option_db'].addItems(
+            ['e', 'p', '2He', '4He', '12C', '14N', '16O', '20N', '56Fe'])   # añadir más después
         self.inputs['seed_db'] = QSpinBox()
         self.inputs['seed_db'].setRange(1, 1000000000)
         self.inputs['seed_db'].setValue(987654321)
@@ -570,9 +583,9 @@ class TabParams(QTabWidget):
         self.inputs['dosis_db_min'] = QLineEdit()
         self.inputs['dosis_db_max'] = QLineEdit()
 
-        
         self.inputs['db_type'] = QComboBox()
-        self.inputs['db_type'].addItems(['Puntos de energía', 'Puntos de dosis'])
+        self.inputs['db_type'].addItems(
+            ['Puntos de energía', 'Puntos de dosis'])
         self.inputs['db_type'].setToolTip('Variar la energía o la dosis')
         self.inputs['N_sim'] = QLineEdit()
         self.inputs['db_energia_dosis_fija'] = QLineEdit()
@@ -580,13 +593,18 @@ class TabParams(QTabWidget):
         self.inputs['db_type'].activated.connect(self.fijar_energia_dosis)
 
         self.boton_fijar_valor = QPushButton('Fijar dosis')
-        self.boton_fijar_valor.setToolTip('Los valores predeterminados son el mínimo de dosis (0.1 Gy) y de energía (0.5 MeV)')
-        self.boton_rangos_energia = QPushButton('Cambiar intervalo de energías')
-        self.boton_rangos_energia.setToolTip('Los valores predeterminados son energía mínima 0.5 MeV y máxima 500 MeV')
+        self.boton_fijar_valor.setToolTip(
+            'Los valores predeterminados son el mínimo de dosis (0.1 Gy) y de energía (0.5 MeV)')
+        self.boton_rangos_energia = QPushButton(
+            'Cambiar intervalo de energías')
+        self.boton_rangos_energia.setToolTip(
+            'Los valores predeterminados son energía mínima 0.5 MeV y máxima 500 MeV')
         self.boton_rangos_dosis = QPushButton('Cambiar intervalo de dosis')
-        self.boton_rangos_dosis.setToolTip('Los valores predeterminados son dosis mínima 0.1 Gy y máxima 10 Gy')
+        self.boton_rangos_dosis.setToolTip(
+            'Los valores predeterminados son dosis mínima 0.1 Gy y máxima 10 Gy')
 
-        self.boton_fijar_valor.clicked.connect(self.fijar_energia_dosis_default)
+        self.boton_fijar_valor.clicked.connect(
+            self.fijar_energia_dosis_default)
         self.boton_rangos_energia.clicked.connect(self.db_cambiar_energias)
         self.boton_rangos_dosis.clicked.connect(self.db_cambiar_dosis)
 
@@ -599,26 +617,26 @@ class TabParams(QTabWidget):
         layout.addRow('CDIA', self.inputs['cdia_db'])
         layout.addRow('DNA', self.inputs['dna_db'])
 
-
         layout_fijar_energia_dosis.addWidget(self.inputs['db_type'])
         layout_fijar_energia_dosis.addWidget(self.inputs['N_sim'])
         layout_fijar_energia_dosis.addWidget(self.boton_fijar_valor)
         self.frame_ptos_energia_dosis.setLayout(layout_fijar_energia_dosis)
 
-        layout.addRow(self.frame_ptos_energia_dosis, self.inputs['db_energia_dosis_fija'])
+        layout.addRow(self.frame_ptos_energia_dosis,
+                      self.inputs['db_energia_dosis_fija'])
 
-        #layout_energies.addSpacing(80)
+        # layout_energies.addSpacing(80)
         layout_energies.addWidget(QLabel('Energía min:'))
-        #layout_energies.addSpacing(10)
+        # layout_energies.addSpacing(10)
         layout_energies.addWidget(self.inputs['energy_db_min'])
         layout_energies.addWidget(QLabel('Energía max:'))
         layout_energies.addWidget(self.inputs['energy_db_max'])
         self.frame_rango_energias.setLayout(layout_energies)
         layout.addRow(self.boton_rangos_energia, self.frame_rango_energias)
 
-        #layout_dosis.addSpacing(80)
+        # layout_dosis.addSpacing(80)
         layout_dosis.addWidget(QLabel('Dosis min:'))
-        #layout_dosis.addSpacing(92)
+        # layout_dosis.addSpacing(92)
         layout_dosis.addWidget(self.inputs['dosis_db_min'])
         layout_dosis.addWidget(QLabel('Dosis max:'))
         layout_dosis.addWidget(self.inputs['dosis_db_max'])
@@ -633,7 +651,7 @@ class TabParams(QTabWidget):
         self.inputs['db_energia_dosis_fija'].hide()
         self.tab8.setLayout(layout)
         self.setTabVisible(8, False)
-    
+
     def db_cambiar_energias(self):
         if self.frame_rango_energias.isHidden():
             self.frame_rango_energias.show()
@@ -653,7 +671,7 @@ class TabParams(QTabWidget):
             self.boton_rangos_dosis.setText('Cambiar intervalo de dosis')
             self.inputs['dosis_db_min'].setText('')
             self.inputs['dosis_db_max'].setText('')
-    
+
     def nuevo_plot(self):
         # Crear una nueva instancia de Plot y guardarla
         plot = Plot(len(self.inputs['plots']) + 1)
@@ -661,13 +679,12 @@ class TabParams(QTabWidget):
         num_plots = len(self.inputs['plots'])
         self.plot_seleccionado.addItem(f'Plot {num_plots}')
         self.stackedLayout.addWidget(plot)
-    
-    def cambiar_vista_plot(self):
-        self.stackedLayout.setCurrentIndex(self.plot_seleccionado.currentIndex())
-        #plot = int(self.plot_seleccionado.currentText()[5:])
-        #self.plot_actual = self.inputs['plots'][plot - 1]
 
-        
+    def cambiar_vista_plot(self):
+        self.stackedLayout.setCurrentIndex(
+            self.plot_seleccionado.currentIndex())
+        # plot = int(self.plot_seleccionado.currentText()[5:])
+        # self.plot_actual = self.inputs['plots'][plot - 1]
 
     def fijar_energia_dosis(self):
         if self.inputs['db_type'].currentText() == 'Puntos de energía':
@@ -676,7 +693,7 @@ class TabParams(QTabWidget):
         elif self.inputs['db_type'].currentText() == 'Puntos de dosis':
             # fijar energía
             self.boton_fijar_valor.setText('Fijar energía')
-        
+
     def fijar_energia_dosis_default(self):
         if self.inputs['db_energia_dosis_fija'].isHidden():
             self.inputs['db_energia_dosis_fija'].show()
@@ -688,31 +705,38 @@ class TabParams(QTabWidget):
             else:
                 self.boton_fijar_valor.setText('Fijar energía')
 
-
     def open_dose_data(self):
-        self.inputs['dose_data_path'] = QFileDialog.getExistingDirectory(self, 'Elegir carpeta')
+        self.inputs['dose_data_path'] = QFileDialog.getExistingDirectory(
+            self, 'Elegir carpeta')
         self.dose_data.setText('{}'.format(self.inputs['dose_data_path']))
 
     def open_spectrum_data(self):
-        self.inputs['spectrum_data_path'] = QFileDialog.getExistingDirectory(self, 'Elegir carpeta')
-        self.spectrum_data.setText('{}'.format(self.inputs['spectrum_data_path']))
+        self.inputs['spectrum_data_path'] = QFileDialog.getExistingDirectory(
+            self, 'Elegir carpeta')
+        self.spectrum_data.setText('{}'.format(
+            self.inputs['spectrum_data_path']))
 
     def open_databasefolder(self):
-        self.inputs['databasefolder_path'] = QFileDialog.getExistingDirectory(self, 'Elegir carpeta')
+        self.inputs['databasefolder_path'] = QFileDialog.getExistingDirectory(
+            self, 'Elegir carpeta')
         self.database.setText('{}'.format(self.inputs['databasefolder_path']))
 
     def open_plot_dat(self):
-        self.inputs['path_plotdats'] = QFileDialog.getExistingDirectory(self, "Elegir carpeta")
+        self.inputs['path_plotdats'] = QFileDialog.getExistingDirectory(
+            self, "Elegir carpeta")
 
     def open_tab_lis(self):
-        self.inputs['path_tablis'] = QFileDialog.getExistingDirectory(self, "Elegir carpeta")
+        self.inputs['path_tablis'] = QFileDialog.getExistingDirectory(
+            self, "Elegir carpeta")
 
     def open_carpeta_plots(self):
-        self.inputs['path_carpeta_plots'] = QFileDialog.getExistingDirectory(self, "Elegir carpeta")
-    
+        self.inputs['path_carpeta_plots'] = QFileDialog.getExistingDirectory(
+            self, "Elegir carpeta")
+
     def open_set_experimental(self):
-        self.inputs['set_experimental'] = QFileDialog.getOpenFileName(None, 'Abrir archivo', '', '')
-    
+        self.inputs['set_experimental'] = QFileDialog.getOpenFileName(
+            None, 'Abrir archivo', '', '')
+
 
 class VentanaInicio(QDialog):
 
@@ -764,22 +788,23 @@ class VentanaInicio(QDialog):
             info = [0, nombre]
         self.senal_carpeta_identificadora.emit(info)
         self.hide()
-    
+
     def closeEvent(self, event):
         info = [0, 'default']
         self.senal_carpeta_identificadora.emit(info)
         event.accept()
-    
+
     def nueva_carpeta(self, event):
         if event:
             self.fluka = False
             self.show()
-        
+
     def nueva_carpeta_fluka(self, event):
         if event:
             self.txt2.setText('La carpeta contendrá los outputs proc')
             self.fluka = True
             self.show()
+
 
 if __name__ == '__main__':
     app = QApplication([])
