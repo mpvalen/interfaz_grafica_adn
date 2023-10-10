@@ -563,9 +563,9 @@ class TabParams(QTabWidget):
         self.inputs['seed_db'] = QSpinBox()
         self.inputs['seed_db'].setRange(1, 1000000000)
         self.inputs['seed_db'].setValue(987654321)
-        self.inputs['nocs'] = QSpinBox()
-        self.inputs['nocs'].setRange(1, 1000000)
-        self.inputs['nocs'].setValue(1)
+        self.inputs['nocs_db'] = QSpinBox()
+        self.inputs['nocs_db'].setRange(1, 1000000)
+        self.inputs['nocs_db'].setValue(1)
 
         self.inputs['ndia_db'] = QDoubleSpinBox()
         self.inputs['ndia_db'].setRange(0, 1000)
@@ -612,7 +612,7 @@ class TabParams(QTabWidget):
 
         layout.addRow('Partícula', self.inputs['par_option_db'])
         layout.addRow('SEED', self.inputs['seed_db'])
-        layout.addRow('NOCS', self.inputs['nocs'])
+        layout.addRow('NOCS', self.inputs['nocs_db'])
         layout.addRow('NDIA', self.inputs['ndia_db'])
         layout.addRow('CDIA', self.inputs['cdia_db'])
         layout.addRow('DNA', self.inputs['dna_db'])

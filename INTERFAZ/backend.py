@@ -27,10 +27,10 @@ class Logica(QObject):
     def recibir_input_mcds(self, e):
         # recibe un diccionario con parámetros y escribe archivo input
         ident = e['ident'][1]
+        print(f'NOCS: {e["nocs"].text()}')
         if str(e['oxygen_type'].currentText()) == '%O2':
             inp_text = fop.mcds_inp(e['dna'].text(), e['ndia'].text(), e['cdia'].text(),
-                                    e['wem'].text(), e['seed'].text(
-            ), e['nocs'].text(), '',  # FN (Fluka)
+                                    e['wem'].text(), e['seed'].text(), e['nocs'].text(), '',  # FN (Fluka)
                 str(e['par'].currentText()), e['ke'].text(
             ), e['mev/a'].text(), e['ad'].text(),
                 e['oxygen'].text(), '', e['m0'].text(
@@ -261,7 +261,7 @@ class Logica(QObject):
         except ValueError as error:
             dato_fijo = ''
 
-        datos_omitibles = {'nocs': event['nocs'].text(), 'seed': event['seed_db'].text(),
+        datos_omitibles = {'nocs': event['nocs_db'].text(), 'seed': event['seed_db'].text(),
                            'ndia': event['ndia_db'].value(), 'dna': event['dna_db'].value(),
                            'cdia': event['cdia_db'].value()}
         for item in datos_omitibles.items():
