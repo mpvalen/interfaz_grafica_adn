@@ -215,34 +215,34 @@ class Plot(QFrame):
         self.new_plot = QFormLayout()
         self.set_experimental = ''
 
-        carpeta = QLabel('Carpeta')
+        carpeta = QLabel('Folder')
         carpeta.setToolTip('La carpeta que contiene los archivos output')
-        self.carpeta_plot = QPushButton('Elegir carpeta', self)
+        self.carpeta_plot = QPushButton('Select folder', self)
         self.carpeta_plot.clicked.connect(self.open_carpeta_plots)
 
-        label_name = QLabel('Label gráfico')
+        label_name = QLabel('Label (plot)')
         self.label = QLineEdit()
 
-        label_puntos = QLabel('Separación de puntos')
+        label_puntos = QLabel('Set ticks separation')
         self.num_puntos_plot = QSpinBox()
         self.num_puntos_plot.setValue(10)
         self.num_puntos_plot.setMinimum(1)
 
-        self.barras_error_check = QCheckBox('Incluir barras de error', self)
+        self.barras_error_check = QCheckBox('Add errorbars', self)
 
         self.new_plot.addRow(carpeta, self.carpeta_plot)
         self.new_plot.addRow(label_name, self.label)
         self.new_plot.addRow(label_puntos, self.num_puntos_plot)
         self.new_plot.addRow(QLabel(''), self.barras_error_check)
 
-        set_experimental = QLabel('Set experimental')
+        set_experimental = QLabel('Experimental dataset')
         set_experimental.setToolTip('Archivo con datos experimentales, se genera un scatter de puntos')
-        self.set_experimental_button = QPushButton(f'Elegir archivo', self)
+        self.set_experimental_button = QPushButton(f'Select file', self)
         self.set_experimental_button.clicked.connect(self.open_set_experimental)
         layout_horizontal.addWidget(set_experimental)
         layout_horizontal.addWidget(self.set_experimental_button)
 
-        label_experimental = QLabel('Label set experimental')
+        label_experimental = QLabel('Label (experimental dataset)')
         self.label_experimental = QLineEdit()
         layout_label_experimental.addWidget(label_experimental)
         layout_label_experimental.addWidget(self.label_experimental)

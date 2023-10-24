@@ -14,7 +14,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Interfaz para simular daño al ADN</string>
+   <string>CELL: Cellular effect and Lesion Linker</string>
   </property>
   <widget class="QWidget" name="centralwidget"/>
   <widget class="QMenuBar" name="menubar">
@@ -32,7 +32,7 @@
     </property>
     <widget class="QMenu" name="menuCalcular_supervivencia">
      <property name="title">
-      <string>Calcular supervivencia</string>
+      <string>Calculate cell survival</string>
      </property>
      <addaction name="actionCelula_HSG"/>
      <addaction name="actionCelula_V79"/>
@@ -63,28 +63,30 @@
    </widget>
    <widget class="QMenu" name="menuGraficar">
     <property name="title">
-     <string>Graficar</string>
+     <string>Plot</string>
     </property>
     <addaction name="actionInterfaz_de_ploteo"/>
    </widget>
    <widget class="QMenu" name="menuBase_de_datos">
     <property name="title">
-     <string>Base de datos</string>
+     <string>Database</string>
     </property>
     <addaction name="actionGenerar_base_de_datos"/>
    </widget>
    <widget class="QMenu" name="menuModelo">
     <property name="title">
-     <string>Modelo</string>
+     <string>Models</string>
     </property>
     <widget class="QMenu" name="menuWang_2018">
      <property name="title">
-      <string>Wang (2018)</string>
+      <string>Wang et al. (2018)</string>
      </property>
      <addaction name="actionParametros_originales"/>
      <addaction name="actionParametros_Sophia"/>
     </widget>
     <addaction name="menuWang_2018"/>
+    <addaction name="actionTLK"/>
+    <addaction name="actionMachine_learning"/>
    </widget>
    <addaction name="menu_Vista"/>
    <addaction name="menuFluka"/>
@@ -98,7 +100,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Celula</string>
+    <string>Cell</string>
    </property>
    <property name="toolTip">
     <string>Ajusta DNA, NDIA, CDIA y WEM</string>
@@ -109,7 +111,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Control simulacion</string>
+    <string>Simulation parameters</string>
    </property>
    <property name="toolTip">
     <string>Ajusta NOCS y SEED</string>
@@ -120,7 +122,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Campo de radiacion</string>
+    <string>Radiation field parameters</string>
    </property>
    <property name="toolTip">
     <string>Ajusta FN, PAR, KE, MeV/A y AD</string>
@@ -131,7 +133,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Oxigenacion</string>
+    <string>Oxygen</string>
    </property>
    <property name="toolTip">
     <string>Ajusta PO2, mmHg, m0, k, q y r</string>
@@ -150,7 +152,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Reductor de radicales</string>
+    <string>Free radicals</string>
    </property>
   </action>
   <action name="actionFluka">
@@ -158,17 +160,17 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Añadir parámetros fluka</string>
+    <string>Add Fluka simulation parameters</string>
    </property>
   </action>
   <action name="actionGenerar_input">
    <property name="text">
-    <string>Generar input</string>
+    <string>Generate input</string>
    </property>
   </action>
   <action name="actionLanzar_simulaciones">
    <property name="text">
-    <string>Lanzar simulaciones</string>
+    <string>Launch simulation</string>
    </property>
   </action>
   <action name="actionFluka_Yield">
@@ -186,7 +188,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Interfaz de ploteo</string>
+    <string>Plot UI</string>
    </property>
   </action>
   <action name="actionGenerar_base_de_datos">
@@ -194,12 +196,12 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Generar base de datos</string>
+    <string>Generate a new database</string>
    </property>
   </action>
   <action name="actionNueva_carpeta">
    <property name="text">
-    <string>Nueva carpeta</string>
+    <string>New folder</string>
    </property>
   </action>
   <action name="actionFluka_Survival">
@@ -209,22 +211,22 @@
   </action>
   <action name="actionNueva_carpeta_proc">
    <property name="text">
-    <string>Nueva carpeta output</string>
+    <string>New output folder</string>
    </property>
   </action>
   <action name="actionCarpeta_output_proc">
    <property name="text">
-    <string>Carpeta output existente</string>
+    <string>Use an existing folder</string>
    </property>
   </action>
   <action name="actionCelula_HSG">
    <property name="text">
-    <string>Celula HSG</string>
+    <string>HSG</string>
    </property>
   </action>
   <action name="actionCelula_V79">
    <property name="text">
-    <string>Celula V79</string>
+    <string>V79</string>
    </property>
   </action>
   <action name="actionPar_metros_originales">
@@ -267,6 +269,16 @@
    </property>
    <property name="text">
     <string>G2 (ADN x2)</string>
+   </property>
+  </action>
+  <action name="actionTLK">
+   <property name="text">
+    <string>TLK (2001)</string>
+   </property>
+  </action>
+  <action name="actionMachine_learning">
+   <property name="text">
+    <string>Machine learning</string>
    </property>
   </action>
  </widget>

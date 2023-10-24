@@ -40,7 +40,7 @@ class VentanaPrincipal(window_name, base_class):
         self.tab_widget = TabParams()
         self.setCentralWidget(self.tab_widget)
         self.inputs = dict()
-        self.setWindowTitle('CELL: Interfaz para simular daño al ADN')
+        self.setWindowTitle('CELL: Cellular Effect and Lesions Linker')
         self.ventana_fontsize = VentanaFontSize(parent=self)
         self.inputs.update(self.ventana_fontsize.data)
 
@@ -284,15 +284,15 @@ class TabParams(QTabWidget):
         # Parámetros + explicacion (tooltip)
         dna = QLabel('DNA')
         self.inputs['dna'] = QLineEdit()
-        dna.setToolTip('cantidad de ADN en Gbp')
+        dna.setToolTip('DNA in Gbp')
 
         ndia = QLabel('NDIA')
         self.inputs['ndia'] = QLineEdit()
-        ndia.setToolTip('Diametro nuclear en um')
+        ndia.setToolTip('Nucleus diameter in um')
 
         cdia = QLabel('CDIA')
         self.inputs['cdia'] = QLineEdit()
-        cdia.setToolTip('Diametro celular en um')
+        cdia.setToolTip('Cell diameters in um')
 
         wem = QLabel('WEM')
         self.inputs['wem'] = QLineEdit()
@@ -303,7 +303,7 @@ class TabParams(QTabWidget):
         layout.addRow(ndia, self.inputs['ndia'])
         layout.addRow(cdia, self.inputs['cdia'])
         layout.addRow(wem, self.inputs['wem'])
-        self.setTabText(0, "Parámetros célula")
+        self.setTabText(0, "Cell parameters")
         self.tab0.setLayout(layout)
         self.setTabVisible(0, False)
 
@@ -312,15 +312,15 @@ class TabParams(QTabWidget):
         # Parámetros + explicacion (tooltip)
         nocs = QLabel('NOCS')
         self.inputs['nocs'] = QLineEdit()
-        nocs.setToolTip('Número de simulaciones')
+        nocs.setToolTip('Number of simulations')
 
         seed = QLabel('SEED')
         self.inputs['seed'] = QLineEdit()
-        seed.setToolTip('Semilla de números aleatorios')
+        seed.setToolTip('SEED for random numbers')
 
         layout.addRow(nocs, self.inputs['nocs'])
         layout.addRow(seed, self.inputs['seed'])
-        self.setTabText(1, "Control simulación")
+        self.setTabText(1, "Simulation parameters")
         self.tab1.setLayout(layout)
         self.setTabVisible(1, False)
 
@@ -349,7 +349,7 @@ class TabParams(QTabWidget):
         layout.addRow(ke, self.inputs['ke'])
         layout.addRow(mev, self.inputs['mev/a'])
         layout.addRow(ad, self.inputs['ad'])
-        self.setTabText(2, "Campo de radiación")
+        self.setTabText(2, "Radiation field")
         self.tab2.setLayout(layout)
         self.setTabVisible(2, False)
 
@@ -380,7 +380,7 @@ class TabParams(QTabWidget):
         layout.addRow(k, self.inputs['k'])
         layout.addRow(q, self.inputs['q'])
         layout.addRow(r, self.inputs['r'])
-        self.setTabText(3, "Oxigenación")
+        self.setTabText(3, "Oxygen %")
         self.tab3.setLayout(layout)
         self.setTabVisible(3, False)
 
@@ -391,7 +391,7 @@ class TabParams(QTabWidget):
         fbl.setToolTip('Fracción de sitios abásicos')
 
         layout.addRow(fbl, self.inputs['fbl'])
-        self.setTabText(4, "Tipo de daño a bases")
+        self.setTabText(4, "Base damage")
         self.tab4.setLayout(layout)
         self.setTabVisible(4, False)
 
@@ -410,7 +410,7 @@ class TabParams(QTabWidget):
         layout.addRow(conc, self.inputs['conc'])
         layout.addRow(fnsd, self.inputs['fnsd'])
         layout.addRow(chmx, self.inputs['chmx'])
-        self.setTabText(5, "Reductor de radicales")
+        self.setTabText(5, "Free radicals/scavengers")
         self.tab5.setLayout(layout)
         self.setTabVisible(5, False)
 
@@ -483,7 +483,7 @@ class TabParams(QTabWidget):
         layout_final.addLayout(layout3)
         layout_final.addLayout(layout)
 
-        self.setTabText(6, "Parámetros Fluka")
+        self.setTabText(6, "MC parameters")
         self.tab6.setLayout(layout_final)
         self.setTabVisible(6, False)
 
@@ -497,7 +497,7 @@ class TabParams(QTabWidget):
         self.v_layout_plots = QVBoxLayout()
 
         layout_plots = QHBoxLayout()
-        self.boton_nuevo_plot = QPushButton('Añadir otro plot')
+        self.boton_nuevo_plot = QPushButton('Add plot')
         self.boton_nuevo_plot.clicked.connect(self.nuevo_plot)
         self.plot_seleccionado = QComboBox()
         self.plot_seleccionado.activated.connect(self.cambiar_vista_plot)
@@ -509,7 +509,7 @@ class TabParams(QTabWidget):
         layout_plots.addWidget(self.plot_seleccionado)
 
         tipo_plot_layout = QHBoxLayout()
-        tipo_plot_layout.addWidget(QLabel('Tipo plot'))
+        tipo_plot_layout.addWidget(QLabel('Plot type'))
         tipo_plot_layout.addWidget(self.inputs['plot_options'])
 
         self.v_layout_plots.addLayout(layout_plots)
@@ -522,16 +522,16 @@ class TabParams(QTabWidget):
 
         self.v_layout_plots.addWidget(HorizontalLine())
 
-        self.boton_fontsize = QPushButton('Cambiar tamaño de letra')
+        self.boton_fontsize = QPushButton('Change font size')
         # self.v_layout_plots.addWidget(self.boton_fontsize)
         # self.v_layout_plots.addWidget(HorizontalLine())
 
-        self.generar_plots_button = QPushButton('Generar plots')
+        self.generar_plots_button = QPushButton('Generate plots')
         self.v_layout_plots.addWidget(self.generar_plots_button)
 
         bottom_layout = QHBoxLayout()
-        self.plots_left = QPushButton('Volver atras')
-        self.plots_right = QPushButton('Siguiente plot')
+        self.plots_left = QPushButton('Last plot')
+        self.plots_right = QPushButton('Next plot')
         bottom_layout.addWidget(self.plots_left)
         bottom_layout.addWidget(self.plots_right)
 
