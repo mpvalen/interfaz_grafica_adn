@@ -28,8 +28,11 @@ if __name__ == '__main__':
     ventana_principal.ventana_fontsize.senal_fontsize_plot.connect(ventana_principal.change_fontsize_plot)
     ventana_principal.senal_ciclo_celular.connect(logica.info_ciclo_celular)
     ventana_principal.senal_modelo.connect(logica.modelo_escogido)
+    ventana_principal.signal_PIDE_get_info.connect(logica.PIDE_give_data)
+    ventana_principal.signal_PIDE_send_user_info.connect(logica.PIDE_receive_user_data)
 
     logica.senal_info_plots_backend.connect(ventana_principal.recibir_info_plots)
+    logica.senal_PIDE_pubnames.connect(ventana_principal.recibir_PIDE_pubnames)
     ventana_principal.show()
     popup_inicio.show()
     sys.exit(app.exec_())

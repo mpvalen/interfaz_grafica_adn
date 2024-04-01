@@ -62,8 +62,28 @@ class Canvas(FigureCanvasQTAgg):
         elif option == 'Lambda vs depth':
             self.lambda_vs_depth(info_plots)
             self.draw()
+        elif option == 'Experimental data':
+            self.experimental_data(info_plots)
+            self.draw()
         
 
+    def experimental_data(self, info_plots):
+        self.title = self.axes.get_title()
+        self.axes.clear()
+        for v in info_plots:
+            set_experimental = v['set_experimental']
+            if set_experimental['values']:
+                set_depth = set_experimental['set_x']
+                set_doses = set_experimental['set_y']
+                label_set_experimental = set_experimental['label_experimental']
+                self.axes.scatter(set_depth, set_doses, color='green', label= label_set_experimental)
+            self.axes.set_xlabel('Dose [Gy]', fontsize=set_experimental['axistext_fontsize'])
+            self.axes.set_ylabel('Survival fraction', fontsize=set_experimental['axistext_fontsize'])
+            self.axes.set_title(self.title, fontsize=set_experimental['title_fontsize'])
+            self.axes.tick_params(axis='both', labelsize=set_experimental['axisticks_fontsize'])
+            self.axes.legend()
+            self.axes.set_yscale('log')
+        
 
     def dose_vs_depth(self, info_plots):
         # Función para graficar dosis vs profundidad
@@ -214,6 +234,7 @@ class Plot(QFrame):
         layout_label_experimental = QHBoxLayout()
         self.new_plot = QFormLayout()
         self.set_experimental = ''
+        self.path_carpeta_plots = ''
 
         carpeta = QLabel('Folder')
         carpeta.setToolTip('La carpeta que contiene los archivos output')

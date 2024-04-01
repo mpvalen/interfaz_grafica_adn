@@ -1,8 +1,9 @@
-from PyQt5.QtGui import QKeySequence
-from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtGui import (QKeySequence, QPalette, QFontMetrics, QStandardItem )
+from PyQt5.QtCore import (pyqtSignal, QEvent, Qt)
 from PyQt5.QtWidgets import (QApplication, QFileDialog, QTabWidget, QWidget, QFormLayout, QLineEdit,
                              QComboBox, QPushButton, QLabel, QVBoxLayout, QHBoxLayout, QDialog, QShortcut,
-                             QSpinBox, QFrame, QSpinBox, QDoubleSpinBox, QStackedLayout)
+                             QSpinBox, QFrame, QSpinBox, QDoubleSpinBox, QStackedLayout, QRadioButton,
+                             QStyledItemDelegate)
 from PyQt5 import uic
 from clases_plots import Canvas, Plot, HorizontalLine, VentanaFontSize
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT
@@ -11,6 +12,7 @@ import sys
 import os
 import matplotlib
 import numpy as np
+
 matplotlib.use('Qt5Agg')
 
 
@@ -33,6 +35,8 @@ class VentanaPrincipal(window_name, base_class):
     senal_mcds_supervivencia = pyqtSignal(dict)
     senal_ciclo_celular = pyqtSignal(bool)
     senal_modelo = pyqtSignal(str)
+    signal_PIDE_get_info = pyqtSignal(bool)
+    signal_PIDE_send_user_info = pyqtSignal(dict)
 
     def __init__(self):
         super().__init__()
@@ -78,11 +82,14 @@ class VentanaPrincipal(window_name, base_class):
         self.tab_widget.plots_right.clicked.connect(self.plot_siguiente)
         self.tab_widget.plots_left.clicked.connect(self.plot_anterior)
         self.tab_widget.boton_fontsize.clicked.connect(self.change_fontsize)
+        self.tab_widget.PIDE_button.clicked.connect(self.get_PIDE_exp_sets)
 
         # Base de datos
         self.actionGenerar_base_de_datos.triggered.connect(self.database)
         self.tab_widget.boton_generar_db.clicked.connect(
             self.generar_base_datos)
+
+        self.actionAdd_PIDE_dataset.triggered.connect(self.add_PIDE_dataset)
 
         # Modelos
         self.actionParametros_originales.setChecked(True)
@@ -105,6 +112,7 @@ class VentanaPrincipal(window_name, base_class):
         self.shortcut_lanzar = QShortcut(QKeySequence('Ctrl+W'), self)
         self.shortcut_lanzar.activated.connect(self.lanzar_simulacion)
 
+
     def change_fontsize_plot(self, event):
         self.inputs.update(event)
 
@@ -124,7 +132,7 @@ class VentanaPrincipal(window_name, base_class):
             self.tab_widget.canvas.choose_plot(
                 self.tipo_plot, self.info_ultimo_plot, 1)
         except AttributeError as error:
-            print('Primero se debe presionar "generar plots')
+            print('Error: Press "generate plots" first')
 
     def plot_anterior(self):
         self.inputs.update(self.tab_widget.inputs)
@@ -132,7 +140,7 @@ class VentanaPrincipal(window_name, base_class):
             self.tab_widget.canvas.choose_plot(
                 self.tipo_plot, self.info_ultimo_plot, -1)
         except AttributeError as error:
-            print('Primero se debe presionar "generar plots')
+            print('Error: Press "generate plots" first')
 
     def change_fontsize(self):
         self.ventana_fontsize.show()
@@ -166,7 +174,7 @@ class VentanaPrincipal(window_name, base_class):
         self.senal_fluka_nueva_carpeta.emit(True)
 
     def fluka_abrir_carpeta(self):
-        folder = QFileDialog.getExistingDirectory(self, 'Elegir carpeta')
+        folder = QFileDialog.getExistingDirectory(self, 'Choose folder')
         self.inputs['proc_folder_path'] = folder
 
     def interfaz_ploteo(self, state):
@@ -174,6 +182,20 @@ class VentanaPrincipal(window_name, base_class):
 
     def database(self, state):
         self.tab_widget.setTabVisible(8, state)
+    
+    def add_PIDE_dataset(self, state):
+        self.signal_PIDE_get_info.emit(True)
+        self.tab_widget.setTabVisible(9, state)
+    
+    def recibir_PIDE_pubnames(self, event):
+        self.tab_widget.inputs['PIDE_PubNames'].addItems(event)
+        self.tab_widget.inputs['PIDE_ID'].setRange(1, len(event))
+    
+    def get_PIDE_exp_sets(self):
+        for radio in self.tab_widget.radio_PIDE_list:
+            if radio.isChecked():
+                self.tab_widget.inputs['PIDE_option'] = radio.text()
+                self.signal_PIDE_send_user_info.emit(self.tab_widget.inputs)
 
     def recibir_carpeta_ident(self, event):
         tipo = event[0]
@@ -188,16 +210,16 @@ class VentanaPrincipal(window_name, base_class):
 
     def lanzar_simulacion(self):
         buscar_carpeta = QFileDialog.getExistingDirectory(
-            self, "Elegir carpeta")
+            self, "Choose folder")
         self.senal_lanzar_simulacion.emit(buscar_carpeta)
 
     def mcds_supervivencia_HSG(self):
-        directory = QFileDialog.getExistingDirectory(self, "Elegir carpeta")
+        directory = QFileDialog.getExistingDirectory(self, "Choose folder")
         dict_surv = {'directory': directory, 'ctype': 'HSG'}
         self.senal_mcds_supervivencia.emit(dict_surv)
 
     def mcds_supervivencia_V79(self):
-        directory = QFileDialog.getExistingDirectory(self, "Elegir carpeta")
+        directory = QFileDialog.getExistingDirectory(self, "Choose folder")
         dict_surv = {'directory': directory, 'ctype': 'v79'}
         self.senal_mcds_supervivencia.emit(dict_surv)
 
@@ -240,6 +262,7 @@ class VentanaPrincipal(window_name, base_class):
         self.senal_ciclo_celular.emit(False)
 
 
+
 class TabParams(QTabWidget):
 
     def __init__(self):
@@ -254,6 +277,7 @@ class TabParams(QTabWidget):
         self.tab6 = QWidget()
         self.tab7 = QWidget()
         self.tab8 = QWidget()
+        self.tab_add_PIDE = QWidget()
 
         # Lista de instancias de la clase Plot
         self.inputs['plots'] = [Plot(1)]
@@ -268,6 +292,7 @@ class TabParams(QTabWidget):
         self.addTab(self.tab6, "Tab 6")
         self.addTab(self.tab7, "Tab 7")
         self.addTab(self.tab8, "Tab 8")
+        self.addTab(self.tab_add_PIDE, "Tab PIDE")
 
         self.tab0UI()
         self.tab1UI()
@@ -278,13 +303,14 @@ class TabParams(QTabWidget):
         self.tab6UI()
         self.tab7UI()
         self.tab8UI()
+        self.tab_add_PIDE_UI()
 
     def tab0UI(self):
         layout = QFormLayout()
         # Parámetros + explicacion (tooltip)
         dna = QLabel('DNA')
         self.inputs['dna'] = QLineEdit()
-        dna.setToolTip('DNA in Gbp')
+        dna.setToolTip('DNA content in Gbp')
 
         ndia = QLabel('NDIA')
         self.inputs['ndia'] = QLineEdit()
@@ -292,12 +318,12 @@ class TabParams(QTabWidget):
 
         cdia = QLabel('CDIA')
         self.inputs['cdia'] = QLineEdit()
-        cdia.setToolTip('Cell diameters in um')
+        cdia.setToolTip('Cell diameter in um')
 
         wem = QLabel('WEM')
         self.inputs['wem'] = QLineEdit()
         wem.setToolTip(
-            'Profundidad de la capa de agua en 10um (Ej: WEM=1 = 10um de agua)')
+            'Water equivalent distance particle must travel to cell surface (Ej: WEM=1 => 10um in water)')
 
         layout.addRow(dna, self.inputs['dna'])
         layout.addRow(ndia, self.inputs['ndia'])
@@ -331,19 +357,19 @@ class TabParams(QTabWidget):
         self.inputs['par'].addItems(
             ['e', 'p', '2He', '4He', '12C', '14N', '16O', '20N', '56Fe'])
         par_label = QLabel('PAR')
-        par_label.setToolTip('Partícula para haz monoenergético (e,p,4He,etc)')
+        par_label.setToolTip('Particle type for monoenergetic beam (e,p,4He,etc)')
 
         ke = QLabel('KE')
         self.inputs['ke'] = QLineEdit()
-        ke.setToolTip('Energía cinética para haz monoenergético en MeV')
+        ke.setToolTip('Kinetic energy of particle for monoenergetic beam (in MeV)')
 
         mev = QLabel('MeV/A')
         self.inputs['mev/a'] = QLineEdit()
-        mev.setToolTip('Energía cinética por nucleón del haz en MeV')
+        mev.setToolTip('Kinetic energy specified as MeV per nucleon')
 
         ad = QLabel('AD')
         self.inputs['ad'] = QLineEdit()
-        ad.setToolTip('Dosis absorbida en Gy')
+        ad.setToolTip('Absorbed dose (Gy)')
 
         layout.addRow(par_label, self.inputs['par'])
         layout.addRow(ke, self.inputs['ke'])
@@ -359,21 +385,21 @@ class TabParams(QTabWidget):
         self.inputs['oxygen_type'] = QComboBox()
         self.inputs['oxygen_type'].addItems(['%O2', 'mmHg'])
         self.inputs['oxygen_type'].setToolTip(
-            '%02: Concentración de oxígeno en %<br>mmHg: Concentración de oxígeno en mmHg, 100%=760mmHg')
+            '%02: Oxygen concentration (as a percentage) %<br>mmHg: Oxygen concentration in mmHg. [100%=760mmHg]')
         self.inputs['oxygen'] = QLineEdit()
         m0 = QLabel('m0')
         self.inputs['m0'] = QLineEdit()
-        m0.setToolTip('OER máximo')
+        m0.setToolTip('Maximum OER')
         k = QLabel('K')
         self.inputs['k'] = QLineEdit()
         k.setToolTip(
-            'Concentración de referencia para la función de rep. química')
+            'Concentration at which half the maximum OER occurs')
         q = QLabel('q')
         self.inputs['q'] = QLineEdit()
-        q.setToolTip('Primer parámetro de calidad de radiación')
+        q.setToolTip('First parameter for radiation quality')
         r = QLabel('r')
         self.inputs['r'] = QLineEdit()
-        r.setToolTip('Segundo parámetro de calidad de radiación')
+        r.setToolTip('Second parameters for radiation quality')
 
         layout.addRow(self.inputs['oxygen_type'], self.inputs['oxygen'])
         layout.addRow(m0, self.inputs['m0'])
@@ -388,7 +414,7 @@ class TabParams(QTabWidget):
         layout = QFormLayout()
         fbl = QLabel('FBL')
         self.inputs['fbl'] = QLineEdit()
-        fbl.setToolTip('Fracción de sitios abásicos')
+        fbl.setToolTip('Fraction of abasic sites')
 
         layout.addRow(fbl, self.inputs['fbl'])
         self.setTabText(4, "Base damage")
@@ -399,13 +425,13 @@ class TabParams(QTabWidget):
         layout = QFormLayout()
         conc = QLabel('CONC')
         self.inputs['conc'] = QLineEdit()
-        conc.setToolTip('Concentración de reductor en mol/dm3')
+        conc.setToolTip('DMSO concentration (in mol/dm3)')
         fnsd = QLabel('FNSD')
         self.inputs['fnsd'] = QLineEdit()
-        fnsd.setToolTip('Fracción de radicales no reducible')
+        fnsd.setToolTip('Fraction of non-scavengeable DNA damage')
         chmx = QLabel('CHMX')
         self.inputs['chmx'] = QLineEdit()
-        chmx.setToolTip('Concentración a nivel medio de reductor')
+        chmx.setToolTip('Concentration at half-level (in mol/dm3)')
 
         layout.addRow(conc, self.inputs['conc'])
         layout.addRow(fnsd, self.inputs['fnsd'])
@@ -422,9 +448,9 @@ class TabParams(QTabWidget):
         layout4 = QHBoxLayout()
         layout = QFormLayout()
         layout_final = QVBoxLayout()
-        self.dose_data_path_button = QPushButton('Elegir carpeta', self)
-        self.spectrum_data_path_button = QPushButton('Elegir carpeta', self)
-        self.databasefolderpath_button = QPushButton('Elegir carpeta', self)
+        self.dose_data_path_button = QPushButton('Choose folder', self)
+        self.spectrum_data_path_button = QPushButton('Choose folder', self)
+        self.databasefolderpath_button = QPushButton('Choose folder', self)
 
         # Path seleccionado
         self.dose_data = QLabel('')
@@ -470,10 +496,10 @@ class TabParams(QTabWidget):
         self.databasefolderpath_button.clicked.connect(
             self.open_databasefolder)
 
-        layout.addRow('Profundidad mínima', self.inputs['depth_min'])
-        layout.addRow('Profundidad máxima', self.inputs['depth_max'])
-        layout.addRow('Separación puntos', self.inputs['sep_ptos'])
-        layout.addRow('Célula', self.inputs['ctype'])
+        layout.addRow('Minimum depth', self.inputs['depth_min'])
+        layout.addRow('Maximum depth', self.inputs['depth_max'])
+        layout.addRow('Point separation', self.inputs['sep_ptos'])
+        layout.addRow('Cell', self.inputs['ctype'])
         layout.addRow('DNA', self.inputs['fluka_dna'])
         layout.addRow('NDIA', self.inputs['fluka_ndia'])
         layout.addRow('dose norm max', self.inputs['dose_norm_max'])
@@ -491,7 +517,6 @@ class TabParams(QTabWidget):
         self.canvas = Canvas(self, width=5, height=4, dpi=100)
         # plots
         toolbar = NavigationToolbar2QT(self.canvas, self)
-        # toolbar.addWidget(QLineEdit('uwu'))
 
         layout = QHBoxLayout()
         self.v_layout_plots = QVBoxLayout()
@@ -608,7 +633,7 @@ class TabParams(QTabWidget):
         self.boton_rangos_energia.clicked.connect(self.db_cambiar_energias)
         self.boton_rangos_dosis.clicked.connect(self.db_cambiar_dosis)
 
-        self.boton_generar_db = QPushButton('Generar base de datos')
+        self.boton_generar_db = QPushButton('Generate database')
 
         layout.addRow('Partícula', self.inputs['par_option_db'])
         layout.addRow('SEED', self.inputs['seed_db'])
@@ -626,49 +651,95 @@ class TabParams(QTabWidget):
                       self.inputs['db_energia_dosis_fija'])
 
         # layout_energies.addSpacing(80)
-        layout_energies.addWidget(QLabel('Energía min:'))
+        layout_energies.addWidget(QLabel('Min Energy:'))
         # layout_energies.addSpacing(10)
         layout_energies.addWidget(self.inputs['energy_db_min'])
-        layout_energies.addWidget(QLabel('Energía max:'))
+        layout_energies.addWidget(QLabel('Max Energy:'))
         layout_energies.addWidget(self.inputs['energy_db_max'])
         self.frame_rango_energias.setLayout(layout_energies)
         layout.addRow(self.boton_rangos_energia, self.frame_rango_energias)
 
         # layout_dosis.addSpacing(80)
-        layout_dosis.addWidget(QLabel('Dosis min:'))
+        layout_dosis.addWidget(QLabel('Min Dose:'))
         # layout_dosis.addSpacing(92)
         layout_dosis.addWidget(self.inputs['dosis_db_min'])
-        layout_dosis.addWidget(QLabel('Dosis max:'))
+        layout_dosis.addWidget(QLabel('Max Dose:'))
         layout_dosis.addWidget(self.inputs['dosis_db_max'])
         self.frame_rango_dosis.setLayout(layout_dosis)
         layout.addRow(self.boton_rangos_dosis, self.frame_rango_dosis)
 
         layout.addRow(self.boton_generar_db)
 
-        self.setTabText(8, 'Base de datos')
+        self.setTabText(8, 'Databases')
         self.frame_rango_energias.hide()
         self.frame_rango_dosis.hide()
         self.inputs['db_energia_dosis_fija'].hide()
         self.tab8.setLayout(layout)
         self.setTabVisible(8, False)
 
+    def tab_add_PIDE_UI(self):
+        main_layout = QVBoxLayout()
+        hlayout = QHBoxLayout()
+        layout = QFormLayout()
+
+        self.radio_PIDE_ID = QRadioButton('#ExpID')
+        self.inputs['PIDE_ID'] = QSpinBox()
+
+        self.radio_PIDE_range = QRadioButton('Range of #ExpIDs')
+        self.inputs['PIDE_range'] = QLineEdit(self, placeholderText='Example: 1-10')
+
+        self.radio_PIDE_PubName = QRadioButton('Publication name')
+        self.inputs['PIDE_PubNames'] = QComboBoxModified()
+
+
+        self.radio_PIDE_all = QRadioButton('All')
+
+        self.radio_PIDE_list = [self.radio_PIDE_ID, self.radio_PIDE_range, self.radio_PIDE_PubName, self.radio_PIDE_all]
+
+        layout.addRow(self.radio_PIDE_ID, self.inputs['PIDE_ID'])
+        layout.addRow(self.radio_PIDE_range, self.inputs['PIDE_range'])
+        layout.addRow(self.radio_PIDE_PubName, self.inputs['PIDE_PubNames'])
+        layout.addRow(self.radio_PIDE_all, QLabel(''))
+
+        self.inputs['PIDE_ID'].hide()
+        self.inputs['PIDE_range'].hide()
+        self.inputs['PIDE_PubNames'].hide()
+
+        self.radio_PIDE_ID.toggled.connect(self.PIDE_single_ExpID)
+        self.radio_PIDE_range.toggled.connect(self.PIDE_range_ExpID)
+        self.radio_PIDE_PubName.toggled.connect(self.PIDE_PubName)
+        self.radio_PIDE_all.toggled.connect(self.PIDE_all)
+
+        main_layout.addLayout(layout)
+        self.PIDE_button = QPushButton('Add dataset')
+
+        hlayout.addStretch()
+        hlayout.addWidget(self.PIDE_button)
+        hlayout.addStretch()
+        main_layout.addLayout(hlayout)
+        main_layout.addStretch()
+        self.tab_add_PIDE.setLayout(main_layout)
+
+        self.setTabText(9, 'PIDE')
+        self.setTabVisible(9, False)
+
     def db_cambiar_energias(self):
         if self.frame_rango_energias.isHidden():
             self.frame_rango_energias.show()
-            self.boton_rangos_energia.setText('Usar intervalo predeterminado')
+            self.boton_rangos_energia.setText('Use default interval')
         else:
             self.frame_rango_energias.hide()
-            self.boton_rangos_energia.setText('Cambiar intervalo de energías')
+            self.boton_rangos_energia.setText('Change energy interval')
             self.inputs['energy_db_min'].setText('')
             self.inputs['energy_db_max'].setText('')
 
     def db_cambiar_dosis(self):
         if self.frame_rango_dosis.isHidden():
             self.frame_rango_dosis.show()
-            self.boton_rangos_dosis.setText('Usar intervalo predeterminado')
+            self.boton_rangos_dosis.setText('Use default interval')
         else:
             self.frame_rango_dosis.hide()
-            self.boton_rangos_dosis.setText('Cambiar intervalo de dosis')
+            self.boton_rangos_dosis.setText('Change dose interval')
             self.inputs['dosis_db_min'].setText('')
             self.inputs['dosis_db_max'].setText('')
 
@@ -707,36 +778,57 @@ class TabParams(QTabWidget):
 
     def open_dose_data(self):
         self.inputs['dose_data_path'] = QFileDialog.getExistingDirectory(
-            self, 'Elegir carpeta')
+            self, 'Choose folder')
         self.dose_data.setText('{}'.format(self.inputs['dose_data_path']))
 
     def open_spectrum_data(self):
         self.inputs['spectrum_data_path'] = QFileDialog.getExistingDirectory(
-            self, 'Elegir carpeta')
+            self, 'Choose folder')
         self.spectrum_data.setText('{}'.format(
             self.inputs['spectrum_data_path']))
 
     def open_databasefolder(self):
         self.inputs['databasefolder_path'] = QFileDialog.getExistingDirectory(
-            self, 'Elegir carpeta')
+            self, 'Choose folder')
         self.database.setText('{}'.format(self.inputs['databasefolder_path']))
 
     def open_plot_dat(self):
         self.inputs['path_plotdats'] = QFileDialog.getExistingDirectory(
-            self, "Elegir carpeta")
+            self, "Choose folder")
 
     def open_tab_lis(self):
         self.inputs['path_tablis'] = QFileDialog.getExistingDirectory(
-            self, "Elegir carpeta")
+            self, "Choose folder")
 
     def open_carpeta_plots(self):
         self.inputs['path_carpeta_plots'] = QFileDialog.getExistingDirectory(
-            self, "Elegir carpeta")
+            self, "Choose folder")
 
     def open_set_experimental(self):
         self.inputs['set_experimental'] = QFileDialog.getOpenFileName(
-            None, 'Abrir archivo', '', '')
+            None, 'Open file', '', '')
+    
+    
+    def PIDE_single_ExpID(self):
+        self.inputs['PIDE_ID'].show()
+        self.inputs['PIDE_range'].hide()
+        self.inputs['PIDE_PubNames'].hide()
 
+    def PIDE_range_ExpID(self):
+        self.inputs['PIDE_range'].show()
+        self.inputs['PIDE_ID'].hide()
+        self.inputs['PIDE_PubNames'].hide()
+    
+    def PIDE_PubName(self):
+        self.inputs['PIDE_PubNames'].show()
+        self.inputs['PIDE_ID'].hide()
+        self.inputs['PIDE_range'].hide()
+    
+    def PIDE_all(self):
+        self.inputs['PIDE_ID'].hide()
+        self.inputs['PIDE_range'].hide()
+        self.inputs['PIDE_PubNames'].hide()
+    
 
 class VentanaInicio(QDialog):
 
@@ -745,7 +837,7 @@ class VentanaInicio(QDialog):
     def __init__(self):
         super().__init__()
         self.setModal(True)
-        self.setWindowTitle('Elección nombre de carpeta')
+        self.setWindowTitle('Choose folder name')
         self.setFixedWidth(485)
         self.setFixedHeight(150)
 
@@ -758,16 +850,16 @@ class VentanaInicio(QDialog):
         mid_layout = QHBoxLayout()
         bottom_layout = QHBoxLayout()
 
-        self.txt1 = QLabel('Nombre de la carpeta:')
+        self.txt1 = QLabel('Folder name:')
         self.name = QLineEdit()
         top_layout.addWidget(self.txt1)
         top_layout.addWidget(self.name)
 
-        self.txt2 = QLabel('La carpeta contendrá los inputs y outputs de MCDS')
+        self.txt2 = QLabel('This folder will contain the inputs and outputs of the MCDS code')
         mid_layout.addSpacing(35)
         mid_layout.addWidget(self.txt2)
 
-        self.boton_aceptar = QPushButton('Aceptar')
+        self.boton_aceptar = QPushButton('Accept')
         bottom_layout.addSpacing(95)
         bottom_layout.addWidget(self.boton_aceptar)
         bottom_layout.addSpacing(95)
@@ -801,10 +893,127 @@ class VentanaInicio(QDialog):
 
     def nueva_carpeta_fluka(self, event):
         if event:
-            self.txt2.setText('La carpeta contendrá los outputs proc')
+            self.txt2.setText('This folder will contain the outputs of the fluka tab')
             self.fluka = True
             self.show()
 
+
+class QComboBoxModified(QComboBox):
+    # Code adapted from: https://gis.stackexchange.com/a/351152
+    # Subclass Delegate to increase item height
+    class Delegate(QStyledItemDelegate):
+        def sizeHint(self, option, index):
+            size = super().sizeHint(option, index)
+            size.setHeight(20)
+            return size
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # Make the combo editable to set a custom text, but readonly
+        self.setEditable(True)
+        self.lineEdit().setReadOnly(True)
+        # Make the lineedit the same color as QPushButton
+        palette = QApplication.palette()
+        palette.setBrush(QPalette.Base, palette.button())
+        self.lineEdit().setPalette(palette)
+
+        # Use custom delegate
+        self.setItemDelegate(QComboBoxModified.Delegate())
+
+        # Update the text when an item is toggled
+        self.model().dataChanged.connect(self.updateText)
+
+        # Hide and show popup when clicking the line edit
+        self.lineEdit().installEventFilter(self)
+        self.closeOnLineEditClick = False
+
+        # Prevent popup from closing when clicking on an item
+        self.view().viewport().installEventFilter(self)
+
+    def resizeEvent(self, event):
+        # Recompute text to elide as needed
+        self.updateText()
+        super().resizeEvent(event)
+
+    def eventFilter(self, object, event):
+
+        if object == self.lineEdit():
+            if event.type() == QEvent.MouseButtonRelease:
+                if self.closeOnLineEditClick:
+                    self.hidePopup()
+                else:
+                    self.showPopup()
+                return True
+            return False
+
+        if object == self.view().viewport():
+            if event.type() == QEvent.MouseButtonRelease:
+                index = self.view().indexAt(event.pos())
+                item = self.model().item(index.row())
+
+                if item.checkState() == Qt.Checked:
+                    item.setCheckState(Qt.Unchecked)
+                else:
+                    item.setCheckState(Qt.Checked)
+                return True
+        return False
+
+    def showPopup(self):
+        super().showPopup()
+        # When the popup is displayed, a click on the lineedit should close it
+        self.closeOnLineEditClick = True
+
+    def hidePopup(self):
+        super().hidePopup()
+        # Used to prevent immediate reopening when clicking on the lineEdit
+        self.startTimer(100)
+        # Refresh the display text when closing
+        self.updateText()
+
+    def timerEvent(self, event):
+        # After timeout, kill timer, and reenable click on line edit
+        self.killTimer(event.timerId())
+        self.closeOnLineEditClick = False
+
+    def updateText(self):
+        texts = []
+        for i in range(self.model().rowCount()):
+            if self.model().item(i).checkState() == Qt.Checked:
+                texts.append(self.model().item(i).text())
+        text = ", ".join(texts)
+
+        # Compute elided text (with "...")
+        metrics = QFontMetrics(self.lineEdit().font())
+        elidedText = metrics.elidedText(text, Qt.ElideRight, self.lineEdit().width())
+        self.lineEdit().setText(elidedText)
+
+    def addItem(self, text, data=None):
+        item = QStandardItem()
+        item.setText(text)
+        if data is None:
+            item.setData(text)
+        else:
+            item.setData(data)
+        item.setFlags(Qt.ItemIsEnabled | Qt.ItemIsUserCheckable)
+        item.setData(Qt.Unchecked, Qt.CheckStateRole)
+        self.model().appendRow(item)
+
+    def addItems(self, texts, datalist=None):
+        for i, text in enumerate(texts):
+            try:
+                data = datalist[i]
+            except (TypeError, IndexError):
+                data = None
+            self.addItem(text, data)
+
+    def currentData(self):
+        # Return the list of selected items data
+        res = []
+        for i in range(self.model().rowCount()):
+            if self.model().item(i).checkState() == Qt.Checked:
+                res.append(self.model().item(i).data())
+        return res
 
 if __name__ == '__main__':
     app = QApplication([])

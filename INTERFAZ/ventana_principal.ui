@@ -72,6 +72,7 @@
      <string>Database</string>
     </property>
     <addaction name="actionGenerar_base_de_datos"/>
+    <addaction name="actionAdd_PIDE_dataset"/>
    </widget>
    <widget class="QMenu" name="menuModelo">
     <property name="title">
@@ -279,6 +280,14 @@
   <action name="actionMachine_learning">
    <property name="text">
     <string>Machine learning</string>
+   </property>
+  </action>
+  <action name="actionAdd_PIDE_dataset">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Add PIDE dataset</string>
    </property>
   </action>
  </widget>
