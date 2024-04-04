@@ -10,6 +10,7 @@ import fluka_to_data as ftd
 import os
 import pandas as pd
 import natsort
+from uncertainties import ufloat
 
 
 class Logica(QObject):
@@ -17,13 +18,14 @@ class Logica(QObject):
     # recurrente como directorio escogido, parámetros dados por el user, etc.
     senal_info_plots_backend = pyqtSignal(list)
     senal_PIDE_pubnames = pyqtSignal(list)
+    signal_new_cell = pyqtSignal(str)
 
     def __init__(self):
         super().__init__()
         self.contador_inputs_mcds = 0
         self.path_mcds = os.path.join('mcds', 'bin', 'mcds.exe')
         self.g1 = True
-        self.modelo = 'Wang'
+        self.modelo = mech.Modelo_Wang()
         # self.database_particles = [''] añadir protones y carbono12
 
     def recibir_input_mcds(self, e):
@@ -427,8 +429,10 @@ class Logica(QObject):
                 energia, y, yerr, let_cell_entry, LET_nuc_entry, LET_nuc_exit, l, lerr, dose = self.read_Y_LET(
                     path)
                 # survival, lmbda = mech.mech_model(dose, ctype, LET_nuc_entry, y)
-                survival, survivalerr = mech.mech_model_wlmbda_uncert(
-                    ctype, dose, 0, y, yerr, l, lerr, self.modelo)
+                self.modelo.add_params(ctype, dose, 0, y, yerr, l, lerr, d=10)
+                survival, survivalerr = self.modelo.predict()
+                #survival, survivalerr = mech.mech_model_wlmbda_uncert(
+                #    ctype, dose, 0, y, yerr, l, lerr, self.modelo)
                 doses.append(dose)
                 yields.append(y/dose)
                 yieldserr.append(yerr/dose)
@@ -436,13 +440,14 @@ class Logica(QObject):
                 lmbdaserr.append(lerr)
                 survivals.append(survival)
                 surverrs.append(survivalerr)
-        with open(os.path.join(directory, f'survival_dose_{ctype}.db'), 'w') as file:
+        with open(os.path.join(directory, f'survival_dose_{ctype}_{self.modelo.name}.db'), 'w') as file:
             file.write(
                 'Survival Survivalerr Dose Yield Yielderr Lambda Lambdaerr\n')
             for (s, serr, d, y, yerr, l, lerr) in zip(survivals, surverrs, doses, yields,
                                                       yieldserr, lmbdas, lmbdaserr):
                 file.write('{} {} {} {} {} {} {}\n'.format(
                     s, serr, d, y, yerr, l, lerr))
+
 
     def info_ciclo_celular(self, event):
         if event:
@@ -451,7 +456,47 @@ class Logica(QObject):
             self.g1 = False
 
     def modelo_escogido(self, event):
-        self.modelo = event
+        #self.modelo = event
+        if event == 'Wang':
+            self.modelo = mech.Modelo_Wang()
+        elif event == 'Wang-Sophia':
+            self.modelo = mech.Modelo_Wang_params_sophia()
+        else:
+            if self.modelo.name != 'Wang':
+                self.modelo = mech.Modelo_Wang()
+    
+    def new_wang_params(self, event):
+        mu_x = event['mu_x'].value()
+        mu_x_e = event['mu_x_e'].value()
+        mu_y = event['mu_y'].value()
+        mu_y_e = event['mu_y_e'].value()
+        zeta = event['zeta'].value()
+        zeta_e = event['zeta_e'].value()
+        xi = event['xi'].value()
+        xi_e = event['xi_e'].value()
+        eta_1 = event['eta_1'].value()
+        eta_1_e = event['eta_1_e'].value()
+        eta_infty = event['eta_infty'].value()
+        eta_infty_e = event['eta_infty_e'].value()
+
+        params = {'mu_x': ufloat(mu_x, mu_x_e),
+                  'mu_y': ufloat(mu_y, mu_y_e),
+                  'zeta': ufloat(zeta, zeta_e),
+                  'xi': ufloat(xi, xi_e),
+                  'eta_1': ufloat(eta_1, eta_1_e),
+                  'eta_infty': ufloat(eta_infty, eta_infty_e)}
+
+        cell = event['new_cell'].text()
+        if cell == '':
+            # change the parameters of an existing cell
+            celltype = event['change_cell_params'].currentText()
+            self.modelo.add_cell_params(celltype, params)
+        else:
+            # define a new cell line with the given parameters
+            self.modelo.add_cell_params(cell, params)
+            self.signal_new_cell.emit(cell)
+
+
 
     def PIDE_give_data(self, event):
         try:

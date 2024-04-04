@@ -3,7 +3,7 @@ from PyQt5.QtCore import (pyqtSignal, QEvent, Qt)
 from PyQt5.QtWidgets import (QApplication, QFileDialog, QTabWidget, QWidget, QFormLayout, QLineEdit,
                              QComboBox, QPushButton, QLabel, QVBoxLayout, QHBoxLayout, QDialog, QShortcut,
                              QSpinBox, QFrame, QSpinBox, QDoubleSpinBox, QStackedLayout, QRadioButton,
-                             QStyledItemDelegate)
+                             QStyledItemDelegate, QAction)
 from PyQt5 import uic
 from clases_plots import Canvas, Plot, HorizontalLine, VentanaFontSize
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT
@@ -37,6 +37,7 @@ class VentanaPrincipal(window_name, base_class):
     senal_modelo = pyqtSignal(str)
     signal_PIDE_get_info = pyqtSignal(bool)
     signal_PIDE_send_user_info = pyqtSignal(dict)
+    signal_new_wang_params = pyqtSignal(dict)
 
     def __init__(self):
         super().__init__()
@@ -98,6 +99,10 @@ class VentanaPrincipal(window_name, base_class):
 
         self.actionParametros_Sophia.triggered.connect(
             self.modelo_wang_params_sophia)
+
+
+        self.actionChange_parameters.triggered.connect(self.change_Wang_parameters)
+        self.tab_widget.change_params_button.clicked.connect(self.new_wang_params)
         # self.actionWang.setChecked(True)
         # self.actionWang.triggered.connect(self.modelo_wang)
 
@@ -220,8 +225,16 @@ class VentanaPrincipal(window_name, base_class):
 
     def mcds_supervivencia_V79(self):
         directory = QFileDialog.getExistingDirectory(self, "Choose folder")
-        dict_surv = {'directory': directory, 'ctype': 'v79'}
+        dict_surv = {'directory': directory, 'ctype': 'V79'}
         self.senal_mcds_supervivencia.emit(dict_surv)
+    
+    def mcds_supervivencia_any_cell(self):
+        for action in self.menuCalcular_supervivencia.actions():
+            if action.isChecked():
+                cell = action.text()
+                directory = QFileDialog.getExistingDirectory(self, "Choose folder")
+                dict_surv = {'directory': directory, 'ctype': cell}
+                self.senal_mcds_supervivencia.emit(dict_surv)
 
     def nueva_carpeta(self):
         self.senal_nueva_carpeta.emit(True)
@@ -242,12 +255,30 @@ class VentanaPrincipal(window_name, base_class):
         # Por ahora se usa solo Wang, por lo tanto se deja siempre marcada esta opción
         self.actionParametros_originales.setChecked(True)
         self.actionParametros_Sophia.setChecked(False)
+        self.actionChange_parameters.setChecked(False)
         self.senal_modelo.emit('Wang')
 
     def modelo_wang_params_sophia(self):
         self.actionParametros_Sophia.setChecked(True)
         self.actionParametros_originales.setChecked(False)
+        self.actionChange_parameters.setChecked(False)
         self.senal_modelo.emit('Wang-Sophia')
+
+    def change_Wang_parameters(self, state):
+        self.actionParametros_Sophia.setChecked(False)
+        self.actionParametros_originales.setChecked(False)
+        self.tab_widget.setTabVisible(10, state)
+
+    def new_wang_params(self):
+        self.inputs.update(self.tab_widget.inputs)
+        self.signal_new_wang_params.emit(self.inputs)
+        self.senal_modelo.emit('Wang-modified')
+
+    def add_new_cell_menu(self, event):
+        action_new_cell = QAction(event, self)
+        action_new_cell.setCheckable(True)
+        self.menuCalcular_supervivencia.addAction(action_new_cell)
+        action_new_cell.triggered.connect(self.mcds_supervivencia_any_cell)
 
     def ciclo_celular_g1(self):
         self.actionG1.setChecked(True)
@@ -278,6 +309,7 @@ class TabParams(QTabWidget):
         self.tab7 = QWidget()
         self.tab8 = QWidget()
         self.tab_add_PIDE = QWidget()
+        self.tab_change_Wang_params = QWidget()
 
         # Lista de instancias de la clase Plot
         self.inputs['plots'] = [Plot(1)]
@@ -293,6 +325,7 @@ class TabParams(QTabWidget):
         self.addTab(self.tab7, "Tab 7")
         self.addTab(self.tab8, "Tab 8")
         self.addTab(self.tab_add_PIDE, "Tab PIDE")
+        self.addTab(self.tab_change_Wang_params, "Tab Wang params")
 
         self.tab0UI()
         self.tab1UI()
@@ -304,6 +337,7 @@ class TabParams(QTabWidget):
         self.tab7UI()
         self.tab8UI()
         self.tab_add_PIDE_UI()
+        self.tab_change_Wang_params_UI()
 
     def tab0UI(self):
         layout = QFormLayout()
@@ -723,6 +757,105 @@ class TabParams(QTabWidget):
         self.setTabText(9, 'PIDE')
         self.setTabVisible(9, False)
 
+    def tab_change_Wang_params_UI(self):
+        main_layout = QVBoxLayout()
+
+        self.radio_change_params = QRadioButton('Change parameters')
+        self.radio_add_cell_line = QRadioButton('Add cell line')
+
+        main_layout.addWidget(self.radio_change_params)
+        main_layout.addWidget(self.radio_add_cell_line)
+
+        self.wang_params_frame = QFrame()
+        frame_layout = QVBoxLayout()
+
+        cell_line_layout = QHBoxLayout()
+        mu_x_layout = QHBoxLayout()
+        mu_y_layout = QHBoxLayout()
+        zeta_layout = QHBoxLayout()
+        xi_layout = QHBoxLayout()
+        eta_1_layout = QHBoxLayout()
+        eta_infty_layout = QHBoxLayout()
+
+        self.inputs['change_cell_params'] = QComboBox()
+        self.inputs['change_cell_params'].addItems(['V79', 'HSG'])
+        self.inputs['new_cell'] = QLineEdit()
+
+        self.inputs['mu_x'] = QDoubleSpinBox()
+        self.inputs['mu_x_e'] = QDoubleSpinBox()
+        self.inputs['mu_y'] = QDoubleSpinBox()
+        self.inputs['mu_y_e'] = QDoubleSpinBox()
+        self.inputs['zeta'] = QDoubleSpinBox()
+        self.inputs['zeta_e'] = QDoubleSpinBox()
+        self.inputs['xi'] = QDoubleSpinBox()
+        self.inputs['xi_e'] = QDoubleSpinBox()
+        self.inputs['eta_1'] = QDoubleSpinBox()
+        self.inputs['eta_1_e'] = QDoubleSpinBox()
+        self.inputs['eta_infty'] = QDoubleSpinBox()
+        self.inputs['eta_infty_e'] = QDoubleSpinBox()
+
+
+        cell_line_layout.addWidget(QLabel('Cell Line: '))
+        cell_line_layout.addWidget(self.inputs['change_cell_params'])
+        cell_line_layout.addWidget(self.inputs['new_cell'])
+        cell_line_layout.addStretch()
+
+        mu_x_layout.addWidget(QLabel('Mu_x: '))
+        mu_x_layout.addWidget(self.inputs['mu_x'])
+        mu_x_layout.addWidget(QLabel('+/-'))
+        mu_x_layout.addWidget(self.inputs['mu_x_e'])
+
+        mu_y_layout.addWidget(QLabel('Mu_y: '))
+        mu_y_layout.addWidget(self.inputs['mu_y'])
+        mu_y_layout.addWidget(QLabel('+/-'))
+        mu_y_layout.addWidget(self.inputs['mu_y_e'])
+
+        zeta_layout.addWidget(QLabel('Zeta: '))
+        zeta_layout.addWidget(self.inputs['zeta'])
+        zeta_layout.addWidget(QLabel('+/-'))
+        zeta_layout.addWidget(self.inputs['zeta_e'])
+
+        xi_layout.addWidget(QLabel('Xi: '))
+        xi_layout.addWidget(self.inputs['xi'])
+        xi_layout.addWidget(QLabel('+/-'))
+        xi_layout.addWidget(self.inputs['xi_e'])
+
+        eta_1_layout.addWidget(QLabel('Eta_1: '))
+        eta_1_layout.addWidget(self.inputs['eta_1'])
+        eta_1_layout.addWidget(QLabel('+/-'))
+        eta_1_layout.addWidget(self.inputs['eta_1_e'])
+
+        eta_infty_layout.addWidget(QLabel('Eta_infty: '))
+        eta_infty_layout.addWidget(self.inputs['eta_infty'])
+        eta_infty_layout.addWidget(QLabel('+/-'))
+        eta_infty_layout.addWidget(self.inputs['eta_infty_e'])
+
+        self.change_params_button = QPushButton('Change parameters')
+
+        frame_layout.addLayout(cell_line_layout)
+        frame_layout.addLayout(mu_x_layout)
+        frame_layout.addLayout(mu_y_layout)
+        frame_layout.addLayout(zeta_layout)
+        frame_layout.addLayout(xi_layout)
+        frame_layout.addLayout(eta_1_layout)
+        frame_layout.addLayout(eta_infty_layout)
+        frame_layout.addWidget(self.change_params_button)
+
+        self.wang_params_frame.setLayout(frame_layout)
+        main_layout.addWidget(self.wang_params_frame)
+
+        self.radio_change_params.toggled.connect(self.change_params_frame)
+        self.radio_add_cell_line.toggled.connect(self.add_cell_line_frame)
+
+        self.inputs['change_cell_params'].hide()
+        self.inputs['new_cell'].hide()
+        self.wang_params_frame.hide()
+
+
+        self.tab_change_Wang_params.setLayout(main_layout)
+        self.setTabText(10, 'Change Wang parameters')
+        self.setTabVisible(10, False)
+
     def db_cambiar_energias(self):
         if self.frame_rango_energias.isHidden():
             self.frame_rango_energias.show()
@@ -828,6 +961,17 @@ class TabParams(QTabWidget):
         self.inputs['PIDE_ID'].hide()
         self.inputs['PIDE_range'].hide()
         self.inputs['PIDE_PubNames'].hide()
+
+    def change_params_frame(self):
+        self.wang_params_frame.show()
+        self.inputs['change_cell_params'].show()
+        self.inputs['new_cell'].setText('')
+        self.inputs['new_cell'].hide()
+
+    def add_cell_line_frame(self):
+        self.wang_params_frame.show()
+        self.inputs['change_cell_params'].hide()
+        self.inputs['new_cell'].show()
     
 
 class VentanaInicio(QDialog):

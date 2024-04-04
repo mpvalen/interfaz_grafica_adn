@@ -68,6 +68,9 @@ class Modelo_Wang(Modelo):
         else:
             return 1
 
+    def add_cell_params(self, cell_line, params):
+        self.params[f'{cell_line}'] = params
+
 
 
 

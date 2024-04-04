@@ -84,6 +84,7 @@
      </property>
      <addaction name="actionParametros_originales"/>
      <addaction name="actionParametros_Sophia"/>
+     <addaction name="actionChange_parameters"/>
     </widget>
     <addaction name="menuWang_2018"/>
     <addaction name="actionTLK"/>
@@ -253,7 +254,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Parametros Sophia</string>
+    <string>Modified parameters</string>
    </property>
   </action>
   <action name="actionG1">
@@ -288,6 +289,14 @@
    </property>
    <property name="text">
     <string>Add PIDE dataset</string>
+   </property>
+  </action>
+  <action name="actionChange_parameters">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Change parameters / Add cell line</string>
    </property>
   </action>
  </widget>
