@@ -363,6 +363,8 @@ class Logica(QObject):
         for linea in mcds_output:
             if 'Desired dose' in linea:
                 dose = float(linea.split('     ')[0])
+            if 'DSBcb' in linea:
+                cDSBpercent = (float(linea.strip().split(" ")[0]) / 100)
             if linea[0:5] == "TABLE":
                 donde_tablas.append(contador)
             lista_output.append(linea)
@@ -390,7 +392,11 @@ class Logica(QObject):
         Yerr = float(filtr2[2])
         lmbda = float(filtr3[1])
         lmbdaerr = float(filtr3[2])
-        return energia, Y, Yerr, LET_cell_entry, LET_nuc_entry, LET_nuc_exit, lmbda, lmbdaerr, dose
+
+        # add sigma1 (sDSB) and sigma2 (cDSB) for the TLK model
+        sigma1 = (1 - cDSBpercent) * Y
+        sigma2 = cDSBpercent * Y
+        return energia, Y, Yerr, LET_cell_entry, LET_nuc_entry, LET_nuc_exit, lmbda, lmbdaerr, dose, sigma1, sigma2
 
     def write_database(self, path_directory):
         # lee todos los outputs en una carpeta, los ordena en un solo archivo (LET's, Y)
@@ -426,10 +432,13 @@ class Logica(QObject):
         for file in directory_sorted:
             path = os.path.join(directory, file)
             if file.endswith('.out'):
-                energia, y, yerr, let_cell_entry, LET_nuc_entry, LET_nuc_exit, l, lerr, dose = self.read_Y_LET(
+                energia, y, yerr, let_cell_entry, LET_nuc_entry, LET_nuc_exit, l, lerr, dose, sigma1, sigma2 = self.read_Y_LET(
                     path)
                 # survival, lmbda = mech.mech_model(dose, ctype, LET_nuc_entry, y)
-                self.modelo.add_params(ctype, dose, 0, y, yerr, l, lerr, d=10)
+                if self.modelo.name == 'TLK':
+                    self.modelo.add_params(sigma1, sigma2, dose, 0, ctype)
+                else:
+                    self.modelo.add_params(ctype, dose, 0, y, yerr, l, lerr, d=10)
                 survival, survivalerr = self.modelo.predict()
                 #survival, survivalerr = mech.mech_model_wlmbda_uncert(
                 #    ctype, dose, 0, y, yerr, l, lerr, self.modelo)
@@ -456,14 +465,20 @@ class Logica(QObject):
             self.g1 = False
 
     def modelo_escogido(self, event):
-        #self.modelo = event
         if event == 'Wang':
             self.modelo = mech.Modelo_Wang()
         elif event == 'Wang-Sophia':
             self.modelo = mech.Modelo_Wang_params_sophia()
+        elif event == 'TLK':
+            self.modelo = mech.TLK_model()
+        elif event == 'ML':
+            self.modelo = mech.Modelo_ML()
         else:
+            # different parameters for Wang's model
             if self.modelo.name != 'Wang':
                 self.modelo = mech.Modelo_Wang()
+
+
     
     def new_wang_params(self, event):
         mu_x = event['mu_x'].value()

@@ -103,6 +103,13 @@ class VentanaPrincipal(window_name, base_class):
 
         self.actionChange_parameters.triggered.connect(self.change_Wang_parameters)
         self.tab_widget.change_params_button.clicked.connect(self.new_wang_params)
+
+        self.actionTLK.triggered.connect(self.modelo_tlk)
+
+        self.actionMachine_learning.triggered.connect(self.modelo_ML)
+
+        self.actions_models = [self.actionParametros_originales, self.actionParametros_Sophia, self.actionChange_parameters,
+                               self.actionTLK, self.actionMachine_learning]
         # self.actionWang.setChecked(True)
         # self.actionWang.triggered.connect(self.modelo_wang)
 
@@ -253,16 +260,32 @@ class VentanaPrincipal(window_name, base_class):
 
     def modelo_wang_params(self):
         # Por ahora se usa solo Wang, por lo tanto se deja siempre marcada esta opción
+        for action in self.actions_models:
+            if action.isChecked():
+                action.setChecked(False)
         self.actionParametros_originales.setChecked(True)
-        self.actionParametros_Sophia.setChecked(False)
-        self.actionChange_parameters.setChecked(False)
         self.senal_modelo.emit('Wang')
 
     def modelo_wang_params_sophia(self):
+        for action in self.actions_models:
+            if action.isChecked():
+                action.setChecked(False)
         self.actionParametros_Sophia.setChecked(True)
-        self.actionParametros_originales.setChecked(False)
-        self.actionChange_parameters.setChecked(False)
         self.senal_modelo.emit('Wang-Sophia')
+    
+    def modelo_tlk(self):
+        for action in self.actions_models:
+            if action.isChecked():
+                action.setChecked(False)
+        self.actionTLK.setChecked(True)
+        self.senal_modelo.emit('TLK')
+    
+    def modelo_ML(self):
+        for action in self.actions_models:
+            if action.isChecked():
+                action.setChecked(False)
+        self.actionMachine_learning.setChecked(True)
+        self.senal_modelo.emit('ML')
 
     def change_Wang_parameters(self, state):
         self.actionParametros_Sophia.setChecked(False)

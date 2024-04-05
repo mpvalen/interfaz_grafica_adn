@@ -274,11 +274,17 @@
    </property>
   </action>
   <action name="actionTLK">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>TLK (2001)</string>
    </property>
   </action>
   <action name="actionMachine_learning">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>Machine learning</string>
    </property>

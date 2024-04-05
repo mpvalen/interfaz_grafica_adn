@@ -1,5 +1,6 @@
 import math
 import numpy as np
+from scipy.integrate import simps
 from uncertainties import ufloat, correlated_values
 import uncertainties.umath as u
 from abc import ABC, abstractmethod
@@ -106,7 +107,6 @@ class Modelo_Wang(Modelo):
 
 
 
-
 class Modelo_Wang_params_sophia(Modelo_Wang):
     
     def __init__(self):
@@ -131,8 +131,77 @@ class Modelo_Wang_params_sophia(Modelo_Wang):
 
 
 class TLK_model(Modelo):
-    pass
+    
+    def __init__(self):
+        self.name = 'TLK'
+        self.params = dict()
+        self.params['V79'] = {'lambda_1': ufloat(6.38E-1, 0.45E-1),
+                              'lambda_2': ufloat(5.44E-1, 1.21E-1),
+                              'phi_1': ufloat(1.52E-4, 1.43E-4),
+                              'phi_2': ufloat(8.46E-3, 0.30E-3),
+                              'gamma_eta': ufloat(4.89E-6, 0.76E-6)}
 
+    def add_params(self, sigma1, sigma2, dose, doserr, cell, T=28):
+        self.sigma1 = sigma1
+        self.sigma2 = sigma2
+        self.dose = ufloat(dose, doserr)
+        self.T = T
+        self.get_params_cell(cell)
+
+
+    def get_params_cell(self, cell):
+        self.lambda1 = self.params[f'{cell}']['lambda_1']
+        self.lambda2 = self.params[f'{cell}']['lambda_2']
+        self.phi1 = self.params[f'{cell}']['phi_1']
+        self.phi2 = self.params[f'{cell}']['phi_2']
+        self.gamma_eta = self.params[f'{cell}']['gamma_eta']
+
+
+    def add_cell_params(self, cell_line, params):
+        if cell_line in self.params.keys():
+            self.params[f'{cell_line}'].update(params)
+        else:
+            self.params[f'{cell_line}'] = params
+
+
+    def predict(self):
+        survival, survivalerr = self.survival_LQ()
+        return survival, survivalerr
+
+
+    def alpha(self):
+        return self.phi1 * self.sigma1 + self.phi2 * self.sigma2
+
+    def beta(self):
+        lambda1 = self.lambda1
+        lambda2 = self.lambda2
+        # gamma_eta = gamma * eta
+        gamma_eta = self.gamma_eta
+
+        return gamma_eta * (self.sigma1 ** 2 / (2 * lambda1) + self.sigma2 ** 2 / (2 * lambda2) + self.sigma1 * self.sigma2 / (lambda1 + lambda2))
+    
+    def survival_LQ(self):
+        a = self.alpha()
+        b = self.beta()
+        S = u.exp(-a * self.dose - b * self.dose ** 2)
+        return S.nominal_value, S.std_dev
+
+    def L(self, t, L1t0, L2t0):
+        lambda1 = self.lambda1
+        lambda2 = self.lambda2
+        eta = self.eta
+        L1 = L1t0 * u.exp(-lambda1 * t) / (1 + eta * ((1 - u.exp(-lambda1 * t)) * L1t0 / lambda1 + (1 - u.exp(-lambda2 * t)) * L2t0 / lambda2))
+        return [L1, L1 * u.exp((lambda1 - lambda2) * t) * L2t0 / L1t0]
+
+    def Lf(self, t, L1, L2):
+        dotLf = self.phi1 * self.lambda1 * L1 + self.phi2 * self.lambda2 * L2 + self.gamma * self.eta * (L1 + L2) ** 2
+        return simps(dotLf, t)
+
+
+    def survival_TLK(self):
+        L1, L2 = self.L(self.T, self.sigma1 * self.dose, self.sigma2 * self.dose, self.lambda1, self.lambda2, self.eta)
+        survival = u.exp(-self.Lf(self.T, L1, L2, self.lambda1, self.lambda2, self.phi1, self.phi2, self.gamma, self.eta))
+        return survival
 
 
 
