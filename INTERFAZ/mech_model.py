@@ -1,9 +1,12 @@
 import math
+import os
 import numpy as np
+import pandas as pd
 from scipy.integrate import simps
 from uncertainties import ufloat, correlated_values
 import uncertainties.umath as u
 from abc import ABC, abstractmethod
+import joblib
 
 #Funciones del modelo mecanístico
 
@@ -205,11 +208,77 @@ class TLK_model(Modelo):
 
 
 
-class Modelo_ML:
-    pass
+class Modelo_ML(Modelo):
+    def __init__(self):
+        self.name = 'ML'
+        path_data = os.path.join(os.getcwd(), 'ML_model')
+        self.model = joblib.load(os.path.join(path_data, 'model.pkl'))
+        self.encoder = joblib.load(os.path.join(path_data, 'encoder.pkl'))
+        self.scaler = joblib.load(os.path.join(path_data, 'scaler.pkl'))
+        self.vcategoricas = ['Ion', 'IrradiationConditions', 'Cells', 'CellClass', 'CellOrigin', 'CellCycle']
+
+    def add_params(self, doses, energy, charge, dna, ion, cell, cellclass, cellorigin, cellcycle, irr_cond):
+        self.doses = doses
+        self.energy = energy
+        self.charge = charge
+        self.dna = dna
+        self.ion = ion
+        self.cell = cell
+        self.cellclass = cellclass
+        self.cellorigin = cellorigin
+        self.cellcycle = cellcycle
+        self.irr_cond = irr_cond
+    
+    def create_df(self):
+        data_df = {'Energy': self.energy, 'Ion': self.ion, 'Cells': self.cell, 
+                   'CellClass': self.cellclass, 'CellOrigin': self.cellorigin,
+                   'DNAcontent': self.dna, 'CellCycle': self.cellcycle, 
+                   'IrradiationConditions': self.irr_cond,
+                   'Charge': self.charge}
+        df = pd.DataFrame(data_df, index=[0])
+        exp_df = pd.DataFrame(np.repeat(df.values, len(self.doses), axis=0))
+        exp_df.columns = df.columns
+        exp_df['Dose'] = self.doses
+        exp_df['Dose2'] = np.power(self.doses, 2)
+        return exp_df
 
 
+    def predict(self):
+        df_data = self.create_df()
+        df_encoded_scaled = self.transform_dataset(df_data)
+        prediction = np.exp(self.model.predict(df_encoded_scaled))
+        return prediction
 
+
+    def transform_dataset(self, df):
+        # reordena features
+        exp_features = df[['Dose', 'Dose2', 'Energy', 'Ion', 'Charge', 'IrradiationConditions', 'Cells', 
+                    'CellClass', 'CellOrigin', 'CellCycle', 'DNAcontent']]
+        categ_encoded = pd.DataFrame(self.encoder.transform(exp_features[self.vcategoricas]), columns=self.encoder.get_feature_names_out())
+        categ_encoded.index = exp_features.index
+        drop_f = exp_features.drop(self.vcategoricas, axis=1)
+        encoded_df = pd.concat([drop_f, categ_encoded], axis=1)
+        exp_features = pd.DataFrame(self.scaler.transform(encoded_df), columns=self.scaler.get_feature_names_out())
+        return exp_features
+    
+
+    def crear_dataframe_exp_V79(self, dose_range, energy, ion, N):
+        # crea un dataframe con el formato adecuado con los datos del experimento para v79
+        # N es el numero de rows que debe tener
+        data_df = {'Ion': ion, 'Cells': 'V79', 'CellClass': 'n', 'CellOrigin': 'r',
+            'DNAcontent': 5.6, 'CellCycle': 'a', 'IrradiationConditions': 's', 'Charge': 1}
+        df = pd.DataFrame(data_df, index=[0])
+        exp_df = pd.DataFrame(np.repeat(df.values, N, axis=0))
+        exp_df.columns = df.columns
+        try:
+            exp_df['Dose'] = dose_range
+            exp_df['Dose2'] = np.power(dose_range, 2)
+        except TypeError as error:
+            exp_df['Dose'] = dose_range.tolist()
+            exp_df['Dose2'] = np.power(dose_range, 2)
+        energies_df = np.repeat(energy, N)
+        exp_df['Energy'] = energies_df.tolist()
+        return exp_df
 
 def mech_model_simple(D,lmbda):
     #Células V79

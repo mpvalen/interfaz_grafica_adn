@@ -38,6 +38,8 @@ class VentanaPrincipal(window_name, base_class):
     signal_PIDE_get_info = pyqtSignal(bool)
     signal_PIDE_send_user_info = pyqtSignal(dict)
     signal_new_wang_params = pyqtSignal(dict)
+    signal_PIDE_data_ML = pyqtSignal(int)
+    signal_ML_survival = pyqtSignal(dict)
 
     def __init__(self):
         super().__init__()
@@ -107,6 +109,8 @@ class VentanaPrincipal(window_name, base_class):
         self.actionTLK.triggered.connect(self.modelo_tlk)
 
         self.actionMachine_learning.triggered.connect(self.modelo_ML)
+        self.tab_widget.button_ML_PIDE.clicked.connect(self.get_PIDE_expid_data)
+        self.tab_widget.button_ML_survival.clicked.connect(self.cell_survival_ML)
 
         self.actions_models = [self.actionParametros_originales, self.actionParametros_Sophia, self.actionChange_parameters,
                                self.actionTLK, self.actionMachine_learning]
@@ -201,7 +205,7 @@ class VentanaPrincipal(window_name, base_class):
     
     def recibir_PIDE_pubnames(self, event):
         self.tab_widget.inputs['PIDE_PubNames'].addItems(event)
-        self.tab_widget.inputs['PIDE_ID'].setRange(1, len(event))
+        self.tab_widget.inputs['PIDE_ID'].setRange(1, 1118)
     
     def get_PIDE_exp_sets(self):
         for radio in self.tab_widget.radio_PIDE_list:
@@ -280,12 +284,25 @@ class VentanaPrincipal(window_name, base_class):
         self.actionTLK.setChecked(True)
         self.senal_modelo.emit('TLK')
     
-    def modelo_ML(self):
+    def modelo_ML(self, state):
         for action in self.actions_models:
             if action.isChecked():
                 action.setChecked(False)
         self.actionMachine_learning.setChecked(True)
+        self.tab_widget.setTabVisible(11, state)
         self.senal_modelo.emit('ML')
+
+    def get_PIDE_expid_data(self):
+        self.inputs.update(self.tab_widget.inputs)
+        self.signal_PIDE_data_ML.emit(int(self.inputs['ML_PIDE_expid'].value()))
+
+    def get_PIDE_values_ML(self, event):
+        dict_ml = event
+        self.tab_widget.change_ML_values(dict_ml)
+    
+    def cell_survival_ML(self):
+        self.inputs.update(self.tab_widget.inputs)
+        self.signal_ML_survival.emit(self.inputs)
 
     def change_Wang_parameters(self, state):
         self.actionParametros_Sophia.setChecked(False)
@@ -333,6 +350,7 @@ class TabParams(QTabWidget):
         self.tab8 = QWidget()
         self.tab_add_PIDE = QWidget()
         self.tab_change_Wang_params = QWidget()
+        self.tab_add_ML = QWidget()
 
         # Lista de instancias de la clase Plot
         self.inputs['plots'] = [Plot(1)]
@@ -349,6 +367,7 @@ class TabParams(QTabWidget):
         self.addTab(self.tab8, "Tab 8")
         self.addTab(self.tab_add_PIDE, "Tab PIDE")
         self.addTab(self.tab_change_Wang_params, "Tab Wang params")
+        self.addTab(self.tab_add_ML, "Tab ML")
 
         self.tab0UI()
         self.tab1UI()
@@ -361,6 +380,7 @@ class TabParams(QTabWidget):
         self.tab8UI()
         self.tab_add_PIDE_UI()
         self.tab_change_Wang_params_UI()
+        self.tab_add_ML_UI()
 
     def tab0UI(self):
         layout = QFormLayout()
@@ -741,6 +761,8 @@ class TabParams(QTabWidget):
 
         self.radio_PIDE_ID = QRadioButton('#ExpID')
         self.inputs['PIDE_ID'] = QSpinBox()
+        self.inputs['PIDE_ID'].setRange(1, 1118)
+        self.inputs['PIDE_ID'].setValue(1)
 
         self.radio_PIDE_range = QRadioButton('Range of #ExpIDs')
         self.inputs['PIDE_range'] = QLineEdit(self, placeholderText='Example: 1-10')
@@ -878,6 +900,128 @@ class TabParams(QTabWidget):
         self.tab_change_Wang_params.setLayout(main_layout)
         self.setTabText(10, 'Change Wang parameters')
         self.setTabVisible(10, False)
+    
+    def tab_add_ML_UI(self):
+        main_layout = QVBoxLayout()
+
+        self.radio_ML_PIDE = QRadioButton('Use PIDE values for a given #ExpID')
+        self.radio_ML_PIDE.toggled.connect(self.add_PIDE_expid_ML)
+        self.ML_PIDE_frame = QFrame()
+        frame_layout = QHBoxLayout()
+        self.inputs['ML_PIDE_expid'] = QSpinBox()
+        self.inputs['ML_PIDE_expid'].setRange(1, 1118)
+        self.inputs['ML_PIDE_expid'].setValue(1)
+
+        self.button_ML_PIDE = QPushButton('Get PIDE values')
+        frame_layout.addWidget(QLabel('#ExpID: '))
+        frame_layout.addWidget(self.inputs['ML_PIDE_expid'])
+        frame_layout.addWidget(self.button_ML_PIDE)
+        self.ML_PIDE_frame.setLayout(frame_layout)
+        
+        dose_layout = QHBoxLayout()
+        self.inputs['dose_ML'] = QLineEdit(self, placeholderText='Example: 1-10')
+        dose_layout.addWidget(QLabel('Doses (range) in Gy: '))
+        dose_layout.addWidget(self.inputs['dose_ML'])
+        
+        energy_layout = QHBoxLayout()
+        self.inputs['energy_ML'] = QDoubleSpinBox()
+        self.inputs['energy_ML'].setRange(0, 1000)
+        self.inputs['energy_ML'].setValue(0.5)
+        energy_layout.addWidget(QLabel('Energy (MeV): '))
+        energy_layout.addWidget(self.inputs['energy_ML'])
+
+        charge_layout = QHBoxLayout()
+        self.inputs['charge_ML'] = QSpinBox()
+        self.inputs['charge_ML'].setRange(1, 100)
+        self.inputs['charge_ML'].setValue(1)
+        charge_layout.addWidget(QLabel('Charge: '))
+        charge_layout.addWidget(self.inputs['charge_ML'])
+
+        dna_layout = QHBoxLayout()
+        self.inputs['dna_ML'] = QDoubleSpinBox()
+        self.inputs['dna_ML'].setRange(0, 100)
+        self.inputs['dna_ML'].setValue(6)
+        dna_layout.addWidget(QLabel('DNA content (Gbp): '))
+        dna_layout.addWidget(self.inputs['dna_ML'])
+
+        ion_layout = QHBoxLayout()
+        self.inputs['ion_ML'] = QComboBox()
+        particles = ['12C', '20Ne', '40Ar', '4He', '1H', '2H', '3He',
+                    '28Si', '56Fe', '7Li', '11B', '238U', '16O',
+                    '14N', '58Ni', '48Ti', '84Kr', '10B', '6Li',
+                    '13C', '132Xe', '197Au']
+        self.inputs['ion_ML'].addItems(particles)
+        ion_layout.addWidget(QLabel('Ion: '))
+        ion_layout.addWidget(self.inputs['ion_ML'])
+
+        irr_cond_layout = QHBoxLayout()
+        self.inputs['irr_cond_ML'] = QComboBox()
+        self.inputs['irr_cond_ML'].addItems(['Spread-out Bragg peak', 'Monoenergetic'])
+        irr_cond_layout.addWidget(QLabel('Irradiation condition: '))
+        irr_cond_layout.addWidget(self.inputs['irr_cond_ML'])
+
+        cell_layout = QHBoxLayout()
+        self.inputs['cell_ML'] = QComboBox()
+        cells = ['V79', 'T1', 'CHO-10B', 'HS-23', 'C3H10T1/2', 'AG1522', 'HeLa', 'HeLaS3',
+                'irs1', 'irs2', 'L5178Y', 'M10', 'LTA', 'SL3-147', 'HE20', 'NB1RGB',
+                'ONS-76', 'A-172', 'U-251MG', 'TK1', 'CHO-K1', 'xrs5', 'HSG', 'HFL-III',
+                'LC-1sq', 'A-549', 'C32TG', 'Marcus', 'U-251MGKO', 'SK-MG-1', 'KNS-89',
+                'KS-1', 'KNS-60', 'Becker', 'T98G', 'SF126', 'HF19', 'M/10', 'SCC25', 'SQ20B',
+                'RAT-1', 'IEC-6', 'EUE', 'U-87MG', 'LN229', 'SuSa', 'AT1OS', 'LS-174T',
+                'CHO', 'SHE', 'H1299-wtp53', 'HL-60', 'AG1522B', 'PS1', 'B14FAF28', 'AA', 'AA8',
+                'HE', 'Colo679', 'HMV-I', 'HMV-II', '92-1', 'MeWo', 'HTh7', 'B16', 'IGR', 'U-343MG',
+                'DU-145', 'xrs6', 'xrs6-hamKu80', '180BR', 'ChangHL', 'M3-1', 'A-172neo',
+                'A-172mp53', 'H1299wtp53', 'H1299tp53', 'H1299tp53-null', 'OCUB-M', 'CRL-1500',
+                'YMB-1', 'Aprt', 'AG01522', 'SASmp53', 'SASneo', 'B16-F0', 'HEK', 'V79-4', 'irs3',
+                'CGL1', 'SCC61', 'HEP2', 'U-87', 'SW-1573', 'UV41', 'irs1SF', 'V3', 'ONS76',
+                'MOLT4', 'XR1', 'HepG2', 'Hep3B', 'HuH7', 'PLC', 'AT-25F', 'HTB140', 'Bcl-2',
+                'Neo', 'HFIB2', 'HFIB15', 'HFIB30', 'MEF', 'HFL-I', 'Caski', 'clone431', 'AG1522D',
+                'HFFF2', 'DLD1', 'HCT116', 'HSF', 'HMF', 'HT1080', 'LM8', 'PDV', 'PDVC57',
+                'H4', 'HD1', 'H460']
+        self.inputs['cell_ML'].addItems(cells)
+        cell_layout.addWidget(QLabel('Cell line: '))
+        cell_layout.addWidget(self.inputs['cell_ML'])
+
+        cell_class_layout = QHBoxLayout()
+        self.inputs['cell_class_ML'] = QComboBox()
+        self.inputs['cell_class_ML'].addItems(['Normal', 'Tumor'])
+        cell_class_layout.addWidget(QLabel('Cell class: '))
+        cell_class_layout.addWidget(self.inputs['cell_class_ML'])
+
+        cell_origin_layout = QHBoxLayout()
+        self.inputs['cell_origin_ML'] = QComboBox()
+        self.inputs['cell_origin_ML'].addItems(['human', 'rodent'])
+        cell_origin_layout.addWidget(QLabel('Cell origin: '))
+        cell_origin_layout.addWidget(self.inputs['cell_origin_ML'])
+
+        cell_cycle_layout = QHBoxLayout()
+        self.inputs['cell_cycle_ML'] = QComboBox()
+        self.inputs['cell_cycle_ML'].addItems(['G0', 'G1', 'a', 'G1/G0', 'G0/G1', 'Se',
+                                               'Sm', 'Sl', 'M', 'S', 'G1/S'])
+        cell_cycle_layout.addWidget(QLabel('Cell cycle: '))
+        cell_cycle_layout.addWidget(self.inputs['cell_cycle_ML'])
+
+        self.button_ML_survival = QPushButton('Calculate cell survival')
+
+        main_layout.addLayout(dose_layout)
+        main_layout.addWidget(self.radio_ML_PIDE)
+        main_layout.addWidget(self.ML_PIDE_frame)
+        main_layout.addWidget(HorizontalLine())
+        main_layout.addLayout(energy_layout)
+        main_layout.addLayout(charge_layout)
+        main_layout.addLayout(dna_layout)
+        main_layout.addLayout(ion_layout)
+        main_layout.addLayout(irr_cond_layout)
+        main_layout.addLayout(cell_layout)
+        main_layout.addLayout(cell_class_layout)
+        main_layout.addLayout(cell_origin_layout)
+        main_layout.addLayout(cell_cycle_layout)
+        main_layout.addWidget(self.button_ML_survival)
+        self.tab_add_ML.setLayout(main_layout)
+        
+        self.ML_PIDE_frame.hide()
+        self.setTabText(11, 'Machine Learning parameters')
+        self.setTabVisible(11, False)
 
     def db_cambiar_energias(self):
         if self.frame_rango_energias.isHidden():
@@ -995,6 +1139,23 @@ class TabParams(QTabWidget):
         self.wang_params_frame.show()
         self.inputs['change_cell_params'].hide()
         self.inputs['new_cell'].show()
+    
+    def add_PIDE_expid_ML(self):
+        if self.radio_ML_PIDE.isChecked():
+            self.ML_PIDE_frame.show()
+        else:
+            self.ML_PIDE_frame.hide()
+    
+    def change_ML_values(self, dict_info):
+        self.inputs['energy_ML'].setValue(dict_info['Energy'])
+        self.inputs['charge_ML'].setValue(dict_info['Charge'])
+        self.inputs['dna_ML'].setValue(dict_info['DNAContent'])
+        self.inputs['ion_ML'].setCurrentText(dict_info['Ion'])
+        self.inputs['cell_ML'].setCurrentText(dict_info['Cell'])
+        self.inputs['cell_class_ML'].setCurrentText(dict_info['CellClass'])
+        self.inputs['cell_origin_ML'].setCurrentText(dict_info['CellOrigin'])
+        self.inputs['cell_cycle_ML'].setCurrentText(dict_info['CellCycle'])
+    
     
 
 class VentanaInicio(QDialog):

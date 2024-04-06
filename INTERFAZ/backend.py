@@ -19,6 +19,7 @@ class Logica(QObject):
     senal_info_plots_backend = pyqtSignal(list)
     senal_PIDE_pubnames = pyqtSignal(list)
     signal_new_cell = pyqtSignal(str)
+    signal_PIDE_ML_data = pyqtSignal(dict)
 
     def __init__(self):
         super().__init__()
@@ -457,7 +458,6 @@ class Logica(QObject):
                 file.write('{} {} {} {} {} {} {}\n'.format(
                     s, serr, d, y, yerr, l, lerr))
 
-
     def info_ciclo_celular(self, event):
         if event:
             self.g1 = True
@@ -478,8 +478,6 @@ class Logica(QObject):
             if self.modelo.name != 'Wang':
                 self.modelo = mech.Modelo_Wang()
 
-
-    
     def new_wang_params(self, event):
         mu_x = event['mu_x'].value()
         mu_x_e = event['mu_x_e'].value()
@@ -511,8 +509,6 @@ class Logica(QObject):
             self.modelo.add_cell_params(cell, params)
             self.signal_new_cell.emit(cell)
 
-
-
     def PIDE_give_data(self, event):
         try:
             pide_path = 'PIDE3.2.csv'
@@ -531,6 +527,53 @@ class Logica(QObject):
             pide_to_set_experimental(2, event)
         elif option == 'All':
             pide_to_set_experimental(3, event)
+    
+    def PIDE_data_ML(self, event):
+        dict_ml = pide_expid_info(event)
+        self.signal_PIDE_ML_data.emit(dict_ml)
+    
+    def calculate_survival_ML(self, event):
+        energy = event['energy_ML'].value()
+        charge = event['charge_ML'].value()
+        dna = event['dna_ML'].value()
+        ion = event['ion_ML'].currentText()
+        cell = event['cell_ML'].currentText()
+        cellclass = event['cell_class_ML'].currentText()
+        cellorigin = event['cell_origin_ML'].currentText()
+        cellcycle = event['cell_cycle_ML'].currentText()
+        irr_cond = event['irr_cond_ML'].currentText()
+
+        try:
+            doses_range = event['dose_ML'].text()
+            doses_range = doses_range.split('-')
+            doses_range = [int(i) for i in doses_range]
+            doses = np.arange(doses_range[0], doses_range[1], 0.1)
+            #doses = list(range(doses[0], doses[1]+1))
+        except IndexError:
+            print('Error: You must enter a valid dose range')
+            doses = False
+
+        if cellclass == 'Normal':
+            cellclass = 'n'
+        else:
+            cellclass = 't'
+        if cellorigin == 'human':
+            cellorigin = 'h'
+        else:
+            cellorigin = 'r'
+        if irr_cond == 'Monoenergetic':
+            irr_cond = 'm'
+        else:
+            irr_cond = 's'
+        # pasar las dosis a lista (rango de dosis)
+        self.modelo.add_params(doses, energy, charge, dna, ion, cell, cellclass, cellorigin, cellcycle, irr_cond)
+        predictions = self.modelo.predict()
+
+        directory = os.path.join(os.getcwd(), 'ML_model')
+        with open(os.path.join(directory, f'survival_dose_{cell}_{self.modelo.name}.db'), 'w') as file:
+            file.write('Survival_ML Dose\n')
+            for (s, d) in zip(predictions, doses):
+                file.write('{} {}\n'.format(s, d))
         
 
 ######### Fin de la clase ############################
@@ -574,8 +617,11 @@ def read_surv_dose_file(path):
     doses = []
     for line in file:
         survivals.append(float(line.split(' ')[0]))
-        surverr.append(float(line.split(' ')[1]))
-        doses.append(float(line.split(' ')[2]))
+        try:
+            doses.append(float(line.split(' ')[2]))
+            surverr.append(float(line.split(' ')[1]))
+        except IndexError as error:
+            doses.append(float(line.split(' ')[1]))
     return np.asarray(survivals), np.asarray(surverr), np.asarray(doses)
 
 
@@ -664,6 +710,18 @@ def read_pubnames_PIDE(pide_path):
     return pubnames
 
 
+def pide_expid_info(expid):
+    pide = pd.read_csv('PIDE3.2.csv', sep=';')
+    row = pide[pide['ExpID'] == expid]
+    dict_ml = {'Energy': float(row.Energy.iloc[0].replace(',', '.')),
+               'Charge': int(row.Charge.iloc[0]),
+               'DNAContent': float(row.DNAcontent.iloc[0].replace(',', '.')),
+               'Ion': row.Ion.iloc[0],
+               'Cell': row.Cells.iloc[0],
+               'CellClass': row.CellClass.iloc[0],
+               'CellOrigin': row.CellOrigin.iloc[0],
+               'CellCycle': row.CellCycle.iloc[0]}
+    return dict_ml
 
 def pide_single_expid(expid, pide):
     doses = []
