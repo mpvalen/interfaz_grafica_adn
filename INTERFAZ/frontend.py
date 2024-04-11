@@ -632,7 +632,7 @@ class TabParams(QTabWidget):
         self.v_layout_plots.addWidget(self.generar_plots_button)
 
         bottom_layout = QHBoxLayout()
-        self.plots_left = QPushButton('Last plot')
+        self.plots_left = QPushButton('Previous plot')
         self.plots_right = QPushButton('Next plot')
         bottom_layout.addWidget(self.plots_left)
         bottom_layout.addWidget(self.plots_right)
@@ -795,6 +795,7 @@ class TabParams(QTabWidget):
         hlayout.addStretch()
         hlayout.addWidget(self.PIDE_button)
         hlayout.addStretch()
+
         main_layout.addLayout(hlayout)
         main_layout.addStretch()
         self.tab_add_PIDE.setLayout(main_layout)

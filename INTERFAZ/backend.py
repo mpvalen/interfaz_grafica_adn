@@ -411,7 +411,7 @@ class Logica(QObject):
         for filename in directory_sorted:
             if filename.endswith('.out'):
                 path_file = os.path.join(path_directory, filename)
-                energia, Y, Yerr, LET_cell_entry, LET_nuc_entry, LET_nuc_exit, lmbda, lmbdaerr, d = self.read_Y_LET(
+                energia, Y, Yerr, LET_cell_entry, LET_nuc_entry, LET_nuc_exit, lmbda, lmbdaerr, d, sigma1, sigma2 = self.read_Y_LET(
                     path_file)
                 database.write('{} {} {} {} {} {} {} {}\n'.format(energia, LET_cell_entry, LET_nuc_entry,
                                                                   LET_nuc_exit, Y, Yerr, lmbda, lmbdaerr))
@@ -547,7 +547,7 @@ class Logica(QObject):
             doses_range = event['dose_ML'].text()
             doses_range = doses_range.split('-')
             doses_range = [int(i) for i in doses_range]
-            doses = np.arange(doses_range[0], doses_range[1], 0.1)
+            doses = np.arange(doses_range[0], doses_range[1], 0.5)
             #doses = list(range(doses[0], doses[1]+1))
         except IndexError:
             print('Error: You must enter a valid dose range')

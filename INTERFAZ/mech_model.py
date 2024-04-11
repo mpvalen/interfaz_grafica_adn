@@ -138,11 +138,11 @@ class TLK_model(Modelo):
     def __init__(self):
         self.name = 'TLK'
         self.params = dict()
-        self.params['V79'] = {'lambda_1': ufloat(6.38E-1, 0.45E-1),
-                              'lambda_2': ufloat(5.44E-1, 1.21E-1),
-                              'phi_1': ufloat(1.52E-4, 1.43E-4),
-                              'phi_2': ufloat(8.46E-3, 0.30E-3),
-                              'gamma_eta': ufloat(4.89E-6, 0.76E-6)}
+        self.params['V79'] = {'lambda_1': ufloat(6.39E-1, 4.55E-2),
+                              'lambda_2': ufloat(5.39E-1, 1.21E-1),
+                              'phi_1': ufloat(3.20E-4, 2.21E-4),
+                              'phi_2': ufloat(8.30E-3, 3.57E-4),
+                              'gamma_eta': ufloat(4.88E-6, 7.68E-7)}
 
     def add_params(self, sigma1, sigma2, dose, doserr, cell, T=28):
         self.sigma1 = sigma1
