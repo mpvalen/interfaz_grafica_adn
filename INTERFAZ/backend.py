@@ -294,7 +294,7 @@ class Logica(QObject):
                             event['dosis_db_min'].text(), event['dosis_db_max'].text()]
         for i, dato in enumerate(db_energia_dosis):
             if dato != '':
-                energia_dosis[i] = int(dato)
+                energia_dosis[i] = float(dato)
 
         ke = energia_dosis[0]
         max_ke = energia_dosis[1]
