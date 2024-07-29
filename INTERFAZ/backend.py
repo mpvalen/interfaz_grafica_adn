@@ -783,8 +783,8 @@ def pide_to_set_experimental(option, info, pide_path='PIDE3.2.csv', ion_data='PI
             pide_single_expid(id, pide)
     elif option == 2:
         #pubnames
-        pubnames = info['PIDE_PubNames'].currentText()
-        pubnames = pubnames.split(', ')
+        pubnames = info['PIDE_PubNames'].currentData()
+        #pubnames = pubnames.split(', ')
         for pubname in pubnames:
             pide_expids = pide_expids_from_pubname(pubname, pide)
             for expid in pide_expids:
