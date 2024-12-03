@@ -36,6 +36,7 @@
      </property>
      <addaction name="actionCelula_HSG"/>
      <addaction name="actionCelula_V79"/>
+     <addaction name="actionCelula_T1"/>
     </widget>
     <addaction name="actionCelula"/>
     <addaction name="actionControl_simulacion"/>
@@ -73,6 +74,8 @@
     </property>
     <addaction name="actionGenerar_base_de_datos"/>
     <addaction name="actionAdd_PIDE_dataset"/>
+    <addaction name="actionNew_database_from_PIDE_exps"/>
+    <addaction name="actionDatabase_file_from_folder"/>
    </widget>
    <widget class="QMenu" name="menuModelo">
     <property name="title">
@@ -233,7 +236,7 @@
   </action>
   <action name="actionPar_metros_originales">
    <property name="text">
-    <string>Parametros originales</string>
+    <string>Original parameters</string>
    </property>
   </action>
   <action name="actionPar_metros_Sophia">
@@ -246,7 +249,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Parametros originales</string>
+    <string>Original parameters</string>
    </property>
   </action>
   <action name="actionParametros_Sophia">
@@ -303,6 +306,24 @@
    </property>
    <property name="text">
     <string>Change parameters / Add cell line</string>
+   </property>
+  </action>
+  <action name="actionNew_database_from_PIDE_exps">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>New database from PIDE exps</string>
+   </property>
+  </action>
+  <action name="actionDatabase_file_from_folder">
+   <property name="text">
+    <string>Database file from folder</string>
+   </property>
+  </action>
+  <action name="actionCelula_T1">
+   <property name="text">
+    <string>T1</string>
    </property>
   </action>
  </widget>

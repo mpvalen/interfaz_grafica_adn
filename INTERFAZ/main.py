@@ -33,6 +33,8 @@ if __name__ == '__main__':
     ventana_principal.signal_PIDE_send_user_info.connect(logica.PIDE_receive_user_data)
     ventana_principal.signal_PIDE_data_ML.connect(logica.PIDE_data_ML)
     ventana_principal.signal_ML_survival.connect(logica.calculate_survival_ML)
+    ventana_principal.senal_generar_db_pide.connect(logica.generar_base_datos_pide)
+    ventana_principal.signal_db_from_folder.connect(logica.add_database_from_folder)
 
     logica.senal_info_plots_backend.connect(ventana_principal.recibir_info_plots)
     logica.senal_PIDE_pubnames.connect(ventana_principal.recibir_PIDE_pubnames)

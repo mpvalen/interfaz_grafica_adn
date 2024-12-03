@@ -8,6 +8,8 @@ import uncertainties.umath as u
 from abc import ABC, abstractmethod
 import joblib
 
+
+
 #Funciones del modelo mecanístico
 
 # Datos HSG - V79
@@ -63,6 +65,13 @@ class Modelo_Wang(Modelo):
                             'xi': ufloat(0.0572,0.0027),
                             'eta_1': ufloat(7.26e-4,0.04e-4),
                             'eta_infty': ufloat(0.0022,0.0001)}
+        
+        self.params['T1'] = {'mu_x': ufloat(0.78, 0.02),
+                             'mu_y': ufloat(0.019, 0.004),
+                             'zeta': ufloat(0.023, 0.008),
+                             'xi': ufloat(0.029, 0.015),
+                             'eta_1': ufloat(-3e-5, 0.003),
+                             'eta_infty': ufloat(0.01, 0.005)}
 
     def add_params(self, ctype, dose, doseerr, yld, ylderr, lmbda, lmbdaerr, d):
         self.ctype = ctype
@@ -76,14 +85,18 @@ class Modelo_Wang(Modelo):
 
 
     def predict(self):
-        self.Yld = self.Yld / self.dose
-        if self.dose!=0:
+        if self.dose!=0.0:
+            self.Yld = self.Yld / self.dose
             if self.ctype == 'V79':
                 params = self.params['V79']
             elif self.ctype == 'HSG':
                 params = self.params['HSG']
+            elif self.ctype == 'T1':
+                params = self.params['T1']
             else:
                 params = self.params[self.ctype]
+            print(self.ctype)
+            print(params)
             D=ufloat(self.dose,self.doserr)
             Y=ufloat(self.Yld,self.Ylderr)
             lmbda=ufloat(self.lmbda,self.lmbdaerr)*10**2/self.d**2
@@ -100,7 +113,7 @@ class Modelo_Wang(Modelo):
             S = u.exp(-N_death)
             return S.nominal_value, S.std_dev
         else:
-            return 1
+            return 1, 0
 
     def add_cell_params(self, cell_line, params):
         if cell_line in self.params.keys():

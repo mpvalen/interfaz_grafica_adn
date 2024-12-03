@@ -40,6 +40,9 @@ class VentanaPrincipal(window_name, base_class):
     signal_new_wang_params = pyqtSignal(dict)
     signal_PIDE_data_ML = pyqtSignal(int)
     signal_ML_survival = pyqtSignal(dict)
+    signal_PIDE_database_mcds = pyqtSignal(bool)
+    senal_generar_db_pide = pyqtSignal(dict)
+    signal_db_from_folder = pyqtSignal(str)
 
     def __init__(self):
         super().__init__()
@@ -60,6 +63,7 @@ class VentanaPrincipal(window_name, base_class):
         # Calcular supervivencia (elegir célula)
         self.actionCelula_HSG.triggered.connect(self.mcds_supervivencia_HSG)
         self.actionCelula_V79.triggered.connect(self.mcds_supervivencia_V79)
+        self.actionCelula_T1.triggered.connect(self.mcds_supervivencia_T1)
 
         # conexiones (MCDS)
         self.actionCelula.triggered.connect(self.param_celula)
@@ -93,6 +97,12 @@ class VentanaPrincipal(window_name, base_class):
             self.generar_base_datos)
 
         self.actionAdd_PIDE_dataset.triggered.connect(self.add_PIDE_dataset)
+
+        self.actionNew_database_from_PIDE_exps.triggered.connect(self.add_PIDE_database_mcds)
+
+        self.actionDatabase_file_from_folder.triggered.connect(self.database_from_folder)
+
+        self.tab_widget.PIDE_database_button.clicked.connect(self.generate_mcds_database_PIDE)
 
         # Modelos
         self.actionParametros_originales.setChecked(True)
@@ -203,6 +213,16 @@ class VentanaPrincipal(window_name, base_class):
         self.signal_PIDE_get_info.emit(True)
         self.tab_widget.setTabVisible(9, state)
     
+    def add_PIDE_database_mcds(self, state):
+        self.signal_PIDE_database_mcds.emit(True)
+        self.tab_widget.setTabVisible(12, state)
+
+    def database_from_folder(self, state): 
+        path_folder = QFileDialog.getExistingDirectory(
+            self, 'Choose folder')
+        self.signal_db_from_folder.emit(path_folder)
+
+    
     def recibir_PIDE_pubnames(self, event):
         self.tab_widget.inputs['PIDE_PubNames'].addItems(event)
         self.tab_widget.inputs['PIDE_ID'].setRange(1, 1118)
@@ -212,6 +232,10 @@ class VentanaPrincipal(window_name, base_class):
             if radio.isChecked():
                 self.tab_widget.inputs['PIDE_option'] = radio.text()
                 self.signal_PIDE_send_user_info.emit(self.tab_widget.inputs)
+    
+    def generate_mcds_database_PIDE(self):
+        self.inputs.update(self.tab_widget.inputs)
+        self.senal_generar_db_pide.emit(self.inputs)
 
     def recibir_carpeta_ident(self, event):
         tipo = event[0]
@@ -237,6 +261,11 @@ class VentanaPrincipal(window_name, base_class):
     def mcds_supervivencia_V79(self):
         directory = QFileDialog.getExistingDirectory(self, "Choose folder")
         dict_surv = {'directory': directory, 'ctype': 'V79'}
+        self.senal_mcds_supervivencia.emit(dict_surv)
+    
+    def mcds_supervivencia_T1(self):
+        directory = QFileDialog.getExistingDirectory(self, "Choose folder")
+        dict_surv = {'directory': directory, 'ctype': 'T1'}
         self.senal_mcds_supervivencia.emit(dict_surv)
     
     def mcds_supervivencia_any_cell(self):
@@ -300,6 +329,7 @@ class VentanaPrincipal(window_name, base_class):
         dict_ml = event
         self.tab_widget.change_ML_values(dict_ml)
     
+    
     def cell_survival_ML(self):
         self.inputs.update(self.tab_widget.inputs)
         self.signal_ML_survival.emit(self.inputs)
@@ -351,6 +381,24 @@ class TabParams(QTabWidget):
         self.tab_add_PIDE = QWidget()
         self.tab_change_Wang_params = QWidget()
         self.tab_add_ML = QWidget()
+        self.tab_database_from_PIDE = QWidget()
+
+        self.cells = ['V79', 'T1', 'CHO-10B', 'HS-23', 'C3H10T1/2', 'AG1522', 'HeLa', 'HeLaS3',
+                'irs1', 'irs2', 'L5178Y', 'M10', 'LTA', 'SL3-147', 'HE20', 'NB1RGB',
+                'ONS-76', 'A-172', 'U-251MG', 'TK1', 'CHO-K1', 'xrs5', 'HSG', 'HFL-III',
+                'LC-1sq', 'A-549', 'C32TG', 'Marcus', 'U-251MGKO', 'SK-MG-1', 'KNS-89',
+                'KS-1', 'KNS-60', 'Becker', 'T98G', 'SF126', 'HF19', 'M/10', 'SCC25', 'SQ20B',
+                'RAT-1', 'IEC-6', 'EUE', 'U-87MG', 'LN229', 'SuSa', 'AT1OS', 'LS-174T',
+                'CHO', 'SHE', 'H1299-wtp53', 'HL-60', 'AG1522B', 'PS1', 'B14FAF28', 'AA', 'AA8',
+                'HE', 'Colo679', 'HMV-I', 'HMV-II', '92-1', 'MeWo', 'HTh7', 'B16', 'IGR', 'U-343MG',
+                'DU-145', 'xrs6', 'xrs6-hamKu80', '180BR', 'ChangHL', 'M3-1', 'A-172neo',
+                'A-172mp53', 'H1299wtp53', 'H1299tp53', 'H1299tp53-null', 'OCUB-M', 'CRL-1500',
+                'YMB-1', 'Aprt', 'AG01522', 'SASmp53', 'SASneo', 'B16-F0', 'HEK', 'V79-4', 'irs3',
+                'CGL1', 'SCC61', 'HEP2', 'U-87', 'SW-1573', 'UV41', 'irs1SF', 'V3', 'ONS76',
+                'MOLT4', 'XR1', 'HepG2', 'Hep3B', 'HuH7', 'PLC', 'AT-25F', 'HTB140', 'Bcl-2',
+                'Neo', 'HFIB2', 'HFIB15', 'HFIB30', 'MEF', 'HFL-I', 'Caski', 'clone431', 'AG1522D',
+                'HFFF2', 'DLD1', 'HCT116', 'HSF', 'HMF', 'HT1080', 'LM8', 'PDV', 'PDVC57',
+                'H4', 'HD1', 'H460']
 
         # Lista de instancias de la clase Plot
         self.inputs['plots'] = [Plot(1)]
@@ -368,6 +416,7 @@ class TabParams(QTabWidget):
         self.addTab(self.tab_add_PIDE, "Tab PIDE")
         self.addTab(self.tab_change_Wang_params, "Tab Wang params")
         self.addTab(self.tab_add_ML, "Tab ML")
+        self.addTab(self.tab_database_from_PIDE, "Tab DB PIDE")
 
         self.tab0UI()
         self.tab1UI()
@@ -381,6 +430,8 @@ class TabParams(QTabWidget):
         self.tab_add_PIDE_UI()
         self.tab_change_Wang_params_UI()
         self.tab_add_ML_UI()
+        self.tab_database_from_PIDE_UI()
+
 
     def tab0UI(self):
         layout = QFormLayout()
@@ -432,7 +483,7 @@ class TabParams(QTabWidget):
         # Parámetros + explicación (tooltip)
         self.inputs['par'] = QComboBox()
         self.inputs['par'].addItems(
-            ['e', 'p', '2He', '4He', '12C', '14N', '16O', '20N', '56Fe'])
+            ['e', 'p', '2He', '4He', '12C', '14N', '16O', '20Ne', '56Fe'])
         par_label = QLabel('PAR')
         par_label.setToolTip('Particle type for monoenergetic beam (e,p,4He,etc)')
 
@@ -661,7 +712,7 @@ class TabParams(QTabWidget):
 
         self.inputs['par_option_db'] = QComboBox()
         self.inputs['par_option_db'].addItems(
-            ['e', 'p', '2He', '4He', '12C', '14N', '16O', '20N', '56Fe'])   # añadir más después
+            ['e', 'p', '2He', '4He', '12C', '14N', '16O', '20N', '56Fe'])
         self.inputs['seed_db'] = QSpinBox()
         self.inputs['seed_db'].setRange(1, 1000000000)
         self.inputs['seed_db'].setValue(987654321)
@@ -687,23 +738,23 @@ class TabParams(QTabWidget):
 
         self.inputs['db_type'] = QComboBox()
         self.inputs['db_type'].addItems(
-            ['Puntos de energía', 'Puntos de dosis'])
-        self.inputs['db_type'].setToolTip('Variar la energía o la dosis')
+            ['Energy bins', 'Dose bins'])
+        self.inputs['db_type'].setToolTip('Change the energy keeping the dose constant or viceversa')
         self.inputs['N_sim'] = QLineEdit()
         self.inputs['db_energia_dosis_fija'] = QLineEdit()
 
         self.inputs['db_type'].activated.connect(self.fijar_energia_dosis)
 
-        self.boton_fijar_valor = QPushButton('Fijar dosis')
+        self.boton_fijar_valor = QPushButton('Set constant dose')
         self.boton_fijar_valor.setToolTip(
-            'Los valores predeterminados son el mínimo de dosis (0.1 Gy) y de energía (0.5 MeV)')
+            'The default values are the minimum dose (0.1 Gy) and energy (0.5 MeV)')
         self.boton_rangos_energia = QPushButton(
-            'Cambiar intervalo de energías')
+            'Change energy interval')
         self.boton_rangos_energia.setToolTip(
-            'Los valores predeterminados son energía mínima 0.5 MeV y máxima 500 MeV')
-        self.boton_rangos_dosis = QPushButton('Cambiar intervalo de dosis')
+            'The default values are minimum energy (0.5 MeV) and maximum energy (500 MeV)')
+        self.boton_rangos_dosis = QPushButton('Change dose interval')
         self.boton_rangos_dosis.setToolTip(
-            'Los valores predeterminados son dosis mínima 0.1 Gy y máxima 10 Gy')
+            'The default values are minimum dose (0.1 Gy) and maximum dose (10 Gy)')
 
         self.boton_fijar_valor.clicked.connect(
             self.fijar_energia_dosis_default)
@@ -712,7 +763,7 @@ class TabParams(QTabWidget):
 
         self.boton_generar_db = QPushButton('Generate database')
 
-        layout.addRow('Partícula', self.inputs['par_option_db'])
+        layout.addRow('Particle', self.inputs['par_option_db'])
         layout.addRow('SEED', self.inputs['seed_db'])
         layout.addRow('NOCS', self.inputs['nocs_db'])
         layout.addRow('NDIA', self.inputs['ndia_db'])
@@ -770,23 +821,29 @@ class TabParams(QTabWidget):
         self.radio_PIDE_PubName = QRadioButton('Publication name')
         self.inputs['PIDE_PubNames'] = QComboBoxModified()
 
+        self.radio_PIDE_Cells = QRadioButton('Cell line')
+        self.inputs['PIDE_Cells'] = QComboBox()
+        self.inputs['PIDE_Cells'].addItems(self.cells)
 
         self.radio_PIDE_all = QRadioButton('All')
 
-        self.radio_PIDE_list = [self.radio_PIDE_ID, self.radio_PIDE_range, self.radio_PIDE_PubName, self.radio_PIDE_all]
+        self.radio_PIDE_list = [self.radio_PIDE_ID, self.radio_PIDE_range, self.radio_PIDE_PubName, self.radio_PIDE_all, self.radio_PIDE_Cells]
 
         layout.addRow(self.radio_PIDE_ID, self.inputs['PIDE_ID'])
         layout.addRow(self.radio_PIDE_range, self.inputs['PIDE_range'])
         layout.addRow(self.radio_PIDE_PubName, self.inputs['PIDE_PubNames'])
+        layout.addRow(self.radio_PIDE_Cells, self.inputs['PIDE_Cells'])
         layout.addRow(self.radio_PIDE_all, QLabel(''))
 
         self.inputs['PIDE_ID'].hide()
         self.inputs['PIDE_range'].hide()
         self.inputs['PIDE_PubNames'].hide()
+        self.inputs['PIDE_Cells'].hide()
 
         self.radio_PIDE_ID.toggled.connect(self.PIDE_single_ExpID)
         self.radio_PIDE_range.toggled.connect(self.PIDE_range_ExpID)
         self.radio_PIDE_PubName.toggled.connect(self.PIDE_PubName)
+        self.radio_PIDE_Cells.toggled.connect(self.PIDE_Cells)
         self.radio_PIDE_all.toggled.connect(self.PIDE_all)
 
         main_layout.addLayout(layout)
@@ -947,11 +1004,11 @@ class TabParams(QTabWidget):
 
         ion_layout = QHBoxLayout()
         self.inputs['ion_ML'] = QComboBox()
-        particles = ['12C', '20Ne', '40Ar', '4He', '1H', '2H', '3He',
+        self.particles = ['12C', '20Ne', '40Ar', '4He', '1H', '2H', '3He',
                     '28Si', '56Fe', '7Li', '11B', '238U', '16O',
                     '14N', '58Ni', '48Ti', '84Kr', '10B', '6Li',
                     '13C', '132Xe', '197Au']
-        self.inputs['ion_ML'].addItems(particles)
+        self.inputs['ion_ML'].addItems(self.particles)
         ion_layout.addWidget(QLabel('Ion: '))
         ion_layout.addWidget(self.inputs['ion_ML'])
 
@@ -963,23 +1020,7 @@ class TabParams(QTabWidget):
 
         cell_layout = QHBoxLayout()
         self.inputs['cell_ML'] = QComboBox()
-        cells = ['V79', 'T1', 'CHO-10B', 'HS-23', 'C3H10T1/2', 'AG1522', 'HeLa', 'HeLaS3',
-                'irs1', 'irs2', 'L5178Y', 'M10', 'LTA', 'SL3-147', 'HE20', 'NB1RGB',
-                'ONS-76', 'A-172', 'U-251MG', 'TK1', 'CHO-K1', 'xrs5', 'HSG', 'HFL-III',
-                'LC-1sq', 'A-549', 'C32TG', 'Marcus', 'U-251MGKO', 'SK-MG-1', 'KNS-89',
-                'KS-1', 'KNS-60', 'Becker', 'T98G', 'SF126', 'HF19', 'M/10', 'SCC25', 'SQ20B',
-                'RAT-1', 'IEC-6', 'EUE', 'U-87MG', 'LN229', 'SuSa', 'AT1OS', 'LS-174T',
-                'CHO', 'SHE', 'H1299-wtp53', 'HL-60', 'AG1522B', 'PS1', 'B14FAF28', 'AA', 'AA8',
-                'HE', 'Colo679', 'HMV-I', 'HMV-II', '92-1', 'MeWo', 'HTh7', 'B16', 'IGR', 'U-343MG',
-                'DU-145', 'xrs6', 'xrs6-hamKu80', '180BR', 'ChangHL', 'M3-1', 'A-172neo',
-                'A-172mp53', 'H1299wtp53', 'H1299tp53', 'H1299tp53-null', 'OCUB-M', 'CRL-1500',
-                'YMB-1', 'Aprt', 'AG01522', 'SASmp53', 'SASneo', 'B16-F0', 'HEK', 'V79-4', 'irs3',
-                'CGL1', 'SCC61', 'HEP2', 'U-87', 'SW-1573', 'UV41', 'irs1SF', 'V3', 'ONS76',
-                'MOLT4', 'XR1', 'HepG2', 'Hep3B', 'HuH7', 'PLC', 'AT-25F', 'HTB140', 'Bcl-2',
-                'Neo', 'HFIB2', 'HFIB15', 'HFIB30', 'MEF', 'HFL-I', 'Caski', 'clone431', 'AG1522D',
-                'HFFF2', 'DLD1', 'HCT116', 'HSF', 'HMF', 'HT1080', 'LM8', 'PDV', 'PDVC57',
-                'H4', 'HD1', 'H460']
-        self.inputs['cell_ML'].addItems(cells)
+        self.inputs['cell_ML'].addItems(self.cells)
         cell_layout.addWidget(QLabel('Cell line: '))
         cell_layout.addWidget(self.inputs['cell_ML'])
 
@@ -1023,6 +1064,62 @@ class TabParams(QTabWidget):
         self.ML_PIDE_frame.hide()
         self.setTabText(11, 'Machine Learning parameters')
         self.setTabVisible(11, False)
+    
+    def tab_database_from_PIDE_UI(self):
+        main_layout = QVBoxLayout()
+        
+        hlayout = QHBoxLayout()
+        layout = QFormLayout()
+
+        # Cell line (PIDE)
+        self.radio_PIDE_Cells_db = QLabel('Generate a database for a specific cell line')
+
+        self.inputs['PIDE_Cells_db'] = QComboBox()
+
+        self.inputs['PIDE_Cells_db'].addItems(self.cells)
+
+        layout.addRow(self.radio_PIDE_Cells_db, self.inputs['PIDE_Cells_db'])
+
+        main_layout.addLayout(layout)
+        main_layout.addWidget(HorizontalLine())
+
+        # MCDS parameters
+        layout_mcds = QFormLayout()
+        self.inputs['seed_pide_db'] = QSpinBox()
+        self.inputs['seed_pide_db'].setRange(1, 1000000000)
+        self.inputs['seed_pide_db'].setValue(987654321)
+        self.inputs['nocs_pide_db'] = QSpinBox()
+        self.inputs['nocs_pide_db'].setRange(1, 1000000)
+        self.inputs['nocs_pide_db'].setValue(1)
+
+        self.inputs['ndia_pide_db'] = QDoubleSpinBox()
+        self.inputs['ndia_pide_db'].setRange(0, 1000)
+        self.inputs['ndia_pide_db'].setValue(5)
+        self.inputs['cdia_pide_db'] = QDoubleSpinBox()
+        self.inputs['cdia_pide_db'].setRange(0, 1000)
+        self.inputs['cdia_pide_db'].setValue(0)
+
+        layout_mcds.addRow('SEED', self.inputs['seed_pide_db'])
+        layout_mcds.addRow('NOCS', self.inputs['nocs_pide_db'])
+        layout_mcds.addRow('NDIA', self.inputs['ndia_pide_db'])
+        layout_mcds.addRow('CDIA', self.inputs['cdia_pide_db'])
+
+        main_layout.addLayout(layout_mcds)
+
+        self.PIDE_database_button = QPushButton('Generate database')
+
+        hlayout.addStretch()
+        hlayout.addWidget(self.PIDE_database_button)
+        hlayout.addStretch()
+
+        main_layout.addLayout(hlayout)
+        self.tab_database_from_PIDE.setLayout(main_layout)
+
+        self.tab_database_from_PIDE.setLayout(main_layout)
+        
+        self.setTabText(12, 'MCDS database from PIDE')
+        self.setTabVisible(12, False)
+
 
     def db_cambiar_energias(self):
         if self.frame_rango_energias.isHidden():
@@ -1059,23 +1156,23 @@ class TabParams(QTabWidget):
         # self.plot_actual = self.inputs['plots'][plot - 1]
 
     def fijar_energia_dosis(self):
-        if self.inputs['db_type'].currentText() == 'Puntos de energía':
+        if self.inputs['db_type'].currentText() == 'Energy bins':
             # fijar dosis
-            self.boton_fijar_valor.setText('Fijar dosis')
-        elif self.inputs['db_type'].currentText() == 'Puntos de dosis':
+            self.boton_fijar_valor.setText('Set constant dose')
+        elif self.inputs['db_type'].currentText() == 'Dose bins':
             # fijar energía
-            self.boton_fijar_valor.setText('Fijar energía')
+            self.boton_fijar_valor.setText('Set constant energy')
 
     def fijar_energia_dosis_default(self):
         if self.inputs['db_energia_dosis_fija'].isHidden():
             self.inputs['db_energia_dosis_fija'].show()
-            self.boton_fijar_valor.setText('Valor predeterminado')
+            self.boton_fijar_valor.setText('Default values')
         else:
             self.inputs['db_energia_dosis_fija'].hide()
-            if self.inputs['db_type'].currentText() == 'Puntos de energía':
-                self.boton_fijar_valor.setText('Fijar dosis')
+            if self.inputs['db_type'].currentText() == 'Energy bins':
+                self.boton_fijar_valor.setText('Set constant dose')
             else:
-                self.boton_fijar_valor.setText('Fijar energía')
+                self.boton_fijar_valor.setText('Set constant energy')
 
     def open_dose_data(self):
         self.inputs['dose_data_path'] = QFileDialog.getExistingDirectory(
@@ -1114,21 +1211,31 @@ class TabParams(QTabWidget):
         self.inputs['PIDE_ID'].show()
         self.inputs['PIDE_range'].hide()
         self.inputs['PIDE_PubNames'].hide()
+        self.inputs['PIDE_Cells'].hide()
 
     def PIDE_range_ExpID(self):
         self.inputs['PIDE_range'].show()
         self.inputs['PIDE_ID'].hide()
         self.inputs['PIDE_PubNames'].hide()
+        self.inputs['PIDE_Cells'].hide()
     
     def PIDE_PubName(self):
         self.inputs['PIDE_PubNames'].show()
         self.inputs['PIDE_ID'].hide()
         self.inputs['PIDE_range'].hide()
+        self.inputs['PIDE_Cells'].hide()
+
+    def PIDE_Cells(self):
+        self.inputs['PIDE_Cells'].show()
+        self.inputs['PIDE_ID'].hide()
+        self.inputs['PIDE_range'].hide()
+        self.inputs['PIDE_PubNames'].hide()
     
     def PIDE_all(self):
         self.inputs['PIDE_ID'].hide()
         self.inputs['PIDE_range'].hide()
         self.inputs['PIDE_PubNames'].hide()
+        self.inputs['PIDE_Cells'].hide()
 
     def change_params_frame(self):
         self.wang_params_frame.show()
@@ -1156,7 +1263,7 @@ class TabParams(QTabWidget):
         self.inputs['cell_class_ML'].setCurrentText(dict_info['CellClass'])
         self.inputs['cell_origin_ML'].setCurrentText(dict_info['CellOrigin'])
         self.inputs['cell_cycle_ML'].setCurrentText(dict_info['CellCycle'])
-    
+
     
 
 class VentanaInicio(QDialog):

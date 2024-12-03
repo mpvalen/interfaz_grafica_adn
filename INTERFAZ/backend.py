@@ -300,10 +300,10 @@ class Logica(QObject):
         max_ke = energia_dosis[1]
         d = energia_dosis[2]
         max_d = energia_dosis[3]
-        if dato_fijo != '' and db_type == 'Puntos de energía':
+        if dato_fijo != '' and db_type == 'Energy bins':
             # Dosis fija
             d = float(dato_fijo)
-        elif dato_fijo != '' and db_type == 'Puntos de dosis':
+        elif dato_fijo != '' and db_type == 'Dose bins':
             # Energía fija
             ke = float(dato_fijo)
         E_levels = np.logspace(np.log10(ke), np.log10(max_ke), N)
@@ -315,7 +315,7 @@ class Logica(QObject):
         except:
             # se usa el mismo directorio
             cont = len([f for f in os.listdir(dir) if f.endswith('.inp')])
-        if db_type == 'Puntos de energía':
+        if db_type == 'Energy bins':
             for E in E_levels:
                 path = os.path.join(dir, f'{particula}_{cont}.inp')
                 file = open(path, 'w')
@@ -364,6 +364,12 @@ class Logica(QObject):
         for linea in mcds_output:
             if 'Desired dose' in linea:
                 dose = float(linea.split('     ')[0])
+                if dose == 1.0:
+                    file_input = file_route.replace('.out', '.inp')
+                    with open(file_input, 'r') as file:
+                        for line in file:
+                            if 'AD=' in line:
+                                dose = float(line.split('AD=')[1].split('\n')[0])
             if 'DSBcb' in linea:
                 cDSBpercent = (float(linea.strip().split(" ")[0]) / 100)
             if linea[0:5] == "TABLE":
@@ -401,8 +407,8 @@ class Logica(QObject):
 
     def write_database(self, path_directory):
         # lee todos los outputs en una carpeta, los ordena en un solo archivo (LET's, Y)
-        path_database = os.path.join(
-            path_directory, f'{path_directory}.database')
+        base_name = os.path.basename(path_directory)
+        path_database = os.path.join(path_directory, f'{base_name}.database')
         database = open(path_database, 'w')
         database.write(
             f'energia LET_cell_entry LET_nuc_entry LET_nuc_exit Yield Yielde lambda lambdae\n')
@@ -444,10 +450,17 @@ class Logica(QObject):
                 #survival, survivalerr = mech.mech_model_wlmbda_uncert(
                 #    ctype, dose, 0, y, yerr, l, lerr, self.modelo)
                 doses.append(dose)
-                yields.append(y/dose)
-                yieldserr.append(yerr/dose)
-                lmbdas.append(l)
-                lmbdaserr.append(lerr)
+                try:
+                    yields.append(y/dose)
+                    yieldserr.append(yerr/dose)
+                    lmbdas.append(l)
+                    lmbdaserr.append(lerr)
+                except ZeroDivisionError as error:
+                    # dose is zero
+                    yields.append(0)
+                    yieldserr.append(0)
+                    lmbdas.append(0)
+                    lmbdaserr.append(0)
                 survivals.append(survival)
                 surverrs.append(survivalerr)
         with open(os.path.join(directory, f'survival_dose_{ctype}_{self.modelo.name}.db'), 'w') as file:
@@ -525,8 +538,97 @@ class Logica(QObject):
             pide_to_set_experimental(1, event)
         elif option == 'Publication name':
             pide_to_set_experimental(2, event)
-        elif option == 'All':
+        elif option == 'Cell line':
             pide_to_set_experimental(3, event)
+        elif option == 'All':
+            pide_to_set_experimental(4, event)
+    
+    def generar_base_datos_pide(self, event):
+        cell = event['PIDE_Cells_db'].currentText()
+        self.pide_cell_to_mcds(cell, event)
+
+    def add_database_from_folder(self, path):
+        self.write_database(path)
+
+    def pide_cell_to_mcds(self, cell, info, pide_path='PIDE3.2.csv', ion_data='PIDE3.2_IonRawData.csv'):
+        pide_ion = pd.read_csv(ion_data, sep=';', header=None)
+        pide = pd.read_csv(pide_path, sep=';')
+        pide_header = ['ExpID', 'Publication', 'PublicationName', 'IonExp', 'PhotonExp']
+        n_dose_surv = (pide_ion.shape[1] - len(pide_header)) // 2
+        for i in range(n_dose_surv):
+            pide_header.append(f'D_{i}')
+            pide_header.append(f'S_{i}')
+        
+        pide_ion.columns = pide_header
+        pide_cell = pide[pide['Cells'] == cell]
+        expids = pide_cell.ExpID.to_numpy().tolist()
+        dir = 'PIDE_database_outputs'
+        try:
+            os.mkdir(dir)
+        except FileExistsError as error:
+            pass
+        for expid in expids:
+            doses = []
+            survs = []
+            row = pide[pide['ExpID'] == expid]
+            row_dose_surv = pide_ion[pide_ion['ExpID'] == expid]
+            columns = row_dose_surv.columns.to_numpy()
+            dose_surv = [columns[x].tolist() for x in row_dose_surv.notna().to_numpy()]
+            # Se tienen los nombres de las columnas que tienen valores distintos a NaN
+            dose_surv = list(zip(dose_surv[0][5:][::2], dose_surv[0][5:][1::2]))
+            for d_s in dose_surv:
+                d = pide_ion[pide_ion['ExpID'] == expid].loc[:, d_s[0]].to_numpy()[0]
+                s = pide_ion[pide_ion['ExpID'] == expid].loc[:, d_s[1]].to_numpy()[0]
+                if d < 0 or s < 0 or s > 1.1:
+                    pass
+                else:
+                    doses.append(d)
+                    survs.append(s)
+            pubname = row.PublicationName.iloc[0]
+            particula = row.Ion.iloc[0]
+            # verificar que la particula sea < 56Fe (máximo válido para MCDS)
+            num_particula = [int(i) for i in [*particula] if i.isdigit()]
+            z_particula = int(''.join(map(str, num_particula)))
+            if z_particula <= 56:
+                dna = float(row.DNAcontent.iloc[0].replace(',', '.'))
+                datos_omitibles = {'nocs': info['nocs_pide_db'].text(), 'seed': info['seed_pide_db'].text(),
+                                'ndia': info['ndia_pide_db'].value(),
+                                'cdia': info['cdia_pide_db'].value()}
+                for item in datos_omitibles.items():
+                    if item[1] != '':
+                        datos_omitibles[item[0]] = float(item[1])
+                    else:
+                        pass
+                nocs = datos_omitibles['nocs']
+                seed = datos_omitibles['seed']
+                ndia = datos_omitibles['ndia']
+                cdia = datos_omitibles['cdia']
+                ke = float(row.Energy.iloc[0].replace(',', '.'))
+                D_levels = np.array(doses)
+                cont = 0
+
+                for D in D_levels:
+                    path = os.path.join(dir, f'{pubname}_{expid}_{cont}.inp')
+                    file = open(path, 'w')
+                    file.write("CELL: DNA={} NDIA={} CDIA={}\nSIMCON: seed={} nocs={}\nRADX: PAR={} KE={} AD={}\n\n\n".format(dna,
+                                                                                                                            ndia, cdia, seed, nocs, particula, ke, D))
+                    file.close()
+                    cont += 1
+        cont_bats = 0
+        for archivo in os.listdir(dir):
+            if archivo.endswith('inp'):
+                ruta = os.path.join(dir, archivo)
+                bat_path = os.path.join(dir, f'{dir}_bat_{cont_bats}.bat')
+                bat = open(bat_path, 'w')
+                bat.write(fop.mcds_bat(ruta, self.path_mcds))
+                bat.close()
+                subprocess.call([r'{}'.format(bat_path)])
+                os.remove(bat_path)
+                cont_bats += 1
+
+            # leer Yield y LET
+        self.write_database(dir)
+        
     
     def PIDE_data_ML(self, event):
         dict_ml = pide_expid_info(event)
@@ -754,10 +856,14 @@ def pide_expids_from_pubname(pubname, pide):
     expids = pide[pide['PublicationName'] == pubname].ExpID.to_numpy()
     return expids
 
+def pide_expids_from_cell(cell, pide):
+    expids = pide[pide['Cells'] == cell].ExpID.to_numpy()
+    return expids
 
 def pide_to_set_experimental(option, info, pide_path='PIDE3.2.csv', ion_data='PIDE3.2_IonRawData.csv'):
     # funcion que convierte datos PIDE a formato de set experimental para graficar
     pide = pd.read_csv(ion_data, sep=';', header=None)
+    pide_original = pd.read_csv(pide_path, sep=';')
     #if ion_data:
     pide_header = ['ExpID', 'Publication', 'PublicationName', 'IonExp', 'PhotonExp']
     #else:
@@ -789,6 +895,12 @@ def pide_to_set_experimental(option, info, pide_path='PIDE3.2.csv', ion_data='PI
             pide_expids = pide_expids_from_pubname(pubname, pide)
             for expid in pide_expids:
                 pide_single_expid(expid, pide)
+    elif option == 3:
+        # Cell line
+        cell = info['PIDE_Cells'].currentText()
+        pide_expids = pide_expids_from_cell(cell, pide_original)
+        for expid in pide_expids:
+            pide_single_expid(expid, pide)
     else:
         # all
         expids = pide.ExpID.to_numpy().tolist()
