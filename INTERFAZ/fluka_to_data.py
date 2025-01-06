@@ -91,7 +91,7 @@ def lector_dose_data_FLUKA(dose_data_path):
         contador += 1
     depths = [starting_point + bin_width * i -
               bin_width / 2 for i in range(1, nbins + 1)]
-    return depths, values
+    return depths, values, nbins, bin_width
 
 
 def fully_floatable(list):
@@ -259,7 +259,7 @@ def fluka_to_data(spectrum_data_path, dose_data_path, database_path,
     doses_matrix = []
     dose_data_path_norm = os.path.normpath(dose_data_path)
     for path in os.listdir(dose_data_path_norm):
-        depths_doses, doses_run = lector_dose_data_FLUKA(os.path.join(
+        depths_doses, doses_run, bins_depth, sep = lector_dose_data_FLUKA(os.path.join(
             dose_data_path_norm, path))  # Lectura de dosis desde archivo FLUKA
         doses_matrix.append(doses_run)
     doses_matrix = np.transpose(np.array(doses_matrix))
@@ -269,16 +269,18 @@ def fluka_to_data(spectrum_data_path, dose_data_path, database_path,
         dose_std_at_depth = np.std(doses_at_same_depth)
         doses.append(dose_avg_at_depth)
         dosese.append(dose_std_at_depth)
+
+    detector_depths = np.array([0 + i * sep for i in range(0, bins_depth + 1)])
     
-    print(f'depth doses (fluka): {depths_doses}\ndetector depths: {detector_depths}\n')
     dosemax = max(doses)
     doses = [i*dose_norm_max/dosemax for i in doses]
     dosese = [i*dose_norm_max/dosemax for i in dosese]
+    print(f'Doses: {doses}')
     # Dosis interpoloadas a profundidades de detectores
     interp_doses = np.interp(detector_depths, depths_doses, doses)
     interp_dosese = np.interp(
         detector_depths, depths_doses, dosese)  # Error interpolado
-
+    print(f'Interpolated doses: {interp_doses}')
     database_norm_path = os.path.normpath(database_path)
     # lector de base de datos (MCDS) nos dice cuanto yield corresponde a cada energía
     energies, yields, yielderrs, lambdas, lambdaerrs = database_reader(
@@ -312,7 +314,6 @@ def fluka_to_data(spectrum_data_path, dose_data_path, database_path,
     yerr = np.interp(Ebins, energies, yielderrs)
     l = np.interp(Ebins, energies, lambdas)
     lerr = np.interp(Ebins, energies, lambdaerrs)
-    print(f'y: {y}\n l: {l}')
     for index, detector_depth in enumerate(detector_depths):
         spectrum_at_detector_depth = spectrum_avg[index]
         if sum(spectrum_at_detector_depth) != 0:
@@ -328,6 +329,7 @@ def fluka_to_data(spectrum_data_path, dose_data_path, database_path,
             yerrave = 0
             lave = 0
             lerrave = 0
+        print(f'Depth: {detector_depth} Dose: {interp_doses[index]}')
         S, Serr = mech_model(
             ctype, interp_doses[index], interp_dosese[index], yave, yerrave, lave, lerrave, DNA, NDIA)
         newtablis.write("{:.4e} {:.4e} {:.4e} {:.4e} {:.4e} {:.4e} {:.4e} {:.4e} {:.4e}\n".

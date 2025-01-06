@@ -95,8 +95,6 @@ class Modelo_Wang(Modelo):
                 params = self.params['T1']
             else:
                 params = self.params[self.ctype]
-            print(self.ctype)
-            print(params)
             D=ufloat(self.dose,self.doserr)
             Y=ufloat(self.Yld,self.Ylderr)
             lmbda=ufloat(self.lmbda,self.lmbdaerr)*10**2/self.d**2
