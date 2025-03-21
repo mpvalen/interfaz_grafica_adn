@@ -1,50 +1,59 @@
-# Interfaz gráfica
-La interfaz permite hacer simulaciones con MCDS de forma sencilla, además contiene una sección para añadir archivos de FLUKA, se pueden generar bases de datos y contiene una interfaz de ploteo incorporada.
+# Welcome to the CELL repository
 
-## Ejecución
-Antes de ejecutar el código, se deben tener instaladas las librerías de python: PyQt5, matplotlib, numpy, scipy, uncertainties y natsort.
-Para utilizar la interfaz basta con ejecutar `main.py`
+[Check the documentation of CELL](https://mpvalen.github.io/interfaz_grafica_adn.html)
 
-# Uso
-Se debe especificar el nombre de la carpeta donde se guardarán los archivos en caso de hacer simulaciones con MCDS o crear una base de datos. Esto se puede ignorar, en cuyo caso la carpeta tendrá un nombre predeterminado.
-En el menú superior se encuentran las distintas opciones: MCDS, Fluka, Graficar, Base de datos y Modelo.
+**CELL (Cellular Effect Lesions Linker)** is a graphical interface for cell survival predictions based on different simulation chains pre-loaded in the system for different cell lines. The program was written in Python using the PyQt5 library.
 
-## MCDS
-Contiene los parámetros necesarios para crear un archivo input, cada set de parámetros puede añadirse a la interfaz según se requiera. Luego de definir los valores, se debe seleccionar `Generar input` para crear un archivo `.inp` en la carpeta escogida al inicio. Se puede seleccionar una carpeta distinta en `Nueva carpeta`.
-Una vez terminada la generación de inputs, se puede ejecutar la simulación seleccionando `Lanzar simulaciones`. Esto último abre una selección de carpeta y luego ejecuta las simulaciones para todos los archivos dentro de esta.
-Finalmente se incorpora una opción para calcular supervivencia celular usando el modelo seleccionado (ver **Modelo**) y escogiendo el tipo de célula a usar (HSG y V79 actualmente).
+  
 
-## Fluka
-Se puede añadir esta opción seleccionando `Añadir parámetros fluka`. En esta ventana se deben escoger 2 carpetas con archivos obtenidos desde Fluka: `dose data`, `spectrum data`. Además se debe añadir una carpeta con al menos una base de datos (ver **Base de datos**).
+## Install
 
-Se deben añadir valores para la profundidad mínima y máxima del haz junto a la separación de puntos (bins) coincidiendo con los archivos de Fluka. Además se debe especificar el tipo de célula (V79 o HSG), la cantidad de ADN, el diámetro del núcleo celular y el máximo de dosis. Una vez añadidos todos los parámetros, se puede seleccionar `Fluka -> survival` en el menú superior para obtener un archivo output con supervivencia a distinta profundidad. Los parámetros del archivo output son:
-- Profundidad
-- Dosis + error
-- Yield de DSB's + error
-- Lambda + error
-- Supervivencia + error.
+  
 
-## Graficar
-Se muestra la interfaz de ploteo. Se debe especificar el tipo de gráfico y la carpeta que contenga los archivos con información por graficar. Se puede especificar el label del gráfico y un set de datos experimentales, pero es opcional.
-Una vez añadidos los parámetros necesarios, se selecciona `Generar plots`y el programa grafica lo que se encuentra en la carpeta entregada, mostrando un gráfico a la vez. Se puede seleccionar `Siguiente plot` o `Plot anterior` para navegar por los archivos de la carpeta en orden. Se puede cambiar el tipo de gráfico cambiando la selección en `Tipo de plot`y volviendo a generar los plots.
+The [repository](https://github.com/mpvalen/interfaz_grafica_adn) has to be downloaded. The following libraries are necessary for the execution, `python` should be version 3.X minimum.
 
-Para añadir más de una curva o puntos a la vez, se debe seleccionar `Añadir otro plot`. Al lado se despliegan los distintos plots enumerados, al seleccionar uno de estos se puede especificar la carpeta, set de datos experimentales, label y separación de puntos para esa curva. Finalmente al hacer click en `Generar plots` se grafican todas las curvas juntas con sus respectivos labels. Si no se especificó un label, se usa uno predeterminado
+  
 
-## Base de datos
+- Numpy
 
-Se puede generar una base de datos que puede usarse luego en la sección de **Fluka**. Se debe escoger el tipo de partícula, el número de puntos de energía o de dosis y se pueden especificar rangos de energía/dosis distintos a los predeterminados. Además se pueden especificar valores para la seed, número de simulaciones (nocs), diámetro nuclear y cantidad de adn distintos a los valores predeterminados.
-Finalmente al seleccionar `Generar base de datos` se generan los inputs y outputs dentro de una carpeta con el nombre entregado en la ventana inicial y finalmente se crea un archivo `.database` que contiene:
-- Energía
-- LET de entrada a la célula
-- LET de entrada al núcleo
-- LET de salida del núcleo
-- Yield de DSB's + error
-- Lambda + error
-Se puede escoger una carpeta distinta seleccionando `Nueva carpeta` dentro del menú superior `MCDS`
+- Matplotlib
 
-## Modelo
-Se puede seleccionar el tipo de modelo para calcular la supervivencia. Actualmente solo se utiliza el de Wang (2018)
+- PyQt5
 
-## Shortcuts
--  `Ctrl+Q` para generar un input de MCDS
--  `Ctrl+W` para lanzar las simulaciones de la carpeta seleccionada
+- scipy
+
+- natsort
+
+- uncertainties
+
+  
+
+The program allows the use of the [MCDS](https://faculty.washington.edu/trawets/mcds/) (Monte Carlo Damage Simulation) software [[1]](#references)[[2]](#references)[[3]](#references)[[4]](#references) . The latest version of MCDS (3.10A) is required for the correct execution of the program, the folder `mcds` should be located inside the `INTERFAZ` directory.
+
+  
+
+## Execution
+
+  
+
+To use the interface, simply execute `main.py`.
+
+  
+
+### References
+
+  
+
+[1] R.D. Stewart, V.K. Yu, A.G. Georgakilas, C. Koumenis, J.H. Park, D.J. Carlson, Monte Carlo Simulation of the Effects of Radiation Quality and Oxygen Concentration on Clustered DNA Lesions. Radiat. Res. 176, 587-602 (2011)
+
+  
+
+[2] Y Hsiao and R.D. Stewart, Monte Carlo Simulation of DNA Damage Induction by X-rays and Selected Radioisotopes. Phys. Med. Biol. 53, 233-244 (2008)
+
+  
+
+[3] V.A. Semenenko and R.D. Stewart. Fast Monte Carlo simulation of DNA damage formed by electrons and light ions. Phys. Med. Biol. 51(7), 1693-1706 (2006)
+
+  
+
+[4] V.A. Semenenko and R.D. Stewart. A fast Monte Carlo algorithm to simulate the spectrum of DNA damages formed by ionizing radiation. Radiat Res. 161(4), 451-457 (2004).

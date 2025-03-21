@@ -332,6 +332,32 @@ def fluka_to_data(spectrum_data_path, dose_data_path, database_path,
         print(f'Depth: {detector_depth} Dose: {interp_doses[index]}')
         S, Serr = mech_model(
             ctype, interp_doses[index], interp_dosese[index], yave, yerrave, lave, lerrave, DNA, NDIA)
+
+        ##### Test #####
+
+        # if sum(spectrum_at_detector_depth) != 0:
+        #     survivals_at_depth = []
+        #     survvialserr_at_depth = []
+        #     for j in range(len(Ebins)):
+        #         yave = y[j]*DNA/6
+        #         yerrave = yerr[j]*DNA/6
+        #         lave = l[j]*5**2/NDIA**2
+        #         lerrave = lerr[j]*5**2/NDIA**2
+        #         S_j, Serr_j = mech_model_test(
+        #             ctype, interp_doses[index], interp_dosese[index], yave, yerrave, lave, lerrave, DNA, NDIA)
+        #         survivals_at_depth.append(S_j)
+        #         survvialserr_at_depth.append(Serr_j)
+        #     S = np.average(survivals_at_depth, weights=spectrum_at_detector_depth)
+        #     Serr = np.average(survvialserr_at_depth, weights=spectrum_at_detector_depth)
+        # else:
+        #     yave = 0
+        #     yerrave = 0
+        #     lave = 0
+        #     lerrave = 0
+        #     S, Serr = 1, 0
+
+
+        ##### Fin Test #######
         newtablis.write("{:.4e} {:.4e} {:.4e} {:.4e} {:.4e} {:.4e} {:.4e} {:.4e} {:.4e}\n".
                         format(detector_depth, interp_doses[index], interp_dosese[index],
                                yave, yerrave, lave, lerrave, S, Serr))

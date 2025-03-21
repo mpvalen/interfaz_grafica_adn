@@ -1,7 +1,0 @@
-!SAMPLE MCDS INPUT FILE (1 MeV proton, 2% O2 concentration)
-
-SIMCON: nocs=10000 seed=987654321
-CELL: DNA=1  ndia=5
-EVO2: pO2=2.0
-RADX: par=p ke=1
-

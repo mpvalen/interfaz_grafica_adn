@@ -1,6 +1,0 @@
-
-CELL: DNA=1 ndia=5 cdia=10
-SIMCON: nocs=3001 seed=987654321
-RADX: fn=20Ne.dat
-EVO2: pO2=100
-
