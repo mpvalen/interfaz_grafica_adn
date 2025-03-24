@@ -34,15 +34,17 @@ The program allows the use of the [MCDS](https://faculty.washington.edu/trawets/
 
 ## Execution
 
-  
-
 To use the interface, simply execute `main.py`.
 
-  
+
+## Citing CELL
+
+If you use CELL in a scientific publication, consider citing the following reference:
+
+Valenzuela M.P., Ciardiello A., Buvic L., Espinoza I., Galvez S., Salgado S., Videla H., Russomando A., CELL: A user-friendly tool for computing cell survival based on radiation-induced DNA damage, Radiotherapy & Oncology, 194, 2024, Digital poster. [https://doi.org/10.1016/S0167-8140(24)02410-1](https://doi.org/10.1016/S0167-8140(24)02410-1)
+
 
 ### References
-
-  
 
 [1] R.D. Stewart, V.K. Yu, A.G. Georgakilas, C. Koumenis, J.H. Park, D.J. Carlson, Monte Carlo Simulation of the Effects of Radiation Quality and Oxygen Concentration on Clustered DNA Lesions. Radiat. Res. 176, 587-602 (2011)
 
